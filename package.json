@@ -1,0 +1,28 @@
+{
+  "name": "mbl",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "evil-icons": "^1.10.1",
+    "next": "^9.1.6",
+    "next-images": "^1.2.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-evil-icons": "^0.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^13.1.2",
+    "@types/react": "^16.9.17",
+    "typescript": "^3.7.4"
+  },
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
