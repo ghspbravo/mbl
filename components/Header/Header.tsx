@@ -12,6 +12,7 @@ import logo from '../../assets/logo_horizontal.svg';
 import Line from '../Line';
 
 import Link from 'next/link';
+import Badge from '../Badge';
 
 function Header({ router }): ReactElement {
 
@@ -130,6 +131,7 @@ function Header({ router }): ReactElement {
             </Link>
 
             <div className="navigation-item d-none d-xl-block">
+              <Badge small>в разработке</Badge>
               <Link href={Events.route} passHref={true}>
                 <a>{Events.title}</a>
               </Link>
@@ -140,26 +142,31 @@ function Header({ router }): ReactElement {
               </Link>
             </div>
             <div className="navigation-item d-none d-xl-block">
+              <Badge small>в разработке</Badge>
               <Link href={Cources.route} passHref={true}>
                 <a >{Cources.title}</a>
               </Link>
             </div>
             <div className="navigation-item d-none d-xl-block">
+              <Badge small>в разработке</Badge>
               <Link href={Members.route} passHref={true}>
                 <a >{Members.title}</a>
               </Link>
             </div>
             <div className="navigation-item d-none d-xl-block">
+              <Badge small>в разработке</Badge>
               <Link href={Companies.route} passHref={true}>
                 <a >{Companies.title}</a>
               </Link>
             </div>
             <div className="navigation-item d-none d-xl-block">
+              <Badge small>в разработке</Badge>
               <Link href={Projects.route} passHref={true}>
                 <a >{Projects.title}</a>
               </Link>
             </div>
             <div className="navigation-item d-none d-xl-block">
+              <Badge small>в разработке</Badge>
               <Link href={About.route} passHref={true}>
                 <a >{About.title}</a>
               </Link>
@@ -228,31 +235,37 @@ function Header({ router }): ReactElement {
                 </Link>
               </div>
               <div className="col-6 col-md-3 burger-navigation-item">
+                <Badge small>в разработке</Badge>
                 <Link href={Events.route} passHref={true}>
                   <a >{Events.title}</a>
                 </Link>
               </div>
               <div className="col-6 col-md-3 burger-navigation-item">
+                <Badge small>в разработке</Badge>
                 <Link href={Cources.route} passHref={true}>
                   <a >{Cources.title}</a>
                 </Link>
               </div>
               <div className="col-6 col-md-3 burger-navigation-item">
+                <Badge small>в разработке</Badge>
                 <Link href={Members.route} passHref={true}>
                   <a >{Members.title}</a>
                 </Link>
               </div>
               <div className="col-6 col-md-3 burger-navigation-item">
+                <Badge small>в разработке</Badge>
                 <Link href={Companies.route} passHref={true}>
                   <a >{Companies.title}</a>
                 </Link>
               </div>
               <div className="col-6 col-md-3 burger-navigation-item">
+                <Badge small>в разработке</Badge>
                 <Link href={Projects.route} passHref={true}>
                   <a >{Projects.title}</a>
                 </Link>
               </div>
               <div className="col-6 col-md-3 burger-navigation-item">
+                <Badge small>в разработке</Badge>
                 <Link href={About.route} passHref={true}>
                   <a >{About.title}</a>
                 </Link>
@@ -271,6 +284,10 @@ function Header({ router }): ReactElement {
         `}</style>
 
       <style jsx>{`
+        .burger-navigation-item,
+        .navigation-item {
+          position: relative;
+        }
         .burger-navigation-item a {
           display: inline-block;
 

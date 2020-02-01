@@ -9,6 +9,7 @@ import fund from '../assets/credits-fund.svg';
 import koriphey from '../assets/credits-koriphey.svg';
 import mybusiness from '../assets/credits-mybusiness.svg';
 import Icon from './Icon';
+import Badge from './Badge';
 
 
 function Footer(): ReactElement {
@@ -22,25 +23,38 @@ function Footer(): ReactElement {
             <div className="col-md-7">
               <div className="row">
                 <div className="col-6 col-xl-3 col-md-4">
-                  <a className="footer-nav-item" href={News.route}>{News.title}</a>
+                  <a className="footer-nav-item" href={News.route}>
+                    {News.title}</a>
                 </div>
                 <div className="col-6 col-xl-3 col-md-4">
-                  <a className="footer-nav-item" href={Events.route}>{Events.title}</a>
+                  <a className="footer-nav-item" href={Events.route}>
+                    <Badge small>В разработке</Badge>
+                    {Events.title}</a>
                 </div>
                 <div className="col-6 col-xl-3 col-md-4">
-                  <a className="footer-nav-item" href={Cources.route}>{Cources.title}</a>
+                  <a className="footer-nav-item" href={Cources.route}>
+                    <Badge small>В разработке</Badge>
+                    {Cources.title}</a>
                 </div>
                 <div className="col-6 col-xl-3 col-md-4">
-                  <a className="footer-nav-item" href={About.route}>{About.title}</a>
+                  <a className="footer-nav-item" href={About.route}>
+                    <Badge small>В разработке</Badge>
+                    {About.title}</a>
                 </div>
                 <div className="col-6 col-xl-3 col-md-4">
-                  <a className="footer-nav-item" href={Members.route}>{Members.title}</a>
+                  <a className="footer-nav-item" href={Members.route}>
+                    <Badge small>В разработке</Badge>
+                    {Members.title}</a>
                 </div>
                 <div className="col-6 col-xl-3 col-md-4">
-                  <a className="footer-nav-item" href={Companies.route}>{Companies.title}</a>
+                  <a className="footer-nav-item" href={Companies.route}>
+                    <Badge small>В разработке</Badge>
+                    {Companies.title}</a>
                 </div>
                 <div className="col-6 col-xl-3 col-md-4">
-                  <a className="footer-nav-item" href={Projects.route}>{Projects.title}</a>
+                  <a className="footer-nav-item" href={Projects.route}>
+                    <Badge small>В разработке</Badge>
+                    {Projects.title}</a>
                 </div>
               </div>
             </div>
@@ -124,6 +138,7 @@ function Footer(): ReactElement {
             padding-bottom: 35px;
           }
         .footer-nav-item {
+          position: relative;
           display: inline-block;
           padding-top: 10px;
           padding-bottom: 10px;
