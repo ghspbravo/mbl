@@ -72,16 +72,16 @@ function Footer(): ReactElement {
 
             <div className="ml-md-auto row no-gutters align-items-center">
               <span>Идея:</span>
-              <a className="ml-md-3 ml-2" href="#">
+              <a target="_blank" className="ml-md-3 ml-2" href="https://cbo.ru/">
                 <object id="credits-cbo" style={{ pointerEvents: 'none' }} type="image/svg+xml" data={cbo} />
               </a>
-              <a className="ml-md-3 ml-2" href="#">
+              <a target="_blank" className="ml-md-3 ml-2" href="https://koriphey.ru/">
                 <object id="credits-koriphey" style={{ pointerEvents: 'none' }} type="image/svg+xml" data={koriphey} />
               </a>
-              <a className="ml-md-3 ml-2" href="#">
+              <a target="_blank" className="ml-md-3 ml-2" href="#">
                 <object id="credits-mybusiness" style={{ pointerEvents: 'none' }} type="image/svg+xml" data={mybusiness} />
               </a>
-              <a className="ml-md-3 ml-2" href="#">
+              <a target="_blank" className="ml-md-3 ml-2" href="#">
                 <object id="credits-fund" style={{ pointerEvents: 'none' }} type="image/svg+xml" data={fund} />
               </a>
             </div>
@@ -131,6 +131,7 @@ function Footer(): ReactElement {
         }
         .footer-nav-item:hover {
           text-decoration-color: white;
+          color: white;
         }
         `}</style>
 
