@@ -11,6 +11,8 @@ import Icon from 'react-evil-icons';
 import logo from '../../assets/logo_horizontal.svg';
 import Line from '../Line';
 
+import Link from 'next/link';
+
 function Header({ router }): ReactElement {
 
   const [stickyHeader, stickyHeaderSet] = useState(false);
@@ -121,30 +123,46 @@ function Header({ router }): ReactElement {
       <section id="navigation" className='inverted'>
         <div className="container">
           <div className="row no-gutters align-items-center navigation">
-            <a className="navigation-logo" href={Home.route}>
-              <object style={{ pointerEvents: 'none' }} type="image/svg+xml" data={logo} />
-            </a>
+            <Link href={Home.route}>
+              <a className="navigation-logo">
+                <object style={{ pointerEvents: 'none' }} type="image/svg+xml" data={logo} />
+              </a>
+            </Link>
 
             <div className="navigation-item d-none d-xl-block">
-              <a href={Events.route}>{Events.title}</a>
+              <Link href={Events.route} passHref={true}>
+                <a>{Events.title}</a>
+              </Link>
             </div>
             <div className="navigation-item d-none d-xl-block">
-              <a href={News.route}>{News.title}</a>
+              <Link href={News.route} passHref={true}>
+                <a >{News.title}</a>
+              </Link>
             </div>
             <div className="navigation-item d-none d-xl-block">
-              <a href={Cources.route}>{Cources.title}</a>
+              <Link href={Cources.route} passHref={true}>
+                <a >{Cources.title}</a>
+              </Link>
             </div>
             <div className="navigation-item d-none d-xl-block">
-              <a href={Members.route}>{Members.title}</a>
+              <Link href={Members.route} passHref={true}>
+                <a >{Members.title}</a>
+              </Link>
             </div>
             <div className="navigation-item d-none d-xl-block">
-              <a href={Companies.route}>{Companies.title}</a>
+              <Link href={Companies.route} passHref={true}>
+                <a >{Companies.title}</a>
+              </Link>
             </div>
             <div className="navigation-item d-none d-xl-block">
-              <a href={Projects.route}>{Projects.title}</a>
+              <Link href={Projects.route} passHref={true}>
+                <a >{Projects.title}</a>
+              </Link>
             </div>
             <div className="navigation-item d-none d-xl-block">
-              <a href={About.route}>{About.title}</a>
+              <Link href={About.route} passHref={true}>
+                <a >{About.title}</a>
+              </Link>
             </div>
 
             <div className="ml-auto d-none d-xl-block">
@@ -205,25 +223,39 @@ function Header({ router }): ReactElement {
 
             <div className="row">
               <div className="col-6 col-md-3 burger-navigation-item">
-                <a href={News.route}>{News.title}</a>
+                <Link href={News.route} passHref={true}>
+                  <a >{News.title}</a>
+                </Link>
               </div>
               <div className="col-6 col-md-3 burger-navigation-item">
-                <a href={Events.route}>{Events.title}</a>
+                <Link href={Events.route} passHref={true}>
+                  <a >{Events.title}</a>
+                </Link>
               </div>
               <div className="col-6 col-md-3 burger-navigation-item">
-                <a href={Cources.route}>{Cources.title}</a>
+                <Link href={Cources.route} passHref={true}>
+                  <a >{Cources.title}</a>
+                </Link>
               </div>
               <div className="col-6 col-md-3 burger-navigation-item">
-                <a href={Members.route}>{Members.title}</a>
+                <Link href={Members.route} passHref={true}>
+                  <a >{Members.title}</a>
+                </Link>
               </div>
               <div className="col-6 col-md-3 burger-navigation-item">
-                <a href={Companies.route}>{Companies.title}</a>
+                <Link href={Companies.route} passHref={true}>
+                  <a >{Companies.title}</a>
+                </Link>
               </div>
               <div className="col-6 col-md-3 burger-navigation-item">
-                <a href={Projects.route}>{Projects.title}</a>
+                <Link href={Projects.route} passHref={true}>
+                  <a >{Projects.title}</a>
+                </Link>
               </div>
               <div className="col-6 col-md-3 burger-navigation-item">
-                <a href={About.route}>{About.title}</a>
+                <Link href={About.route} passHref={true}>
+                  <a >{About.title}</a>
+                </Link>
               </div>
             </div>
 
