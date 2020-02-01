@@ -45,6 +45,8 @@ export default function NewsSingle({ status, body }: Props): ReactElement {
                 {parse(body.content)}
               </div>
 
+              <div className="news__date mt-5">{body.date}</div>
+
             </div>
 
           </div>
@@ -56,6 +58,7 @@ export default function NewsSingle({ status, body }: Props): ReactElement {
             border-left: 10px solid ${Colors.Acsent};
             line-height: 1.5;
           }
+          .news__date {color: ${Colors.TextDark}}
           `}</style>
         </section>
       </Layout>
