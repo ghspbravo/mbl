@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react'
 import Link from 'next/link';
 import Colors from '../../constants/colors';
 import Pages from '../../constants/pages';
+import Lazy from '../Lazy';
 
 interface Props {
   content: {
@@ -15,10 +16,12 @@ interface Props {
 export default function NewsItem({ content }: Props): ReactElement {
   const { id, title, previewSrc, createdDate } = content;
 
-  return <Link href={`${Pages.News.route}/${id}`} as={`${Pages.News.route}/${title}`} prefetch={false} passHref={true}>
+  return <Link href={`${Pages.News.route}/${id}`} prefetch={false} passHref={true}>
     <a className="clear news interactive row no-gutters">
       <div className="news__preview">
-        <img src={previewSrc} alt="Изображение к новости" />
+        <Lazy>
+          <img src={previewSrc} alt="Изображение к новости" />
+        </Lazy>
       </div>
   
       <div className="col ml-4 ml-md-5">
@@ -30,6 +33,10 @@ export default function NewsItem({ content }: Props): ReactElement {
         .news:hover .news__title {
           text-decoration: underline;
         }
+        .news__preview {
+          min-width: 150px;
+          min-height: 150px;
+        }
         .news__preview img {
           width: 150px;
           height: 150px;
@@ -39,6 +46,10 @@ export default function NewsItem({ content }: Props): ReactElement {
         .news__date {color: ${Colors.TextDark};}
 
         @media screen and (max-width: 576px) {
+          .news__preview {
+            min-width: 80px;
+            min-height: 80px;
+          }
           .news__preview img {
             width: 80px;
             height: 80px;

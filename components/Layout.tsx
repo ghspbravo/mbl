@@ -76,8 +76,11 @@ function Layout({ children: pageContent }: Props) {
               button:focus,
               .button:focus {
                 background-color: rgba(0, 102, 198, 0.2);
-                outline: none;
+                outline-color: #ffffff;
               }
+              .inverted a:focus {
+                outline-color: #ffffff
+              };
               button.primary:focus,
               .button.primary:focus { background-color: rgb(42, 126, 204); }
               .inverted button.primary:focus,
