@@ -33,8 +33,10 @@ function Layout({ children: pageContent }: Props) {
                 letter-spacing: 0.02em;
               }
               body,
-              button { color: ${Colors.TextCommon}; }
-              button {
+              button,
+              .button { color: ${Colors.TextCommon}; }
+              button, .button {
+                display: block;
                 padding: 12px 28px;
                 text-transform: uppercase;
 
@@ -46,38 +48,61 @@ function Layout({ children: pageContent }: Props) {
                 cursor: pointer;
                 transition: background-color 0.3s ease-in-out;
               }
-              button.primary {
+              button.primary,
+              .button.primary {
                 background-color: ${Colors.Primary};
                 color: #fff;
                 border: none;
               }
               .inverted { background-color: ${Colors.Primary}; color: #ffffff; }
-              .inverted button { 
+              .inverted button,
+              .inverted .button { 
                 color: #ffffff;
                 border-color: #ffffff;
                  }
-              .inverted button.primary { 
+              .inverted button.primary,
+              .inverted .button.primary { 
                 color: ${Colors.Primary};
                 background-color: #ffffff;
                  }
-              button:hover { background-color: rgba(0, 102, 198, 0.1); }
-              button.primary:hover { background-color: rgb(24, 113, 196); }
-              .inverted button.primary:hover { background-color: rgb(243, 243, 243); }
-              .inverted button:hover { background-color: rgba(255, 255, 255, 0.1); }
-              button:focus {
+              button:hover,
+              .button:hover { background-color: rgba(0, 102, 198, 0.1); }
+              button.primary:hover,
+              .button.primary:hover { background-color: rgb(24, 113, 196); }
+              .inverted button.primary:hover,
+              .inverted .button.primary:hover { background-color: rgb(243, 243, 243); }
+              .inverted button:hover,
+              .inverted .button:hover { background-color: rgba(255, 255, 255, 0.1); }
+              button:focus,
+              .button:focus {
                 background-color: rgba(0, 102, 198, 0.2);
                 outline: none;
               }
-              button.primary:focus { background-color: rgb(42, 126, 204); }
-              .inverted button.primary:focus { background-color: rgb(226, 226, 226); }
-              .inverted button:focus { background-color: rgba(255, 255, 255, 0.2) };
-              a {
+              button.primary:focus,
+              .button.primary:focus { background-color: rgb(42, 126, 204); }
+              .inverted button.primary:focus,
+              .inverted .button.primary:focus { background-color: rgb(226, 226, 226); }
+              .inverted button:focus,
+              .inverted .button:focus { background-color: rgba(255, 255, 255, 0.2) };
+              a.button {
+                display: inline-block;
+              }
+              a.clear {
+                text-decoration: inherit;
+                color: inherit;
+              }
+              a:not(.clear) {
                 color: ${Colors.Acsent};
                 text-decoration: unset;
-
-                transition: color 0.3s ease-in;
               }
-              a:hover {
+              .inverted a:not(.clear) {
+                color: #ffffff;
+              }
+              .inverted a:not(.clear):hover {
+                color: #ffffff;
+                text-decoration-color: #ffffff;
+              }
+              a:not(.clear):hover {
                 text-decoration: underline;
                 text-decoration-color: #c6e407;
 
@@ -101,6 +126,9 @@ function Layout({ children: pageContent }: Props) {
                   border-width: 2px;
                 }
               }
+              .text,p {
+                line-height: 2;
+              }
 
               section { 
                 position: relative;
@@ -119,6 +147,20 @@ function Layout({ children: pageContent }: Props) {
 
               .interactive {
                 cursor: pointer;
+              }
+
+              img.responsive {
+                width: 100%;
+                height: auto;
+                object-fit: cover;
+              }
+
+              img,object {
+                user-select: none;
+              }
+              
+              .align-center {
+                text-align: center;
               }
             `}</style>
       {/* bootstrap spacings */}
@@ -244,27 +286,27 @@ function Layout({ children: pageContent }: Props) {
             }
 
             .m-5 {
-              margin: 3rem !important;
+              margin: 2.5rem !important;
             }
 
             .mt-5,
             .my-5 {
-              margin-top: 3rem !important;
+              margin-top: 2.5rem !important;
             }
 
             .mr-5,
             .mx-5 {
-              margin-right: 3rem !important;
+              margin-right: 2.5rem !important;
             }
 
             .mb-5,
             .my-5 {
-              margin-bottom: 3rem !important;
+              margin-bottom: 2.5rem !important;
             }
 
             .ml-5,
             .mx-5 {
-              margin-left: 3rem !important;
+              margin-left: 2.5rem !important;
             }
 
             .p-0 {
@@ -388,27 +430,27 @@ function Layout({ children: pageContent }: Props) {
             }
 
             .p-5 {
-              padding: 3rem !important;
+              padding: 2.5rem !important;
             }
 
             .pt-5,
             .py-5 {
-              padding-top: 3rem !important;
+              padding-top: 2.5rem !important;
             }
 
             .pr-5,
             .px-5 {
-              padding-right: 3rem !important;
+              padding-right: 2.5rem !important;
             }
 
             .pb-5,
             .py-5 {
-              padding-bottom: 3rem !important;
+              padding-bottom: 2.5rem !important;
             }
 
             .pl-5,
             .px-5 {
-              padding-left: 3rem !important;
+              padding-left: 2.5rem !important;
             }
 
             .m-auto {
@@ -532,23 +574,23 @@ function Layout({ children: pageContent }: Props) {
                 margin-left: 1.5rem !important;
               }
               .m-sm-5 {
-                margin: 3rem !important;
+                margin: 2.5rem !important;
               }
               .mt-sm-5,
               .my-sm-5 {
-                margin-top: 3rem !important;
+                margin-top: 2.5rem !important;
               }
               .mr-sm-5,
               .mx-sm-5 {
-                margin-right: 3rem !important;
+                margin-right: 2.5rem !important;
               }
               .mb-sm-5,
               .my-sm-5 {
-                margin-bottom: 3rem !important;
+                margin-bottom: 2.5rem !important;
               }
               .ml-sm-5,
               .mx-sm-5 {
-                margin-left: 3rem !important;
+                margin-left: 2.5rem !important;
               }
               .p-sm-0 {
                 padding: 0 !important;
@@ -646,23 +688,23 @@ function Layout({ children: pageContent }: Props) {
                 padding-left: 1.5rem !important;
               }
               .p-sm-5 {
-                padding: 3rem !important;
+                padding: 2.5rem !important;
               }
               .pt-sm-5,
               .py-sm-5 {
-                padding-top: 3rem !important;
+                padding-top: 2.5rem !important;
               }
               .pr-sm-5,
               .px-sm-5 {
-                padding-right: 3rem !important;
+                padding-right: 2.5rem !important;
               }
               .pb-sm-5,
               .py-sm-5 {
-                padding-bottom: 3rem !important;
+                padding-bottom: 2.5rem !important;
               }
               .pl-sm-5,
               .px-sm-5 {
-                padding-left: 3rem !important;
+                padding-left: 2.5rem !important;
               }
               .m-sm-auto {
                 margin: auto !important;
@@ -782,23 +824,23 @@ function Layout({ children: pageContent }: Props) {
                 margin-left: 1.5rem !important;
               }
               .m-md-5 {
-                margin: 3rem !important;
+                margin: 2.5rem !important;
               }
               .mt-md-5,
               .my-md-5 {
-                margin-top: 3rem !important;
+                margin-top: 2.5rem !important;
               }
               .mr-md-5,
               .mx-md-5 {
-                margin-right: 3rem !important;
+                margin-right: 2.5rem !important;
               }
               .mb-md-5,
               .my-md-5 {
-                margin-bottom: 3rem !important;
+                margin-bottom: 2.5rem !important;
               }
               .ml-md-5,
               .mx-md-5 {
-                margin-left: 3rem !important;
+                margin-left: 2.5rem !important;
               }
               .p-md-0 {
                 padding: 0 !important;
@@ -896,23 +938,23 @@ function Layout({ children: pageContent }: Props) {
                 padding-left: 1.5rem !important;
               }
               .p-md-5 {
-                padding: 3rem !important;
+                padding: 2.5rem !important;
               }
               .pt-md-5,
               .py-md-5 {
-                padding-top: 3rem !important;
+                padding-top: 2.5rem !important;
               }
               .pr-md-5,
               .px-md-5 {
-                padding-right: 3rem !important;
+                padding-right: 2.5rem !important;
               }
               .pb-md-5,
               .py-md-5 {
-                padding-bottom: 3rem !important;
+                padding-bottom: 2.5rem !important;
               }
               .pl-md-5,
               .px-md-5 {
-                padding-left: 3rem !important;
+                padding-left: 2.5rem !important;
               }
               .m-md-auto {
                 margin: auto !important;
@@ -1032,23 +1074,23 @@ function Layout({ children: pageContent }: Props) {
                 margin-left: 1.5rem !important;
               }
               .m-lg-5 {
-                margin: 3rem !important;
+                margin: 2.5rem !important;
               }
               .mt-lg-5,
               .my-lg-5 {
-                margin-top: 3rem !important;
+                margin-top: 2.5rem !important;
               }
               .mr-lg-5,
               .mx-lg-5 {
-                margin-right: 3rem !important;
+                margin-right: 2.5rem !important;
               }
               .mb-lg-5,
               .my-lg-5 {
-                margin-bottom: 3rem !important;
+                margin-bottom: 2.5rem !important;
               }
               .ml-lg-5,
               .mx-lg-5 {
-                margin-left: 3rem !important;
+                margin-left: 2.5rem !important;
               }
               .p-lg-0 {
                 padding: 0 !important;
@@ -1146,23 +1188,23 @@ function Layout({ children: pageContent }: Props) {
                 padding-left: 1.5rem !important;
               }
               .p-lg-5 {
-                padding: 3rem !important;
+                padding: 2.5rem !important;
               }
               .pt-lg-5,
               .py-lg-5 {
-                padding-top: 3rem !important;
+                padding-top: 2.5rem !important;
               }
               .pr-lg-5,
               .px-lg-5 {
-                padding-right: 3rem !important;
+                padding-right: 2.5rem !important;
               }
               .pb-lg-5,
               .py-lg-5 {
-                padding-bottom: 3rem !important;
+                padding-bottom: 2.5rem !important;
               }
               .pl-lg-5,
               .px-lg-5 {
-                padding-left: 3rem !important;
+                padding-left: 2.5rem !important;
               }
               .m-lg-auto {
                 margin: auto !important;
@@ -1282,23 +1324,23 @@ function Layout({ children: pageContent }: Props) {
                 margin-left: 1.5rem !important;
               }
               .m-xl-5 {
-                margin: 3rem !important;
+                margin: 2.5rem !important;
               }
               .mt-xl-5,
               .my-xl-5 {
-                margin-top: 3rem !important;
+                margin-top: 2.5rem !important;
               }
               .mr-xl-5,
               .mx-xl-5 {
-                margin-right: 3rem !important;
+                margin-right: 2.5rem !important;
               }
               .mb-xl-5,
               .my-xl-5 {
-                margin-bottom: 3rem !important;
+                margin-bottom: 2.5rem !important;
               }
               .ml-xl-5,
               .mx-xl-5 {
-                margin-left: 3rem !important;
+                margin-left: 2.5rem !important;
               }
               .p-xl-0 {
                 padding: 0 !important;
@@ -1396,23 +1438,23 @@ function Layout({ children: pageContent }: Props) {
                 padding-left: 1.5rem !important;
               }
               .p-xl-5 {
-                padding: 3rem !important;
+                padding: 2.5rem !important;
               }
               .pt-xl-5,
               .py-xl-5 {
-                padding-top: 3rem !important;
+                padding-top: 2.5rem !important;
               }
               .pr-xl-5,
               .px-xl-5 {
-                padding-right: 3rem !important;
+                padding-right: 2.5rem !important;
               }
               .pb-xl-5,
               .py-xl-5 {
-                padding-bottom: 3rem !important;
+                padding-bottom: 2.5rem !important;
               }
               .pl-xl-5,
               .px-xl-5 {
-                padding-left: 3rem !important;
+                padding-left: 2.5rem !important;
               }
               .m-xl-auto {
                 margin: auto !important;

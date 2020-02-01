@@ -4,7 +4,7 @@ const Colors = {
 
   TextCommon: "#0065C6",
   TextLight: "#FFFFFF",
-  TextDark: "#000000",
+  TextDark: "#2F3943",
 }
 
 export default Colors
