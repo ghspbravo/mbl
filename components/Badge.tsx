@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import Colors from '../constants/colors'
+import Colors from '../constants/colors';
 
 interface Props {
   children: string

@@ -1,17 +1,29 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Head from 'next/head'
 import Header from './Header/Header'
 import Colors from '../constants/colors'
 import Footer from './Footer'
+import { setAuthToken } from '../constants/fetcher';
+import moment from 'moment'
 
 interface Props {
   children: JSX.Element[] | JSX.Element
 }
 
 function Layout({ children: pageContent }: Props) {
-  return (
-    <>
+  moment.locale('ru');
+  const [loaded, loadedSet] = useState(false)
+
+  useEffect(() => {
+    if (!!localStorage.getItem('token')) {
+      const AUTH_TOKEN = localStorage.getItem('token');
+      setAuthToken(AUTH_TOKEN)
+    }
+    loadedSet(true);
+  }, [])
+  return (loaded 
+    ? <>
       <Head>
         <title>Молодежная бизнесс лига</title>
         <meta
@@ -137,6 +149,12 @@ function Layout({ children: pageContent }: Props) {
                 position: relative;
                 padding-top: 60px;
                 padding-bottom: 60px;
+              }
+              @media screen and (max-width: 576px) {
+                section {
+                  padding-top: 25px;
+                  padding-bottom: 25px;
+                }
               }
               section.primary {background-color: ${Colors.Primary};}
 
@@ -1491,8 +1509,16 @@ function Layout({ children: pageContent }: Props) {
       <Footer />
 
       <style jsx>{`
-          main {position: relative;}
+          main {
+            position: relative;
+            min-height: 57vh;
+            }
         `}</style>
+    </>
+    : <>
+      <Head>
+        <title>Молодежная бизнесс лига</title>
+      </Head>
     </>
   )
 }

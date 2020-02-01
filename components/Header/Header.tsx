@@ -382,8 +382,8 @@ function Header({ router }): ReactElement {
           }
         .line {
           position: absolute;
-          left: -25px; top: -250px;
-          width: 110%; height: auto;
+          left: -25px; top: -300px;
+          width: 110%; height: 750px;
           z-index: 0;
         }
         section {
@@ -400,17 +400,14 @@ function Header({ router }): ReactElement {
           padding-bottom: 0;
         }
 
-        @media screen and (max-width: 1440px) {
-          .line {
-            top: -180px;
-          }
-        }
         @media screen and (max-width: 1199px) {
+          .line {
+            width: 115%;
+            height: 600px;
+            top: -250px;
+          }
           .navigation-logo {
             display: block;
-          }
-          .line {
-            top: -130px;
           }
           .search-input input {
             width: 90%;
@@ -425,15 +422,18 @@ function Header({ router }): ReactElement {
         @media screen and (max-width: 991px) {
         .line {
           width: 130%;
-          top: -100px;
+          height: 550px;
+          top: -200px;
           left: -70px;
         }
       }
       @media screen and (max-width: 767px) {
         header {
           margin-bottom: 0;
+          padding-top: 50px;
         }
         .line {
+          height: 350px;
           top: -150px;
         }
         .search-input {
@@ -458,18 +458,12 @@ function Header({ router }): ReactElement {
         }
       }
       @media screen and (max-width: 576px) {
-        .line {
-          top: -110px;
+        header {
+          padding-top: 75px;
         }
-      }
-      @media screen and (max-width: 425px) {
         .line {
-          top: -70px;
-        }
-      }
-      @media screen and (max-width: 375px) {
-        .line {
-          top: -40px;
+          top: -65px;
+          height: 200px
         }
       }
         `}</style>

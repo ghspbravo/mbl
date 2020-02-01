@@ -5,20 +5,23 @@ import Colors from '../constants/colors';
 import NewsItem from '../components/News/NewsItem';
 import Link from 'next/link';
 import Pages from '../constants/pages';
+import { isoFetcher } from '../constants/fetcher';
+import Api from '../constants/api';
+import { NewsListFormatter, shortNews } from '../constants/formatters/newsFormatter';
+import { Status } from '../constants/formatters/rootFormatter';
 
-const newsMock: {
-  id: number,
-  title: string,
-  createdDate: string,
-  previewSrc: string
-}[] = new Array(6).fill({
-  id: 0,
-  title: 'Выпускники + Эндаумент = Молодежная бизнес лига',
-  createdDate: '12 ноября 2019',
-  previewSrc: 'https://picsum.photos/200/200'
-})
+interface Props {
+  newsResponse: {
+    status: number,
+    body: any
+  }
+}
 
-function Home() {
+function Home({ newsResponse }: Props) {
+
+  const hasNews = newsResponse.status === Status.success,
+    newsContents = newsResponse.body;
+
   return (
     <Layout>
       <section>
@@ -62,6 +65,10 @@ function Home() {
               margin-bottom: 0;
               margin-left: 0;
             }   
+            @media screen and (max-width: 576px) {
+            .brand-description {
+              margin-top: 35px;
+            }   
               }
             `}</style>
         </div>
@@ -72,21 +79,51 @@ function Home() {
         <div className="container">
           <h1>Новости</h1>
 
-          <div className="row">
-            {newsMock.map(item => <div key={item.id} className="col-lg-6 col-12 mb-5">
-              <NewsItem content={item} />
-            </div>)}
-          </div>
+          {hasNews
+            ? <div>
+              {(newsContents.news as shortNews[]).length > 0
+                ? <div className="row">
+                  {(newsContents.news as shortNews[]).map(item => <div key={item.id} className="col-lg-6 col-12 mb-5">
+                    <NewsItem content={item} />
+                  </div>)}
+                </div>
+                : <div>
+                  Нет новых новостей
+                </div>}
 
-          <div className="align-center">
-            <Link passHref={true} href={Pages.News.route}>
-              <a className="clear button mx-auto">все новости</a>
-            </Link>
-          </div>
+              <div className="align-center">
+                <Link passHref={true} href={Pages.News.route}>
+                  <a className="clear button mx-auto">все новости</a>
+                </Link>
+              </div>
+            </div>
+            : <div>
+              {newsContents}
+            </div>}
         </div>
       </section>
     </Layout>
   )
+}
+
+Home.getInitialProps = async () => {
+  const props: any = {}
+
+  // NEWS
+  const newsResponse = isoFetcher.fetch(Api.NewsList, {
+    params: {
+      count: 6
+    }
+  });
+  const newsFormatter = new NewsListFormatter(),
+    newsList = await newsFormatter.format(newsResponse);
+
+  props.newsResponse = {
+    status: newsList.status,
+    body: newsList.body
+  };
+
+  return props;
 }
 
 export default Home

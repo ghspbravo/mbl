@@ -1,5 +1,4 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
-
 import evil from 'evil-icons'
 
 class MyDocument extends Document {

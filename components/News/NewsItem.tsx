@@ -3,32 +3,28 @@ import Link from 'next/link';
 import Colors from '../../constants/colors';
 import Pages from '../../constants/pages';
 import Lazy from '../Lazy';
+import { shortNews } from '../../constants/formatters/newsFormatter';
 
 interface Props {
-  content: {
-    id: number,
-    title: string,
-    createdDate: string,
-    previewSrc: string
-  }
+  content: shortNews
 }
 
 export default function NewsItem({ content }: Props): ReactElement {
-  const { id, title, previewSrc, createdDate } = content;
+  const { id, title, preview, date } = content;
 
   return <Link href={`${Pages.News.route}/${id}`} prefetch={false} passHref={true}>
     <a className="clear news interactive row no-gutters">
       <div className="news__preview">
         <Lazy>
-          <img src={previewSrc} alt="Изображение к новости" />
+          <img src={preview} alt="Изображение к новости" />
         </Lazy>
       </div>
-  
+
       <div className="col ml-4 ml-md-5">
         <div className="news__title">{title}</div>
-        <div className="news__date mt-4">{createdDate}</div>
+        <div className="news__date mt-4">{date}</div>
       </div>
-  
+
       <style jsx>{`
         .news:hover .news__title {
           text-decoration: underline;
