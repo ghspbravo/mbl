@@ -47,6 +47,7 @@ export default function News({ }: Props): ReactElement {
     }
   }
   useEffect(() => {
+    currentPage = 0;
     fetchNews();
   }, [])
 
