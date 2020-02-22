@@ -41,7 +41,8 @@ export default class Formatter {
       // pass to other formatter
       return contents;
     }).catch((err) => {
-      alert('Ошибка парсинга ответа от сервера')
+      this.status = Status.error;
+      this.body = 'Ошибка парсинга ответа от сервера';
     })
   }
 
