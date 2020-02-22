@@ -22,7 +22,7 @@ function Layout({ children: pageContent }: Props) {
     }
     loadedSet(true);
   }, [])
-  return (loaded 
+  return (loaded
     ? <>
       <Head>
         <title>Молодежная бизнесс лига</title>
@@ -47,6 +47,10 @@ function Layout({ children: pageContent }: Props) {
               body,
               button,
               .button { color: ${Colors.TextCommon}; }
+              button.full,
+              .button.full {
+                width: 100%;
+              }
               button, .button {
                 display: block;
                 padding: 12px 28px;
@@ -106,6 +110,10 @@ function Layout({ children: pageContent }: Props) {
                 text-decoration: inherit;
                 color: inherit;
               }
+              a.primary:not(.clear) {
+                color: ${Colors.Primary};
+                text-decoration: unset;
+              }
               a:not(.clear) {
                 color: ${Colors.Acsent};
                 text-decoration: unset;
@@ -120,8 +128,12 @@ function Layout({ children: pageContent }: Props) {
               a:not(.clear):hover {
                 text-decoration: underline;
                 text-decoration-color: #c6e407;
-
                 color: #c6e407;
+              }
+              a.primary:not(.clear):hover {
+                text-decoration: underline;
+                text-decoration-color: #2676c0;
+                color: #2676c0;
               }
               h1,h2,h3,h4,h5,h6 {
                 font-family: 'Montserrat', sans-serif;
@@ -137,7 +149,7 @@ function Layout({ children: pageContent }: Props) {
                 h3 { font-size: 1.125em; }
                 button {
                   font-size: 0.625em;
-                  padding: 5px 10px;
+                  padding: 7px 10px;
                   border-width: 2px;
                 }
               }
@@ -158,9 +170,41 @@ function Layout({ children: pageContent }: Props) {
               }
               section.primary {background-color: ${Colors.Primary};}
 
+              fieldset {
+                border: none;
+                padding: 0;
+              }
+              fieldset input {
+                padding-top: 30px;
+              }
               input {
                 color: ${Colors.Primary};
                 border: none;
+                border-bottom: 2px solid ${Colors.Primary};
+                width: 100%;
+              }
+              input[data-error="true"] {
+                border-bottom-color: red;
+              }
+              .label-text {
+                font-weight: bold;
+                font-size: 14px;
+              }
+              label > span {
+                display: block;
+              }
+              @media screen and (max-width: 576px) {
+                fieldset input {
+                  padding-top: 15px;
+                }
+                input {
+                  color: ${Colors.Primary};
+                  border: none;
+                  border-bottom: 2px solid ${Colors.Primary};
+                }
+                .label-text {
+                  font-size: 12px;
+                }
               }
               input:focus {
                 outline: none;
@@ -182,6 +226,15 @@ function Layout({ children: pageContent }: Props) {
               
               .align-center {
                 text-align: center;
+              }
+              .center {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+              .error {
+                color: red;
+                font-size: 10px;
               }
             `}</style>
       {/* bootstrap spacings */}

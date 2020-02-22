@@ -13,8 +13,26 @@ import Line from '../Line';
 
 import Link from 'next/link';
 import Badge from '../Badge';
+import Modal from '../Modal';
+import Login from '../Auth/Login';
 
 function Header({ router }): ReactElement {
+  const [openModal, openModalSet] = useState(false);
+  const openModalHandler = () => { openModalSet(true) }
+  const closeModalHandler = () => { openModalSet(false) }
+  const SignInButton = window.innerWidth < 768
+    ? <Link href={Pages.SignIn.route}>
+      <button>Войти</button>
+    </Link>
+    : <div>
+      <button onClick={openModalHandler}>Войти</button>
+      <Modal open={openModal} closeHandler={closeModalHandler} width="100%">
+        <Login />
+      </Modal>
+    </div>
+  const SignUpButton = <Link href={Pages.SignUp.route}>
+    <button className="ml-3 primary">Регистрация</button>
+  </Link>
 
   const [stickyHeader, stickyHeaderSet] = useState(false);
   let stickyEnabled: boolean = false;
@@ -112,8 +130,8 @@ function Header({ router }): ReactElement {
 
             <div className="ml-auto">
               <div className="row no-gutters">
-                <button>Войти</button>
-                <button className="ml-3 primary">Регистрация</button>
+                {SignInButton}
+                {SignUpButton}
               </div>
             </div>
 
@@ -220,8 +238,8 @@ function Header({ router }): ReactElement {
             </div>
 
             <div className="d-md-none row no-gutters mt-4">
-              <button>Войти</button>
-              <button className="ml-3 primary">Регистрация</button>
+              {SignInButton}
+              {SignUpButton}
             </div>
 
             <div className="d-md-none">

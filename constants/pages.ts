@@ -2,7 +2,8 @@ const Pages = {
   Home: { header: 'Главная', title: 'Главная', route: '/' },
 
   SignUp: { header: 'Регистрация', title: 'Регистрация', route: '/sign-up' },
-  SignIn: { header: 'Вход', title: 'Вход', route: '/sign-in' },
+  SignIn: { header: 'Вход', title: 'Вход', route: '/login' },
+  Recover: { header: 'Восстановление пароля', title: 'Восстановление пароля', route: '/recover' },
 
   About: { header: 'О Молодежной Бизнес Лиге', title: 'О МБЛ', route: '/about' },
   Companies: { header: 'Компании', title: 'Компании', route: '/companies' },
