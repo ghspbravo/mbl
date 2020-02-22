@@ -7,20 +7,20 @@ interface Props {
 
   error?: any,
 
-  required: boolean
+  required?: boolean
 }
 
 function Input({ name, label, type = "text", error, required, ...otherProps }: Props, ref): any {
   const random = Math.random()
   return (
     <label htmlFor={`${name}_${random}`}>
-      <span>{label}{required && <sup>*</sup>}</span>
+      {label && <span>{label}{required && <sup>*</sup>}</span>}
       <input data-error={error ? true : false} ref={ref} id={`${name}_${random}`} name={name} type={type} {...otherProps} />
       {error && <span className="error">{error.message}</span>}
 
       <style jsx>{`
         input {
-          margin: 15px 0;
+          margin-bottom: 15px;
         }
         `}</style>
     </label>

@@ -4,6 +4,8 @@ import Input from '../Inputs/Input'
 import Pages from '../../constants/pages'
 import Link from 'next/link'
 
+import { emailRegexp } from '../../constants/regexp';
+
 import { useForm } from "react-hook-form";
 
 interface Props {
@@ -32,19 +34,19 @@ export default function Login({ }: Props): ReactElement {
       <form className="no-gutters" onSubmit={handleSubmit(onSubmit)}>
         <fieldset>
           <div className="mb-3">
-            <Input name="username" label="Логин" required type="email"
+            <Input name="username" label="Логин" type="email"
               error={errors.username}
               ref={register({
                 required: true,
                 pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                  value: emailRegexp,
                   message: "Неверный формат почты"
                 }
               })}
             />
           </div>
           <div>
-            <Input name="password" label="Пароль" required type="password"
+            <Input name="password" label="Пароль" type="password"
               error={errors.password}
               ref={register({
                 required: true,
@@ -67,7 +69,7 @@ export default function Login({ }: Props): ReactElement {
           </Link>
         </div>
 
-        <div className="mt-5 col-10 col-sm-12 mx-auto">
+        <div className="mt-5 col-10 col-sm-12 px-0 mx-auto">
           <button className="primary full">Войти</button>
         </div>
       </form>

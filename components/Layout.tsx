@@ -142,6 +142,9 @@ function Layout({ children: pageContent }: Props) {
               h1 { font-size: 2.5em; } 
               h2 { font-size: 2em; }
               h3 { font-size: 1.625em; }
+              .small {
+                font-size: 0.75rem;
+              }
               @media screen and (max-width: 576px) {
                 body { font-size: 0.75em; }
                 h1 { font-size: 1.25em; }
@@ -151,6 +154,9 @@ function Layout({ children: pageContent }: Props) {
                   font-size: 0.625em;
                   padding: 7px 10px;
                   border-width: 2px;
+                }
+                .small {
+                  font-size: 0.625rem;
                 }
               }
               .text,p {
@@ -188,14 +194,14 @@ function Layout({ children: pageContent }: Props) {
               }
               .label-text {
                 font-weight: bold;
-                font-size: 14px;
+                font-size: 0.875em;
               }
               label > span {
                 display: block;
               }
               @media screen and (max-width: 576px) {
                 fieldset input {
-                  padding-top: 15px;
+                  padding-top: 10px;
                 }
                 input {
                   color: ${Colors.Primary};
@@ -203,7 +209,7 @@ function Layout({ children: pageContent }: Props) {
                   border-bottom: 2px solid ${Colors.Primary};
                 }
                 .label-text {
-                  font-size: 12px;
+                  font-size: 0.75rem;
                 }
               }
               input:focus {
@@ -234,7 +240,7 @@ function Layout({ children: pageContent }: Props) {
               }
               .error {
                 color: red;
-                font-size: 10px;
+                font-size: 0.625rem;
               }
             `}</style>
       {/* bootstrap spacings */}
