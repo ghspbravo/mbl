@@ -53,25 +53,28 @@ function Layout({ children: pageContent }: Props) {
               }
               button, .button {
                 display: block;
+                
+                background-color: transparent;
+                cursor: pointer;
+                border: none;
+              }
+              button:not(.clear), .button {
                 padding: 12px 28px;
                 text-transform: uppercase;
 
                 font-size: 0.875em;
                 letter-spacing: 1px;
-                background-color: transparent;
 
                 border: 4px solid ${Colors.Primary};
-                cursor: pointer;
                 transition: background-color 0.3s ease-in-out;
               }
-              button.primary,
+              button.primary:not(.clear),
               .button.primary {
                 background-color: ${Colors.Primary};
                 color: #fff;
-                border: none;
               }
               .inverted { background-color: ${Colors.Primary}; color: #ffffff; }
-              .inverted button,
+              .inverted button:not(.clear),
               .inverted .button { 
                 color: #ffffff;
                 border-color: #ffffff;
@@ -81,15 +84,15 @@ function Layout({ children: pageContent }: Props) {
                 color: ${Colors.Primary};
                 background-color: #ffffff;
                  }
-              button:hover,
+              button:not(.clear):hover,
               .button:hover { background-color: rgba(0, 102, 198, 0.1); }
-              button.primary:hover,
+              button.primary:not(.clear):hover,
               .button.primary:hover { background-color: rgb(24, 113, 196); }
               .inverted button.primary:hover,
               .inverted .button.primary:hover { background-color: rgb(243, 243, 243); }
               .inverted button:hover,
               .inverted .button:hover { background-color: rgba(255, 255, 255, 0.1); }
-              button:focus,
+              button:not(.clear):focus,
               .button:focus {
                 background-color: rgba(0, 102, 198, 0.2);
                 outline-color: #ffffff;
@@ -97,7 +100,7 @@ function Layout({ children: pageContent }: Props) {
               .inverted a:focus {
                 outline-color: #ffffff
               };
-              button.primary:focus,
+              button.primary:not(.clear):focus,
               .button.primary:focus { background-color: rgb(42, 126, 204); }
               .inverted button.primary:focus,
               .inverted .button.primary:focus { background-color: rgb(226, 226, 226); }
@@ -110,11 +113,13 @@ function Layout({ children: pageContent }: Props) {
                 text-decoration: inherit;
                 color: inherit;
               }
-              a.primary:not(.clear) {
+              a.primary:not(.clear),
+              .link.primary {
                 color: ${Colors.Primary};
                 text-decoration: unset;
               }
-              a:not(.clear) {
+              a:not(.clear),
+              .link {
                 color: ${Colors.Acsent};
                 text-decoration: unset;
               }
@@ -130,7 +135,8 @@ function Layout({ children: pageContent }: Props) {
                 text-decoration-color: #c6e407;
                 color: #c6e407;
               }
-              a.primary:not(.clear):hover {
+              a.primary:not(.clear):hover,
+              .link.primary:hover {
                 text-decoration: underline;
                 text-decoration-color: #2676c0;
                 color: #2676c0;
@@ -151,7 +157,7 @@ function Layout({ children: pageContent }: Props) {
                 h2 { font-size: 1.125em; }
                 h3 { font-size: 1.125em; }
                 button {
-                  font-size: 0.625em;
+                  font-size: 0.75em;
                   padding: 7px 10px;
                   border-width: 2px;
                 }
@@ -187,10 +193,14 @@ function Layout({ children: pageContent }: Props) {
                 color: ${Colors.Primary};
                 border: none;
                 border-bottom: 2px solid ${Colors.Primary};
+              }
+              input:not([type="checkbox"]) {
                 width: 100%;
               }
+              input:hover,
+              input:focus {border-bottom-color: ${Colors.Acsent}}
               input[data-error="true"] {
-                border-bottom-color: red;
+                border-bottom-color: red !important;
               }
               .label-text {
                 font-weight: bold;

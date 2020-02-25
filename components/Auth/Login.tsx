@@ -34,7 +34,7 @@ export default function Login({ }: Props): ReactElement {
       <form className="no-gutters" onSubmit={handleSubmit(onSubmit)}>
         <fieldset>
           <div className="mb-3">
-            <Input name="username" label="Логин" type="email"
+            <Input name="username" label="Почта" type="email"
               error={errors.username}
               ref={register({
                 required: true,

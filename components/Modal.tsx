@@ -1,10 +1,11 @@
 import React, { ReactElement } from 'react'
 import ModalWindow from 'react-modal'
+import Icon from '../components/Icon'
 
 interface Props {
   children: any,
   open: boolean,
-  closeHandler: Function,
+  closeHandler: any,
 
   width?: number | string
 }
@@ -36,7 +37,21 @@ export default function Modal({ children, open, closeHandler, width }: Props): R
         }
       }}
     >
+      <button onClick={closeHandler} className="modal__close">
+        <Icon size={40} name="ei-close-o" />
+      </button>
       {children}
+
+      <style jsx>{`
+        .modal__close {
+          border: none;
+          padding: 5px;
+
+          position: absolute;
+          top: 5px;
+          right: 5px;
+        }
+        `}</style>
     </ModalWindow>
   )
 }

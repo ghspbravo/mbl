@@ -1,7 +1,7 @@
 const Pages = {
   Home: { header: 'Главная', title: 'Главная', route: '/' },
 
-  SignUp: { header: 'Регистрация', title: 'Регистрация', route: '/sign-up' },
+  SignUp: { header: 'Регистрация', title: 'Регистрация', route: '/join' },
   SignIn: { header: 'Вход', title: 'Вход', route: '/login' },
   Recover: { header: 'Восстановление пароля', title: 'Восстановление пароля', route: '/recover' },
 
