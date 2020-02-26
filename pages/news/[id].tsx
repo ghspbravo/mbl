@@ -23,7 +23,7 @@ export default function NewsSingle({ status, body }: Props): ReactElement {
       <Layout>
         {/* Load font for this page only */}
         <Head>
-          <title>Новости | {body.title}</title>
+          <title>{Pages.News.title} | {body.title}</title>
           <link href="https://fonts.googleapis.com/css?family=Montserrat:600&display=swap" rel="stylesheet"></link>
         </Head>
 

@@ -57,13 +57,13 @@ export default function News({ }: Props): ReactElement {
   return (
     <Layout>
       <Head>
-        <title>Новости</title>
+        <title>{Pages.News.title}</title>
       </Head>
       <section>
         <div className="container">
           <Breadcrumbs pages={[{ title: Pages.News.title }]} />
 
-          <h1>Новости</h1>
+          <h1>{Pages.News.header}</h1>
 
           {hasNews
             ? <div>
