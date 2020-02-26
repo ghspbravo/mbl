@@ -141,6 +141,10 @@ function Layout({ children: pageContent }: Props) {
                 text-decoration-color: #2676c0;
                 color: #2676c0;
               }
+              button[disabled] {
+                background-color: rgb(214, 219, 219) !important;
+                color: black !important;
+              }
               h1,h2,h3,h4,h5,h6 {
                 font-family: 'Montserrat', sans-serif;
                 font-weight: 700;
@@ -210,6 +214,9 @@ function Layout({ children: pageContent }: Props) {
                 display: block;
               }
               @media screen and (max-width: 576px) {
+                .m-align-center {
+                  text-align: center;
+                }
                 fieldset input {
                   padding-top: 10px;
                 }
@@ -236,8 +243,13 @@ function Layout({ children: pageContent }: Props) {
                 object-fit: cover;
               }
 
+              .w-100 {
+                width: 100%;
+              }
+
               img,object {
                 user-select: none;
+                display: block;
               }
               
               .align-center {

@@ -42,7 +42,7 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
     clearError("signUp");
     // TODO: handle signUp
     console.log(values);
-    const valid = false;
+    const valid = true;
     if (!valid) {
       setError("signUp", "signUpError", "Ошибка связи с сервером")
       // setError("signUp", "signUpExist", "Пользователь с такой почтой уже зарегистрирован")

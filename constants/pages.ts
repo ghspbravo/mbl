@@ -15,7 +15,7 @@ const Pages = {
   Terms: { header: 'Политика конфиденциальности', title: 'Политика конфиденциальности', route: '/terms' },
   Search: { header: 'Поиск', title: 'Поиск по сайту', route: '/search' },
 
-  Profile: { header: 'Профиль', title: 'Профиль', route: '/profile' },
+  Profile: { header: 'Личный кабинет', title: 'Профиль', route: '/profile' },
   MyEvents: { header: 'Мои мероприятия', title: 'Мои мероприятия', route: '/profile/events' },
   MyCources: { header: 'Мои программы', title: 'Мои программы', route: '/profile/cources' },
   MyProjects: { header: 'Мои проекты', title: 'Мои проекты', route: '/profile/projects' },

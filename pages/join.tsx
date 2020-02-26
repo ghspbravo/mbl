@@ -15,7 +15,7 @@ enum Steps {
 }
 
 export default function Join({ }: Props): ReactElement {
-  const [currentStep, currentStepSet] = useState(Steps.registration)
+  const [currentStep, currentStepSet] = useState(Steps.success)
   return (
     <Layout>
       <Head>
