@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useState } from 'react'
 import { useForm, useFieldArray } from "react-hook-form";
 import Input from '../../Inputs/Input';
 import { nameRegexp, dateRegexp, emailRegexp } from '../../../constants/regexp';
@@ -6,6 +6,7 @@ import Checkbox from '../../Inputs/Checkbox';
 import MaskedInput from 'react-text-mask'
 import composeRefs from '@seznam/compose-react-refs'
 import DynamicField from '../../Inputs/DynamicField';
+import PhotoInput from '../../Inputs/PhotoInput';
 
 
 interface Props {
@@ -17,6 +18,25 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
     mode: "onBlur"
   });
   const userPassword = watch('password')
+
+  const [userPhoto, userPhotoSet] = useState<any>();
+  const onPhotoChange = (e) => {
+    const input = e.target;
+
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        const filePath = e.target.result
+        userPhotoSet(filePath);
+      }
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+  const onPhotoRemove = () => {
+    userPhotoSet(undefined);
+  }
 
   const onSubmit = values => {
     clearError("signUp");
@@ -57,6 +77,7 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {/* credentials */}
       <div className="px-0 col-sm-10 col-xl-6 col-lg-8">
         <fieldset>
           <Input name="username" label="Почта" type="email" required
@@ -97,7 +118,7 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
         </fieldset>
       </div>
 
-
+      {/* role */}
       <div className="mt-4">
         <h2>Роль</h2>
 
@@ -110,6 +131,7 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
         </fieldset>
       </div>
 
+      {/* about */}
       <div className="mt-4">
         <h2>Информация о себе</h2>
 
@@ -126,6 +148,11 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
                 }
               })}
             />
+
+            {/* TODO: place photo input */}
+            <div className="my-5">
+              <PhotoInput image={userPhoto} onRemove={onPhotoRemove} onChange={onPhotoChange} />
+            </div>
 
             <div className="mt-3">
               <MaskedInput
@@ -159,11 +186,13 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
           </div>
 
           <div className="mt-3">
+            <div className="label-text mb-3">Место работы</div>
+
             {worksList.map((workPlace, index) => <div key={workPlace.id} className="mt-2">
               <DynamicField removeHandler={() => removeWork(index)}>
                 <fieldset>
                   <div>
-                    <Input name={`work[${index}].place`} label="Место работы"
+                    <Input name={`work[${index}].place`} label="Организация, должность" required
                       error={errors.work && errors.work[index]?.place}
                       ref={register({
                         required: true,
@@ -181,7 +210,7 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
                       <MaskedInput
                         mask={[/\d/, /\d/, '.', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/]}
                         guide={true}
-                        render={(ref, props) => <Input name={`work[${index}].start`} label="Начало работы" {...props}
+                        render={(ref, props) => <Input name={`work[${index}].start`} label="Начало работы" required {...props}
                           error={errors.work && errors.work[index]?.start}
                           ref={composeRefs(
                             register({
@@ -234,11 +263,12 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
           </div>
 
           <div className="mt-3">
+            <div className="label-text mb-3">Ссылки на соцсети</div>
             {linksList.map((linkItem, index) => <div key={linkItem.id} className="mt-1">
               <DynamicField removeHandler={() => removeLink(index)}>
                 <fieldset>
                   <div>
-                    <Input name={`link[${index}]`} placeholder="URL"
+                    <Input name={`link[${index}]`} placeholder="URL" required
                       error={errors.link && errors.link[index]}
                       ref={register({
                         required: true,
