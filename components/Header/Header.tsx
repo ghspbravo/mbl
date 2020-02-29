@@ -16,6 +16,9 @@ import Badge from '../Badge';
 import Modal from '../Modal';
 import Login from '../Auth/Login';
 
+import pass from '../../assets/pass.png';
+import Dropdown from '../Dropdown';
+
 function Header({ router }): ReactElement {
   const [openModal, openModalSet] = useState(false);
   const openModalHandler = () => { openModalSet(true) }
@@ -33,6 +36,86 @@ function Header({ router }): ReactElement {
   const SignUpButton = <Link href={Pages.SignUp.route}>
     <button className="ml-3 primary">Регистрация</button>
   </Link>
+
+  const signedIn = false;
+  const [profileSubmenuOpen, profileSubmenuOpenSet] = useState(false);
+  const onSubmenuOpen = () => { profileSubmenuOpenSet(true) }
+  const onSubmenuClose = () => { profileSubmenuOpenSet(false) }
+  const onSignOutClick = () => {
+    // TODO: signOut handler
+    onSubmenuClose();
+  }
+  const profileControls = () => {
+    return signedIn
+      ? <div onClick={onSubmenuOpen} className="profile-controls">
+        <div className="row align-items-center no-gutters">
+          <img style={{ width: "48px", height: "48px" }} src={pass} alt="Фотография пользователя" />
+          <div className="ml-2">
+            <div className="profile-controls__label">
+              <span>Личный кабинет</span>
+              <span className='icon'><Icon name="ei-chevron-down" size="s" /></span>
+            </div>
+          </div>
+        </div>
+        {profileSubmenuOpen && <Dropdown style={{ marginTop: '20px' }} closeHandler={onSubmenuClose}>
+          <Link href={Pages.Profile.route} passHref>
+            <a className="clear primary dropdown__item">Профиль</a>
+          </Link>
+          <Link href={Pages.MyEvents.route} passHref>
+            <a className="clear dropdown__item">Мои мероприятия</a>
+          </Link>
+          <Link href={Pages.MyCources.route} passHref>
+            <a className="clear dropdown__item">Мои программы</a>
+          </Link>
+          <Link href={Pages.MyProjects.route} passHref>
+            <a className="clear dropdown__item">Мои проекты</a>
+          </Link>
+          <div className="dropdown__item">
+            <Line />
+          </div>
+          {/* TODO: add register company href */}
+          <Link href={Pages.Profile.route} passHref>
+            <a className="clear dropdown__item">Привязать юр. лицо</a>
+          </Link>
+          <button onClick={onSignOutClick} className="clear dropdown__item w-100 align-left">Выйти</button>
+        </Dropdown>}
+        <style jsx>{`
+          .profile-controls {
+            position: relative;
+            z-index: 6;
+          }
+          .profile-controls__label {
+            cursor: pointer;
+            display: inline-block;
+
+            padding: 3px 5px;
+            border-radius: 5px;
+
+            background-color: transparent;
+            transition: background-color 0.3s ease-in-out;
+          }
+          .profile-controls:hover .profile-controls__label {
+            background-color: rgba(0, 102, 198, 0.1);
+          }
+          .dropdown__item {
+            display: block;
+            padding: 15px 30px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          .icon {
+            vertical-align: bottom;
+            top: 2px;
+            transform: rotate(${profileSubmenuOpen ? 180 : 0}deg);
+          }
+          `}</style>
+      </div>
+      : <div className="row no-gutters">
+        {SignInButton}
+        {SignUpButton}
+      </div>
+  }
 
   const [stickyHeader, stickyHeaderSet] = useState(false);
   let stickyEnabled: boolean = false;
@@ -123,16 +206,14 @@ function Header({ router }): ReactElement {
 
             <div style={{ position: 'relative', zIndex: 6 }}>
               <span>Город:&ensp;</span>
-              <Select openCallback={onOpenCities} dropdownStyle={{ minWidth: '300px', maxHeight: '250px' }} changeHandler={changeCityHandler} items={citiesList}>
+              <Select openCallback={onOpenCities} dropdownStyle={{ minWidth: '300px', maxHeight: '250px' }}
+                changeHandler={changeCityHandler} items={citiesList}>
                 <span><b>{currentCity}</b></span>
               </Select>
             </div>
 
             <div className="ml-auto">
-              <div className="row no-gutters">
-                {SignInButton}
-                {SignUpButton}
-              </div>
+              {profileControls()}
             </div>
 
           </div>
@@ -230,16 +311,15 @@ function Header({ router }): ReactElement {
 
           {burgerMenuShow && <div className="d-xl-none burger-inner">
 
-            <div className="d-md-none" style={{ position: 'relative', zIndex: 6 }}>
+            <div className="d-md-none" style={{ position: 'relative', zIndex: 7 }}>
               <span>Город:&ensp;</span>
               <Select openCallback={onOpenCities} dropdownStyle={{ maxWidth: '300px', maxHeight: '250px' }} changeHandler={changeCityHandler} items={citiesList}>
                 <span><b>{currentCity}</b></span>
               </Select>
             </div>
 
-            <div className="d-md-none row no-gutters mt-4">
-              {SignInButton}
-              {SignUpButton}
+            <div className="d-md-none mt-4">
+              {profileControls()}
             </div>
 
             <div className="d-md-none">
@@ -328,7 +408,7 @@ function Header({ router }): ReactElement {
           top: 108px;
           left: 0;
 
-          z-index: 4;
+          z-index: 5;
 
           background-color: rgba(0, 101, 198, 0.5);
         }

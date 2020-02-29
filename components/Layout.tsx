@@ -113,6 +113,9 @@ function Layout({ children: pageContent }: Props) {
                 text-decoration: inherit;
                 color: inherit;
               }
+              a.clear:hover {
+                text-decoration: underline;
+              }
               a.primary:not(.clear),
               .link.primary {
                 color: ${Colors.Primary};
@@ -161,7 +164,6 @@ function Layout({ children: pageContent }: Props) {
                 h2 { font-size: 1.125em; }
                 h3 { font-size: 1.125em; }
                 button {
-                  font-size: 0.75em;
                   padding: 7px 10px;
                   border-width: 2px;
                 }
@@ -254,6 +256,9 @@ function Layout({ children: pageContent }: Props) {
               
               .align-center {
                 text-align: center;
+              }
+              .align-left {
+                text-align: left;
               }
               .center {
                 display: flex;

@@ -7,7 +7,7 @@ interface Props {
 
   dropdownStyle?: React.CSSProperties,
 
-  children: JSX.Element | Text,
+  children: JSX.Element | String,
   changeHandler: (value: string | number) => void,
   items: { value: number | string, name: string }[],
 
