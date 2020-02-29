@@ -113,7 +113,7 @@ function Layout({ children: pageContent }: Props) {
                 text-decoration: inherit;
                 color: inherit;
               }
-              a.clear:hover {
+              a.clear:not(.button):hover {
                 text-decoration: underline;
               }
               a.primary:not(.clear),
