@@ -1,4 +1,5 @@
-import React, { ReactElement } from 'react'
+// redirect users with token
+import React, { ReactElement, useState } from 'react'
 import Layout from '../components/Layout'
 import Head from 'next/head'
 
@@ -8,24 +9,45 @@ import WrappedPage from '../components/WrappedPage';
 import { useForm } from "react-hook-form";
 import Input from '../components/Inputs/Input';
 import { emailRegexp } from '../constants/regexp';
+import Api from '../constants/api';
+import { fetcher } from '../constants/fetcher';
+
+import { RecoverFormatter } from '../constants/formatters/authFormatter'
 
 interface Props {
 
+}
+
+enum steps {
+  recover, success
 }
 
 export default function Recover({ }: Props): ReactElement {
   const { handleSubmit, register, errors, setError, clearError } = useForm({
     mode: "onBlur"
   });
-  const onSubmit = values => {
+
+  const [currentStep, currentStepSet] = useState(steps.recover)
+  const [submitting, submittingSet] = useState(false);
+  const onSubmit = async values => {
     clearError("recover");
-    // TODO: handle recover
-    console.log(values);
-    const valid = false;
-    if (!valid) {
-      setError("recover", "recoverError", "Ошибка связи с сервером")
-      // setError("recover", "recoverError", "Пользователь с введенными реквизитами не найден")
+    submittingSet(true);
+
+    const apiResponse = fetcher.fetch(Api.ResetPassword, {
+      params: {
+        email: values.email
+      }
+    })
+
+    const recoverFormatter = new RecoverFormatter();
+
+    const response = await recoverFormatter.format(apiResponse)
+    if (response.status > 0) {
+      setError("recover", "recoverError", response.body)
+    } else {
+      currentStepSet(steps.success)
     }
+    submittingSet(false);
   };
   return (
     <Layout>
@@ -40,7 +62,7 @@ export default function Recover({ }: Props): ReactElement {
             <WrappedPage>
               <h1 className="align-center">{Pages.Recover.header}</h1>
 
-              <form onSubmit={handleSubmit(onSubmit)}>
+              {currentStep === steps.recover && <form onSubmit={handleSubmit(onSubmit)}>
                 <fieldset>
                   <Input name="email" label="Почта, указанная при регистрации"
                     error={errors.email}
@@ -61,9 +83,15 @@ export default function Recover({ }: Props): ReactElement {
                 <p className="small">На введенную вами почту будет выслано письмо с инструкцией по сбросу пароля.</p>
 
                 <div className="mt-5 col-10 col-sm-12 px-0 mx-auto">
-                  <button className="primary full">Продолжить</button>
+                  <button disabled={submitting} className="primary full">{submitting ? "..." : "Продолжить"}</button>
                 </div>
-              </form>
+              </form>}
+
+              {currentStep === steps.success && <div>
+                <h2>Успех!</h2>
+                <p>Письмо для сброса пароля отправлено на почту.</p>
+              </div>}
+
             </WrappedPage>
           </div>
 

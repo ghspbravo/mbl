@@ -9,7 +9,7 @@ interface newsItemApi {
   id: number,
   title: string,
   imagePreview: string | null,
-  createdAt: Date
+  createdAt: string
 }
 
 export interface newsItem {
@@ -56,7 +56,7 @@ interface shortNewsApi {
   id: number,
   title: string,
   imagePreview: string | null,
-  createdAt: Date
+  createdAt: string
 }
 
 export interface shortNews {

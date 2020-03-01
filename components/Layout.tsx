@@ -6,6 +6,7 @@ import Colors from '../constants/colors'
 import Footer from './Footer'
 import { setAuthToken } from '../constants/fetcher';
 import moment from 'moment'
+import { getToken, setToken } from '../constants/auth'
 
 interface Props {
   children: JSX.Element[] | JSX.Element
@@ -16,9 +17,9 @@ function Layout({ children: pageContent }: Props) {
   const [loaded, loadedSet] = useState(false)
 
   useEffect(() => {
-    if (!!localStorage.getItem('token')) {
-      const AUTH_TOKEN = localStorage.getItem('token');
-      setAuthToken(AUTH_TOKEN)
+    const token = getToken();
+    if (token) {
+      setToken(token)
     }
     loadedSet(true);
   }, [])

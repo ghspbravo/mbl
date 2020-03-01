@@ -18,6 +18,7 @@ import Login from '../Auth/Login';
 
 import pass from '../../assets/pass.png';
 import Dropdown from '../Dropdown';
+import { removeToken, currentUserCtx } from '../../constants/auth';
 
 function Header({ router }): ReactElement {
   const [openModal, openModalSet] = useState(false);
@@ -30,22 +31,40 @@ function Header({ router }): ReactElement {
     : <div>
       <button onClick={openModalHandler}>Войти</button>
       <Modal open={openModal} closeHandler={closeModalHandler} width="100%">
-        <Login />
+        <Login successHandler={closeModalHandler} />
       </Modal>
     </div>
   const SignUpButton = <Link href={Pages.SignUp.route}>
     <button className="ml-3 primary">Регистрация</button>
   </Link>
 
-  const signedIn = false;
+  const [signedIn, signedInSet] = useState(null);
+  useEffect(() => {
+    if (currentUserCtx.isAuth !== signedIn) {
+      signedInSet(currentUserCtx.isAuth);
+    }
+  }, [currentUserCtx.isAuth])
+
+  const [userPhoto, userPhotoSet] = useState(pass);
+  useEffect(() => {
+    if (currentUserCtx.body?.photo !== userPhoto) {
+      userPhotoSet(currentUserCtx.body?.photo);
+    }
+  }, [currentUserCtx.body])
+
   const [profileSubmenuOpen, profileSubmenuOpenSet] = useState(false);
   const onSubmenuOpen = () => { profileSubmenuOpenSet(true) }
   const onSubmenuClose = () => { profileSubmenuOpenSet(false) }
   const onSignOutClick = () => {
-    // TODO: signOut handler
+    removeToken();
     onSubmenuClose();
   }
   const profileControls = () => {
+    if (signedIn === null) {
+      return <div>
+        <Icon size="s" name="ei-spinner-2" />
+      </div>
+    }
     return signedIn
       ? <div onClick={onSubmenuOpen} className="profile-controls">
         <div className="row align-items-center no-gutters">

@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useState } from 'react'
 import Icon from '../Icon'
 import Input from '../Inputs/Input'
 import Pages from '../../constants/pages'
@@ -7,24 +7,44 @@ import Link from 'next/link'
 import { emailRegexp } from '../../constants/regexp';
 
 import { useForm } from "react-hook-form";
+import { fetcher } from '../../constants/fetcher'
+import Api from '../../constants/api'
+import { SignInFormatter } from '../../constants/formatters/authFormatter'
+import { setToken } from '../../constants/auth'
 
 interface Props {
-
+  successHandler?: any
 }
 
-export default function Login({ }: Props): ReactElement {
+export default function Login({ successHandler }: Props): ReactElement {
   const { handleSubmit, register, errors, setError, clearError } = useForm({
     mode: "onBlur"
   });
-  const onSubmit = values => {
+  const [submitting, submittingSet] = useState(false);
+  const onSubmit = async values => {
+    submittingSet(true);
     clearError("auth");
-    // TODO: handle login
-    console.log(values);
-    const valid = false;
-    if (!valid) {
-      setError("auth", "authError", "Ошибка связи с сервером")
-      // setError("auth", "authError", "Неверный логин/пароль")
+
+    const apiResponse = fetcher.fetch(Api.Login, {
+      method: "POST",
+      headers: { "Content-Type": "application/json-patch+json" },
+      body: JSON.stringify({
+        Email: values.username,
+        Password: values.password
+      })
+    })
+
+    const signInFormatter = new SignInFormatter();
+
+    const response = await signInFormatter.format(apiResponse)
+    if (response.status > 0) {
+      setError("auth", "authError", response.body)
+    } else {
+      const token = response.body;
+      setToken(token);
+      if (successHandler) { return successHandler(); }
     }
+    submittingSet(false)
   };
   return (
     <div className="col-md-10 mx-auto">
@@ -70,7 +90,7 @@ export default function Login({ }: Props): ReactElement {
         </div>
 
         <div className="mt-5 col-10 col-sm-12 px-0 mx-auto">
-          <button className="primary full">Войти</button>
+          <button disabled={submitting} className="primary full">{submitting ? "Авторизация..." : "Войти"}</button>
         </div>
       </form>
 

@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useState, useEffect } from 'react'
 import { useForm, useFieldArray } from "react-hook-form";
 import Input from '../../Inputs/Input';
 import { nameRegexp, dateRegexp, emailRegexp } from '../../../constants/regexp';
@@ -7,12 +7,20 @@ import MaskedInput from 'react-text-mask'
 import composeRefs from '@seznam/compose-react-refs'
 import DynamicField from '../../Inputs/DynamicField';
 import PhotoInput from '../../Inputs/PhotoInput';
+import { fetcher } from '../../../constants/fetcher';
+import Api from '../../../constants/api';
+import { RegistrationFormatter } from '../../../constants/formatters/registrationFormatter';
+import { formatName } from '../../../constants/formatters/rootFormatter';
+import { setToken } from '../../../constants/auth';
+import { CommonFormatter } from '../../../constants/formatters/commonFormatter';
+import Icon from '../../Icon';
 
 
 interface Props {
   nextStepHandler: Function
 }
 
+// "http://dev.mbl.mba/api/v1/Account/Register?Email=test%40mail.ru&Password=12345678&WorkExperiences=%7BName%3A%20%22work1%22%2C%20Start%3A%20%2201-01-2010%22%2C%20End%3A%20%2211-02-2018%22%7D&WorkExperiences=%7BName%3A%20%22work2%22%2C%20Start%3A%20%2212-02-2018%22%7D&ProfileTypeIds=1&ProfileTypeIds=2&FirstName=%D0%98%D0%B2%D0%B0%D0%BD&SurName=%D0%98%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2&MiddleName=%D0%98%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2%D0%B8%D1%87&BirthDate=01-10-1999"
 export default function RegistrationForm({ nextStepHandler }: Props): ReactElement {
   const { handleSubmit, register, errors, setError, clearError, watch, control } = useForm({
     mode: "onBlur"
@@ -20,10 +28,12 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
   const userPassword = watch('password')
 
   const [userPhoto, userPhotoSet] = useState<any>();
+  let photoFile: File;
   const onPhotoChange = (e) => {
     const input = e.target;
 
     if (input.files && input.files[0]) {
+      photoFile = input.files[0]
       var reader = new FileReader();
 
       reader.onload = function (e) {
@@ -31,37 +41,118 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
         userPhotoSet(filePath);
       }
 
-      reader.readAsDataURL(input.files[0]);
+      reader.readAsDataURL(photoFile);
     }
   }
   const onPhotoRemove = () => {
     userPhotoSet(undefined);
+    photoFile = null;
   }
 
-  const onSubmit = values => {
-    clearError("signUp");
-    // TODO: handle signUp
-    console.log(values);
-    const valid = true;
-    if (!valid) {
-      setError("signUp", "signUpError", "Ошибка связи с сервером")
-      // setError("signUp", "signUpExist", "Пользователь с такой почтой уже зарегистрирован")
-    } else {
+  interface formValues {
+    username: string,
+    password: string,
+    repeatPassword: string,
+    name: string,
+    role?: boolean[],
+    birthday: string,
+    study?: string,
+    sphere?: boolean[],
+    link?: string[],
+    work?: { place: string, start: string, end?: string }[],
+  }
 
+  const [submitting, submittingSet] = useState(false);
+  const onSubmit = async (values: formValues) => {
+    clearError("signUp");
+    submittingSet(true);
+    const nameObj = formatName(values.name)
+    const payload: any = {
+      Email: values.username,
+      Password: values.password,
+      FirstName: nameObj.name,
+      SurName: nameObj.surname,
+      MiddleName: nameObj.middlename,
+      BirthDate: values.birthday.replace(/\./g, "-"),
+    }
+
+    if (values.role?.length) {
+      let idx = 0;
+      values.role.forEach((selected, index) => {
+        if (selected) {
+          payload[`ProfileTypeIds[${idx}]`] = index;
+          idx += 1;
+        }
+      })
+    }
+    if (values.sphere?.length) {
+      let idx = 0;
+      values.sphere.forEach((selected, index) => {
+        if (selected) {
+          payload[`SkillIds[${idx}]`] = index;
+          idx += 1;
+        }
+      })
+    }
+    if (values.link?.length) {
+      values.link.forEach((link, index) => {
+        if (link) {
+          payload[`SocialNetWorkUrls[${index}]`] = link;
+        }
+      })
+    }
+    if (values.work?.length) {
+      values.work.forEach((work, index) => {
+        if (work) {
+          payload[`WorkExperiences[${index}]`] = JSON.stringify({
+            Name: work.place,
+            Start: work.start.replace(/\./g, "-"),
+            End: work?.end.replace(/\./g, "-") || ""
+          });
+        }
+      })
+    }
+
+    const formData = new FormData();
+    if (photoFile) { formData.append("Photo", photoFile); }
+
+    const apiResponse = fetcher.fetch(Api.Register, {
+      params: payload,
+      method: "POST",
+      headers: { "Content-Type": "multipart/form-data" },
+      body: formData
+    })
+
+    const registrationFormatter = new RegistrationFormatter();
+
+    const response = await registrationFormatter.format(apiResponse)
+    if (response.status > 0) {
+      setError("signUp", "signUpError", response.body)
+    } else {
+      setToken(response.body);
 
       nextStepHandler();
     }
+    submittingSet(false);
   };
 
-  const sampleList = [
-    { id: 1, name: 'Участник' },
-    { id: 2, name: 'Преподаватель' },
-    { id: 3, name: 'Наставник' },
-    { id: 4, name: 'Инвестор' },
-    { id: 5, name: 'Наставник' },
-    { id: 6, name: 'Инвестор' },
-    { id: 7, name: 'Наставник' },
-  ]
+  const [rolesList, rolesListSet] = useState(null)
+  const [skillsList, skillsListSet] = useState(null)
+  useEffect(() => {
+    const commonFormatter = new CommonFormatter();
+    commonFormatter.formatRoles(fetcher.fetch(Api.GetRoles))
+      .then(response => {
+        if (response.status > 0) { setError("roles", "rolesError", response.body) }
+        else { rolesListSet(response.body) }
+      })
+    commonFormatter.formatSkills(fetcher.fetch(Api.GetSkills))
+      .then(response => {
+        if (response.status > 0) { setError("skills", "skillsError", response.body) }
+        else { skillsListSet(response.body) }
+      })
+
+  }, [])
+
 
   const { fields: worksList, append: appendWork, remove: removeWork } = useFieldArray({
     control,
@@ -98,8 +189,8 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
                 ref={register({
                   required: true,
                   minLength: {
-                    value: 6,
-                    message: "Пароль должен содержать хотя бы 6 символов"
+                    value: 8,
+                    message: "Пароль должен содержать хотя бы 8 символов"
                   }
                 })}
               />
@@ -122,13 +213,18 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
       <div className="mt-4">
         <h2>Роль</h2>
 
-        <fieldset>
+        {rolesList?.length > 0 && <fieldset>
           <div className="row no-gutters">
-            {sampleList && sampleList.map(role => <div key={role.id} className="mr-3 mb-2">
+            {rolesList.map(role => <div key={role.id} className="mr-3 mb-2">
               <Checkbox ref={register({})} name={`role[${role.id}]`}>{role.name}</Checkbox>
             </div>)}
           </div>
-        </fieldset>
+
+        </fieldset>}
+        {rolesList === null && <Icon name="ei-spinner-2" size={24} />}
+        {errors.roles && <div className="error">
+          {(errors.roles as any).message}
+        </div>}
       </div>
 
       {/* about */}
@@ -149,7 +245,6 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
               })}
             />
 
-            {/* TODO: place photo input */}
             <div className="my-5">
               <PhotoInput image={userPhoto} onRemove={onPhotoRemove} onChange={onPhotoChange} />
             </div>
@@ -253,13 +348,17 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
           <div className="mt-4">
             <div className="label-text mb-3">Интересы, профессиональные области</div>
 
-            <fieldset>
+            {skillsList?.length > 0 && <fieldset>
               <div className="row no-gutters">
-                {sampleList && sampleList.map(sphere => <div key={sphere.id} className="mr-3 mb-2">
+                {skillsList.map(sphere => <div key={sphere.id} className="mr-3 mb-2">
                   <Checkbox ref={register({})} name={`sphere[${sphere.id}]`}>{sphere.name}</Checkbox>
                 </div>)}
               </div>
-            </fieldset>
+            </fieldset>}
+            {skillsList === null && <Icon name="ei-spinner-2" size={24} />}
+            {errors.skills && <div className="error">
+              {(errors.skills as any).message}
+            </div>}
           </div>
 
           <div className="mt-3">
@@ -290,7 +389,7 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
       </div>}
 
       <div className="mt-5">
-        <button className="primary mx-auto">Зарегистрироваться</button>
+        <button disabled={submitting} className="primary mx-auto">{submitting ? "Регистрация..." : "Зарегистрироваться"}</button>
       </div>
     </form>
   )

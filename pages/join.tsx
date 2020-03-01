@@ -1,3 +1,4 @@
+// redirect users with token
 import React, { ReactElement, useEffect, useState } from 'react'
 import Head from 'next/head'
 import Layout from '../components/Layout'
@@ -15,7 +16,7 @@ enum Steps {
 }
 
 export default function Join({ }: Props): ReactElement {
-  const [currentStep, currentStepSet] = useState(Steps.success)
+  const [currentStep, currentStepSet] = useState(Steps.registration)
   return (
     <Layout>
       <Head>
