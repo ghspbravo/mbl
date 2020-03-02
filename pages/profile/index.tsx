@@ -4,6 +4,7 @@ import Head from 'next/head'
 
 import Pages from '../../constants/pages';
 import Tag from '../../components/Tag';
+import moment from 'moment';
 
 interface Props {
 
@@ -61,33 +62,34 @@ export default function Login({ }: Props): ReactElement {
                     <img className="responsive mx-auto" style={{ maxWidth: "350px" }} src={currentUser.photo} alt="Фотография человека" />
                   </div>
 
-                  <div className="row mb-3">
+                  {currentUser.birthday && <div className="row mb-3">
                     <div className="col-lg-4 col-xl-3 col-md-6 text"><b>Дата рождния:</b></div>
-                    <div className="col-lg-8 col-xl-9 col-md-6 text">28 сентября 1995 г.</div>
-                  </div>
-                  <div className="row mb-3">
+                    <div className="col-lg-8 col-xl-9 col-md-6 text">{moment(currentUser.birthday).format("LL")}</div>
+                  </div>}
+                  {currentUser.education && <div className="row mb-3">
                     <div className="col-lg-4 col-xl-3 col-md-6 text"><b>Место учебы:</b></div>
-                    <div className="col-lg-8 col-xl-9 col-md-6 text">Уральский Федеральный Университет</div>
-                  </div>
-                  <div className="row mb-3">
+                    <div className="col-lg-8 col-xl-9 col-md-6 text">{currentUser.education}</div>
+                  </div>}
+                  {currentUser.workList?.length > 0 && <div className="row mb-3">
                     <div className="col-lg-4 col-xl-3 col-md-6 text"><b>Место работы:</b></div>
                     <div className="col-lg-8 col-xl-9 col-md-6 text">
-                      Business Consulting Group, бизнес-консультант, с 2017 г.
-                    <br /> Строй-Сервис, менеджер по продажам, 2016 - 2017 гг.
-                  </div>
-                  </div>
-                  <div className="row mb-3">
+                      {currentUser.workList.map((work, index) => <div key={index}>
+                        {`${work.name}, ${work.end ? `${work.start} – ${work.end} гг.` : `с ${work.start} г.`}`}
+                      </div>)}
+                    </div>
+                  </div>}
+                  {currentUser.spheresList?.length > 0 && <div className="row mb-3">
                     <div className="col-lg-4 col-xl-3 col-md-6 text"><b>Интересы:</b></div>
-                    <div className="col-lg-8 col-xl-9 col-md-6 text">Маркетинг, Бизнес-консалтинг, IT</div>
-                  </div>
-                  <div className="row mb-3">
+                    <div className="col-lg-8 col-xl-9 col-md-6 text">{currentUser.spheresList.map(sphere => sphere.name).join(',')}</div>
+                  </div>}
+                  {currentUser.interests && <div className="row mb-3">
                     <div className="col-lg-4 col-xl-3 col-md-6 text"><b>Навыки:</b></div>
-                    <div className="col-lg-8 col-xl-9 col-md-6 text">Продажи, Нетворкинг, Публичные выступления, Проджект-менеджмент, Маркетинг, Реклама, Бизнес-консультирование, Коучинг</div>
-                  </div>
-                  <div className="row mb-3">
+                    <div className="col-lg-8 col-xl-9 col-md-6 text">{currentUser.interests}</div>
+                  </div>}
+                  {currentUser.achievements && <div className="row mb-3">
                     <div className="col-lg-4 col-xl-3 col-md-6 text"><b>Интересы и достижения:</b></div>
-                    <div className="col-lg-8 col-xl-9 col-md-6 text">Моя цель — повысить качество малого бизнеса в России. Поэтому я основал компанию, оказывающую консалтинговые услуги. Я регулярно повышаю уровень своего образования — прохожу развивающие программы, участвую в образовательных проектах, посещаю лекции и мастер-классы.</div>
-                  </div>
+                    <div className="col-lg-8 col-xl-9 col-md-6 text">{currentUser.achievements}</div>
+                  </div>}
 
                   <div className="d-lg-none">
                     {buttons()}
@@ -101,6 +103,6 @@ export default function Login({ }: Props): ReactElement {
           </div>
         </section>}
       </AuthContext.Consumer>
-    </Layout>
+    </Layout >
   )
 }

@@ -69,30 +69,32 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
   const onSubmit = async (values: formValues) => {
     clearError("signUp");
     submittingSet(true);
+    const formData = new FormData();
+
     const nameObj = formatName(values.name)
-    const payload: any = {
-      Email: values.username,
-      Password: values.password,
-      FirstName: nameObj.name,
-      SurName: nameObj.surname,
-      MiddleName: nameObj.middlename,
-      BirthDate: values.birthday.replace(/\./g, "-"),
-    }
+    formData.append("FirstName", nameObj.name)
+    formData.append("SurName", nameObj.surname)
+    if (nameObj.middlename) { formData.append("MiddleName", nameObj.middlename) }
+    formData.append("BirthDate", values.birthday.replace(/\./g, "-"))
+
+    formData.append("Email", values.username)
+    formData.append("Password", values.password)
 
     if (values.role?.length) {
       let idx = 0;
       values.role.forEach((selected, index) => {
         if (selected) {
-          payload[`ProfileTypeIds[${idx}]`] = index;
+          formData.append(`ProfileTypeIds[${idx}]`, index.toString());
           idx += 1;
         }
       })
     }
+
     if (values.sphere?.length) {
       let idx = 0;
       values.sphere.forEach((selected, index) => {
         if (selected) {
-          payload[`SkillIds[${idx}]`] = index;
+          formData.append(`SkillIds[${idx}]`, index.toString());
           idx += 1;
         }
       })
@@ -100,27 +102,23 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
     if (values.link?.length) {
       values.link.forEach((link, index) => {
         if (link) {
-          payload[`SocialNetWorkUrls[${index}]`] = link;
+          formData.append(`SocialNetWorkUrls[${index}]`, link);
         }
       })
     }
     if (values.work?.length) {
       values.work.forEach((work, index) => {
         if (work) {
-          payload[`WorkExperiences[${index}]`] = JSON.stringify({
-            Name: work.place,
-            Start: work.start.replace(/\./g, "-"),
-            End: work?.end.replace(/\./g, "-") || ""
-          });
+          formData.append(`WorkExperiences[${index}].Name`, work.place)
+          formData.append(`WorkExperiences[${index}].Start`, work.start.replace(/\./g, "-"))
+          if (work.end) { formData.append(`WorkExperiences[${index}].End`, work.end.replace(/\./g, "-") || "") }
         }
       })
     }
 
-    const formData = new FormData();
     if (photoFile) { formData.append("Photo", photoFile); }
 
     const apiResponse = fetcher.fetch(Api.Register, {
-      params: payload,
       method: "POST",
       headers: { "Content-Type": "multipart/form-data" },
       body: formData

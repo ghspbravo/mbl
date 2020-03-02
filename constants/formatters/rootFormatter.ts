@@ -26,7 +26,7 @@ export function formatName(nameStr: string) {
     return {
       name: results[2].trim(),
       surname: results[1].trim(),
-      middlename: results[3].trim()
+      middlename: results[3] ? results[3].trim() : ""
     }
   }
 }

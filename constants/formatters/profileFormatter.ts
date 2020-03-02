@@ -22,7 +22,6 @@ export class ProfileFormatter extends Formatter {
   }
 
   async formatCurrentUser(fetchPromise: Promise<Response>) {
-    // TODO: format current user
     await this.responseHandle(fetchPromise)
       .then(contents => {
         if (this.status > 0) { return; }
@@ -32,12 +31,14 @@ export class ProfileFormatter extends Formatter {
           achivements, wantToLearn, interests, education,
           skills, portfolio
         } = contents;
+        const formattedWorkExperiences = workExperiences?.map(work => ({ name: work.Name, start: work.Start, end: work.End }))
+
         this.body = {
           id,
           name: `${surName} ${firstName} ${middleName || ""}`.trimEnd(),
           photo: photo || pass, birthday: birthDate,
           roles: profileTypes || [],
-          education, workList: workExperiences,
+          education, workList: formattedWorkExperiences,
           socialLinks: socialNetWorks || [],
           spheresList: skills || [],
           achievements: achivements,
