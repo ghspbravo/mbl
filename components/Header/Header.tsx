@@ -96,7 +96,7 @@ function Header({ router }): ReactElement {
           <Link href={Pages.Profile.route} passHref>
             <a className="clear dropdown__item">Привязать юр. лицо</a>
           </Link>
-          <button onClick={onSignOutClick} className="clear dropdown__item w-100 align-left">Выйти</button>
+          <button onClick={onSignOutClick} className="clear link primary dropdown__item w-100 align-left">Выйти</button>
         </Dropdown>}
         <style jsx>{`
           .profile-controls {
@@ -319,7 +319,7 @@ function Header({ router }): ReactElement {
                 <Icon size="s" name="ei-search" />
               </div>
 
-              <input type="text" onChange={searchQueryChangeHandler} placeholder="Поиск по сайту" value={searchQuery} />
+              <input style={{ borderBottom: "none" }} type="text" onChange={searchQueryChangeHandler} placeholder="Поиск по сайту" value={searchQuery} />
 
               <div className="interactive" onClick={searchCancelHandler}>
                 <Icon size="s" name="ei-close" />
