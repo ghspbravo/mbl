@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useEffect } from 'react'
+import React, { ReactElement, useState, useEffect, useContext } from 'react'
 import { withRouter } from 'next/router';
 
 import coloredLine from '../../assets/colored_line.jpg'
@@ -18,7 +18,8 @@ import Login from '../Auth/Login';
 
 import pass from '../../assets/pass.png';
 import Dropdown from '../Dropdown';
-import { removeToken, currentUserCtx } from '../../constants/auth';
+import { removeToken } from '../../constants/auth';
+import { AuthContext } from '../Layout';
 
 function Header({ router }): ReactElement {
   const [openModal, openModalSet] = useState(false);
@@ -38,28 +39,16 @@ function Header({ router }): ReactElement {
     <button className="ml-3 primary">Регистрация</button>
   </Link>
 
-  const [signedIn, signedInSet] = useState(null);
-  useEffect(() => {
-    if (currentUserCtx.isAuth !== signedIn) {
-      signedInSet(currentUserCtx.isAuth);
-    }
-  }, [currentUserCtx.isAuth])
-
-  const [userPhoto, userPhotoSet] = useState(pass);
-  useEffect(() => {
-    if (currentUserCtx.body?.photo !== userPhoto) {
-      userPhotoSet(currentUserCtx.body?.photo);
-    }
-  }, [currentUserCtx.body])
+  const { setAuthState } = useContext(AuthContext)
 
   const [profileSubmenuOpen, profileSubmenuOpenSet] = useState(false);
   const onSubmenuOpen = () => { profileSubmenuOpenSet(true) }
   const onSubmenuClose = () => { profileSubmenuOpenSet(false) }
   const onSignOutClick = () => {
-    removeToken();
+    removeToken(setAuthState);
     onSubmenuClose();
   }
-  const profileControls = () => {
+  const profileControls = (signedIn, user) => {
     if (signedIn === null) {
       return <div>
         <Icon size="s" name="ei-spinner-2" />
@@ -68,7 +57,7 @@ function Header({ router }): ReactElement {
     return signedIn
       ? <div onClick={onSubmenuOpen} className="profile-controls">
         <div className="row align-items-center no-gutters">
-          <img style={{ width: "48px", height: "48px" }} src={pass} alt="Фотография пользователя" />
+          <img style={{ width: "48px", height: "48px" }} src={user.photo} alt="Фотография пользователя" />
           <div className="ml-2">
             <div className="profile-controls__label">
               <span>Личный кабинет</span>
@@ -217,374 +206,376 @@ function Header({ router }): ReactElement {
   }
 
   return (
-    <header>
-      <img src={coloredLine} alt="" className="line" />
-      <section className="d-none d-md-block">
-        <div className="container">
-          <div className="row no-gutters align-items-center">
+    <AuthContext.Consumer>
+      {({ isAuth, currentUser }) => <header>
+        <img src={coloredLine} alt="" className="line" />
+        <section className="d-none d-md-block">
+          <div className="container">
+            <div className="row no-gutters align-items-center">
 
-            <div style={{ position: 'relative', zIndex: 6 }}>
-              <span>Город:&ensp;</span>
-              <Select openCallback={onOpenCities} dropdownStyle={{ minWidth: '300px', maxHeight: '250px' }}
-                changeHandler={changeCityHandler} items={citiesList}>
-                <span><b>{currentCity}</b></span>
-              </Select>
+              <div style={{ position: 'relative', zIndex: 6 }}>
+                <span>Город:&ensp;</span>
+                <Select openCallback={onOpenCities} dropdownStyle={{ minWidth: '300px', maxHeight: '250px' }}
+                  changeHandler={changeCityHandler} items={citiesList}>
+                  <span><b>{currentCity}</b></span>
+                </Select>
+              </div>
+
+              <div className="ml-auto">
+                {profileControls(isAuth, currentUser)}
+              </div>
+
             </div>
-
-            <div className="ml-auto">
-              {profileControls()}
-            </div>
-
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="navigation" className='inverted'>
-        <div className="container">
-          <div className="row no-gutters align-items-center navigation">
-            <Link href={Home.route}>
-              <a className="navigation-logo">
-                <object style={{ pointerEvents: 'none' }} type="image/svg+xml" data={logo} />
-              </a>
-            </Link>
+        <section id="navigation" className='inverted'>
+          <div className="container">
+            <div className="row no-gutters align-items-center navigation">
+              <Link href={Home.route}>
+                <a className="navigation-logo">
+                  <object style={{ pointerEvents: 'none' }} type="image/svg+xml" data={logo} />
+                </a>
+              </Link>
 
-            <div className="navigation-item d-none d-xl-block">
-              <Badge small>в разработке</Badge>
-              <Link href={Events.route} passHref={true}>
-                <a>{Events.title}</a>
-              </Link>
-            </div>
-            <div className="navigation-item d-none d-xl-block">
-              <Link href={News.route} passHref={true}>
-                <a >{News.title}</a>
-              </Link>
-            </div>
-            <div className="navigation-item d-none d-xl-block">
-              <Badge small>в разработке</Badge>
-              <Link href={Cources.route} passHref={true}>
-                <a >{Cources.title}</a>
-              </Link>
-            </div>
-            <div className="navigation-item d-none d-xl-block">
-              <Badge small>в разработке</Badge>
-              <Link href={Members.route} passHref={true}>
-                <a >{Members.title}</a>
-              </Link>
-            </div>
-            <div className="navigation-item d-none d-xl-block">
-              <Badge small>в разработке</Badge>
-              <Link href={Companies.route} passHref={true}>
-                <a >{Companies.title}</a>
-              </Link>
-            </div>
-            <div className="navigation-item d-none d-xl-block">
-              <Badge small>в разработке</Badge>
-              <Link href={Projects.route} passHref={true}>
-                <a >{Projects.title}</a>
-              </Link>
-            </div>
-            <div className="navigation-item d-none d-xl-block">
-              <Badge small>в разработке</Badge>
-              <Link href={About.route} passHref={true}>
-                <a >{About.title}</a>
-              </Link>
-            </div>
-
-            <div className="ml-auto d-none d-xl-block">
-              <div onClick={searchToggleHandler} className="row no-gutters align-items-center search">
-                <span>Найти</span>
-                <div style={{ paddingBottom: '3px' }}>
-                  <Icon size="s" name="ei-search" />
-                </div>
+              <div className="navigation-item d-none d-xl-block">
+                <Badge small>в разработке</Badge>
+                <Link href={Events.route} passHref={true}>
+                  <a>{Events.title}</a>
+                </Link>
               </div>
-            </div>
-
-            <div className="ml-auto d-xl-none">
-              {!burgerMenuShow && <div onClick={burgerMenuToggle} className="interactive">
-                <Icon size="s" name="ei-navicon" />
-              </div>}
-
-              {burgerMenuShow && <div className="row no-gutters align-items-center">
-                <div onClick={searchToggleHandler}>
-                  <Icon size="s" name="ei-search" />
-                </div>
-                <div onClick={burgerMenuToggle} className="ml-3">
-                  <Icon size="s" name="ei-close" />
-                </div>
-              </div>}
-            </div>
-
-            {searchEnable && <div className="search-input row no-gutters align-items-center justify-content-end">
-              <div className="interactive mr-2" onClick={searchHandler}>
-                <Icon size="s" name="ei-search" />
-              </div>
-
-              <input style={{ borderBottom: "none" }} type="text" onChange={searchQueryChangeHandler} placeholder="Поиск по сайту" value={searchQuery} />
-
-              <div className="interactive" onClick={searchCancelHandler}>
-                <Icon size="s" name="ei-close" />
-              </div>
-            </div>}
-
-          </div>
-
-          {burgerMenuShow && <div className="d-xl-none burger-inner">
-
-            <div className="d-md-none" style={{ position: 'relative', zIndex: 7 }}>
-              <span>Город:&ensp;</span>
-              <Select openCallback={onOpenCities} dropdownStyle={{ maxWidth: '300px', maxHeight: '250px' }} changeHandler={changeCityHandler} items={citiesList}>
-                <span><b>{currentCity}</b></span>
-              </Select>
-            </div>
-
-            <div className="d-md-none mt-4">
-              {profileControls()}
-            </div>
-
-            <div className="d-md-none">
-              <Line top={30} bottom={10} color="white" />
-            </div>
-
-            <div className="row">
-              <div className="col-6 col-md-3 burger-navigation-item">
+              <div className="navigation-item d-none d-xl-block">
                 <Link href={News.route} passHref={true}>
                   <a >{News.title}</a>
                 </Link>
               </div>
-              <div className="col-6 col-md-3 burger-navigation-item">
-                <Badge small>в разработке</Badge>
-                <Link href={Events.route} passHref={true}>
-                  <a >{Events.title}</a>
-                </Link>
-              </div>
-              <div className="col-6 col-md-3 burger-navigation-item">
+              <div className="navigation-item d-none d-xl-block">
                 <Badge small>в разработке</Badge>
                 <Link href={Cources.route} passHref={true}>
                   <a >{Cources.title}</a>
                 </Link>
               </div>
-              <div className="col-6 col-md-3 burger-navigation-item">
+              <div className="navigation-item d-none d-xl-block">
                 <Badge small>в разработке</Badge>
                 <Link href={Members.route} passHref={true}>
                   <a >{Members.title}</a>
                 </Link>
               </div>
-              <div className="col-6 col-md-3 burger-navigation-item">
+              <div className="navigation-item d-none d-xl-block">
                 <Badge small>в разработке</Badge>
                 <Link href={Companies.route} passHref={true}>
                   <a >{Companies.title}</a>
                 </Link>
               </div>
-              <div className="col-6 col-md-3 burger-navigation-item">
+              <div className="navigation-item d-none d-xl-block">
                 <Badge small>в разработке</Badge>
                 <Link href={Projects.route} passHref={true}>
                   <a >{Projects.title}</a>
                 </Link>
               </div>
-              <div className="col-6 col-md-3 burger-navigation-item">
+              <div className="navigation-item d-none d-xl-block">
                 <Badge small>в разработке</Badge>
                 <Link href={About.route} passHref={true}>
                   <a >{About.title}</a>
                 </Link>
               </div>
+
+              <div className="ml-auto d-none d-xl-block">
+                <div onClick={searchToggleHandler} className="row no-gutters align-items-center search">
+                  <span>Найти</span>
+                  <div style={{ paddingBottom: '3px' }}>
+                    <Icon size="s" name="ei-search" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="ml-auto d-xl-none">
+                {!burgerMenuShow && <div onClick={burgerMenuToggle} className="interactive">
+                  <Icon size="s" name="ei-navicon" />
+                </div>}
+
+                {burgerMenuShow && <div className="row no-gutters align-items-center">
+                  <div onClick={searchToggleHandler}>
+                    <Icon size="s" name="ei-search" />
+                  </div>
+                  <div onClick={burgerMenuToggle} className="ml-3">
+                    <Icon size="s" name="ei-close" />
+                  </div>
+                </div>}
+              </div>
+
+              {searchEnable && <div className="search-input row no-gutters align-items-center justify-content-end">
+                <div className="interactive mr-2" onClick={searchHandler}>
+                  <Icon size="s" name="ei-search" />
+                </div>
+
+                <input style={{ borderBottom: "none" }} type="text" onChange={searchQueryChangeHandler} placeholder="Поиск по сайту" value={searchQuery} />
+
+                <div className="interactive" onClick={searchCancelHandler}>
+                  <Icon size="s" name="ei-close" />
+                </div>
+              </div>}
+
             </div>
 
-          </div>}
-        </div>
+            {burgerMenuShow && <div className="d-xl-none burger-inner">
 
-      </section>
+              <div className="d-md-none" style={{ position: 'relative', zIndex: 7 }}>
+                <span>Город:&ensp;</span>
+                <Select openCallback={onOpenCities} dropdownStyle={{ maxWidth: '300px', maxHeight: '250px' }} changeHandler={changeCityHandler} items={citiesList}>
+                  <span><b>{currentCity}</b></span>
+                </Select>
+              </div>
 
-      {burgerMenuShow && <div onClick={burgerMenuToggle} className="d-xl-none burger-menu-wrapper" />}
+              <div className="d-md-none mt-4">
+                {profileControls(isAuth, currentUser)}
+              </div>
 
-      <style jsx global>{`
-            body, html {overflow-y: ${burgerMenuShow ? "hidden" : "auto"}}
-        `}</style>
+              <div className="d-md-none">
+                <Line top={30} bottom={10} color="white" />
+              </div>
 
-      <style jsx>{`
-        .burger-navigation-item,
-        .navigation-item {
-          position: relative;
-        }
-        .burger-navigation-item a {
-          display: inline-block;
+              <div className="row">
+                <div className="col-6 col-md-3 burger-navigation-item">
+                  <Link href={News.route} passHref={true}>
+                    <a >{News.title}</a>
+                  </Link>
+                </div>
+                <div className="col-6 col-md-3 burger-navigation-item">
+                  <Badge small>в разработке</Badge>
+                  <Link href={Events.route} passHref={true}>
+                    <a >{Events.title}</a>
+                  </Link>
+                </div>
+                <div className="col-6 col-md-3 burger-navigation-item">
+                  <Badge small>в разработке</Badge>
+                  <Link href={Cources.route} passHref={true}>
+                    <a >{Cources.title}</a>
+                  </Link>
+                </div>
+                <div className="col-6 col-md-3 burger-navigation-item">
+                  <Badge small>в разработке</Badge>
+                  <Link href={Members.route} passHref={true}>
+                    <a >{Members.title}</a>
+                  </Link>
+                </div>
+                <div className="col-6 col-md-3 burger-navigation-item">
+                  <Badge small>в разработке</Badge>
+                  <Link href={Companies.route} passHref={true}>
+                    <a >{Companies.title}</a>
+                  </Link>
+                </div>
+                <div className="col-6 col-md-3 burger-navigation-item">
+                  <Badge small>в разработке</Badge>
+                  <Link href={Projects.route} passHref={true}>
+                    <a >{Projects.title}</a>
+                  </Link>
+                </div>
+                <div className="col-6 col-md-3 burger-navigation-item">
+                  <Badge small>в разработке</Badge>
+                  <Link href={About.route} passHref={true}>
+                    <a >{About.title}</a>
+                  </Link>
+                </div>
+              </div>
 
-          color: white;
-          padding-top: 10px;
-          padding-bottom: 10px;
-        }
-        .burger-navigation-item a:hover {
-          text-decoration: unset;
-        }
-            .burger-inner {
-              padding-top: 30px;
-              padding-bottom: 30px;
-            }
+            </div>}
+          </div>
 
-        .burger-menu-wrapper {
-          position: fixed;
-          width: 100%;
-          height: 100%;
-          top: 108px;
-          left: 0;
+        </section>
 
-          z-index: 5;
+        {burgerMenuShow && <div onClick={burgerMenuToggle} className="d-xl-none burger-menu-wrapper" />}
 
-          background-color: rgba(0, 101, 198, 0.5);
-        }
+        <style jsx global>{`
+              body, html {overflow-y: ${burgerMenuShow ? "hidden" : "auto"}}
+          `}</style>
 
-        .search-input {
-          position: absolute;
-          right: 0;
-          top: 0;
-
-          height: 78px;
-          min-width: 920px;
-
-          padding-right: 15px;
-
-          background: rgb(255,255,255);
-          background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 35%, rgba(255,255,255,1) 100%);
-
-          color: black;
-        }
-
-        .search-input input {
-          width: 500px;
-          padding-top: 30px;
-          padding-bottom: 30px;
-        }
-
-
-        .search {
-          cursor: pointer;
-          vertical-align: middle;
-        }
-
-        .navigation-item a {
-          display: inline-block;
-          padding-top: 30px;
-          padding-bottom: 30px;
-          color: white;
-
-          transition: background-color 0.3s ease-out;
-        }
-        .navigation-item a:hover {
-          background-color: rgba(255, 255, 255, 0.1);
-          text-decoration: unset;
-        }
-        .navigation-item a {
-          padding-left: 10px;
-          padding-right: 10px
-        }
-        .navigation-item:first-child {
-          padding-left: 0;
-        }
-
-        .navigation-logo {
-          margin-right: 40px; 
-          display: ${isMain ? 'none' : 'block'};
-        }
-        .navigation-logo object {
-          height: 30px;
-        }
-
-        .navigation {
-          position: relative;
-          min-height: 78px;
-        }
-
-        header {
-          position: relative;
-          margin-bottom: ${stickyHeader ? 78 : 0}px; 
+        <style jsx>{`
+          .burger-navigation-item,
+          .navigation-item {
+            position: relative;
           }
-        .line {
-          position: absolute;
-          left: -25px; top: -300px;
-          width: 110%; height: 750px;
-          z-index: 0;
-        }
-        section {
-          padding-top: 30px;
-          padding-bottom: 30px;
-        }
-        section#navigation {
-          position: ${stickyHeader ? 'fixed' : 'relative'};
-          top: 0; left: 0;
-          width: 100%;
-          z-index: ${stickyHeader ? 7 : 5};
-
-          padding-top: 0;
-          padding-bottom: 0;
-        }
-
-        @media screen and (max-width: 1199px) {
-          .line {
-            width: 115%;
-            height: 600px;
-            top: -250px;
+          .burger-navigation-item a {
+            display: inline-block;
+  
+            color: white;
+            padding-top: 10px;
+            padding-bottom: 10px;
           }
-          .navigation-logo {
-            display: block;
+          .burger-navigation-item a:hover {
+            text-decoration: unset;
           }
+              .burger-inner {
+                padding-top: 30px;
+                padding-bottom: 30px;
+              }
+  
+          .burger-menu-wrapper {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 108px;
+            left: 0;
+  
+            z-index: 5;
+  
+            background-color: rgba(0, 101, 198, 0.5);
+          }
+  
+          .search-input {
+            position: absolute;
+            right: 0;
+            top: 0;
+  
+            height: 78px;
+            min-width: 920px;
+  
+            padding-right: 15px;
+  
+            background: rgb(255,255,255);
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 35%, rgba(255,255,255,1) 100%);
+  
+            color: black;
+          }
+  
           .search-input input {
-            width: 90%;
+            width: 500px;
             padding-top: 30px;
             padding-bottom: 30px;
           }
-          .search-input {
-            background: white;
-            min-width: 100%;
+  
+  
+          .search {
+            cursor: pointer;
+            vertical-align: middle;
           }
-        }
-        @media screen and (max-width: 991px) {
-        .line {
-          width: 130%;
-          height: 550px;
-          top: -200px;
-          left: -70px;
-        }
-      }
-      @media screen and (max-width: 767px) {
-        header {
-          margin-bottom: 0;
-          padding-top: 50px;
-        }
-        .line {
-          height: 350px;
-          top: -150px;
-        }
-        .search-input {
-          height: 50px;
-        }
-        .search-input input {
-            width: 75%;
+  
+          .navigation-item a {
+            display: inline-block;
+            padding-top: 30px;
+            padding-bottom: 30px;
+            color: white;
+  
+            transition: background-color 0.3s ease-out;
+          }
+          .navigation-item a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            text-decoration: unset;
+          }
+          .navigation-item a {
+            padding-left: 10px;
+            padding-right: 10px
+          }
+          .navigation-item:first-child {
+            padding-left: 0;
+          }
+  
+          .navigation-logo {
+            margin-right: 40px; 
+            display: ${isMain ? 'none' : 'block'};
+          }
+          .navigation-logo object {
+            height: 30px;
+          }
+  
+          .navigation {
+            position: relative;
+            min-height: 78px;
+          }
+  
+          header {
+            position: relative;
+            margin-bottom: ${stickyHeader ? 78 : 0}px; 
+            }
+          .line {
+            position: absolute;
+            left: -25px; top: -300px;
+            width: 110%; height: 750px;
+            z-index: 0;
+          }
+          section {
+            padding-top: 30px;
+            padding-bottom: 30px;
+          }
+          section#navigation {
+            position: ${stickyHeader ? 'fixed' : 'relative'};
+            top: 0; left: 0;
+            width: 100%;
+            z-index: ${stickyHeader ? 7 : 5};
+  
             padding-top: 0;
             padding-bottom: 0;
           }
-        section#navigation {
-          position: fixed;
-          top: 0; left: 0;
-          width: 100%;
-          z-index: 7;
+  
+          @media screen and (max-width: 1199px) {
+            .line {
+              width: 115%;
+              height: 600px;
+              top: -250px;
+            }
+            .navigation-logo {
+              display: block;
+            }
+            .search-input input {
+              width: 90%;
+              padding-top: 30px;
+              padding-bottom: 30px;
+            }
+            .search-input {
+              background: white;
+              min-width: 100%;
+            }
+          }
+          @media screen and (max-width: 991px) {
+          .line {
+            width: 130%;
+            height: 550px;
+            top: -200px;
+            left: -70px;
+          }
         }
-        .navigation {
-          min-height: 50px;
+        @media screen and (max-width: 767px) {
+          header {
+            margin-bottom: 0;
+            padding-top: 50px;
+          }
+          .line {
+            height: 350px;
+            top: -150px;
+          }
+          .search-input {
+            height: 50px;
+          }
+          .search-input input {
+              width: 75%;
+              padding-top: 0;
+              padding-bottom: 0;
+            }
+          section#navigation {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            z-index: 7;
+          }
+          .navigation {
+            min-height: 50px;
+          }
+          .navigation-logo object {
+            height: 20px;
+          }
         }
-        .navigation-logo object {
-          height: 20px;
+        @media screen and (max-width: 576px) {
+          header {
+            padding-top: 75px;
+          }
+          .line {
+            top: -65px;
+            height: 200px
+          }
         }
-      }
-      @media screen and (max-width: 576px) {
-        header {
-          padding-top: 75px;
-        }
-        .line {
-          top: -65px;
-          height: 200px
-        }
-      }
-        `}</style>
-    </header>
+          `}</style>
+      </header>}
+    </AuthContext.Consumer>
   )
 }
 

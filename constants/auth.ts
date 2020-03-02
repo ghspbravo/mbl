@@ -4,6 +4,7 @@ import Cookies from 'js-cookie'
 import { setAuthToken, fetcher } from "./fetcher";
 import Api from "./api";
 import { ProfileFormatter } from './formatters/profileFormatter';
+import { AuthContext } from '../components/Layout';
 
 /**
  * search token in cookies and filling fetchers with it
@@ -29,17 +30,9 @@ export const getToken = () => {
   return token;
 };
 
-const initialCurrentUser = {
-  isAuth: false,
-  body: null
-}
-
-export let currentUserCtx = { ...initialCurrentUser }
-
-export const setToken = async (token, expires = 30) => {
+export const setToken = async (token, setAuthState, expires = 30) => {
   Cookies.set('token', token, { expires: expires })
   setAuthToken(token);
-  currentUserCtx.isAuth = true;
 
   const profileFormatter = new ProfileFormatter()
 
@@ -47,16 +40,18 @@ export const setToken = async (token, expires = 30) => {
 
   const response = await profileFormatter.formatCurrentUser(apiResponse)
   if (response.status > 0) {
+    // TODO: remove token here won't cause re-render
     removeToken();
   } else {
     const userInfo = response.body;
-    currentUserCtx.body = userInfo;
+    setAuthState(userInfo)
   }
 
 }
 
-export const removeToken = () => {
+export const removeToken = (setAuthState = (arg) => null) => {
   Cookies.remove('token')
+
   setAuthToken("")
-  currentUserCtx = { ...initialCurrentUser };
+  setAuthState(null)
 }

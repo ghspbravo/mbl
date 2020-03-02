@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useEffect } from 'react'
+import React, { ReactElement, useState, useEffect, useContext } from 'react'
 import { useForm, useFieldArray } from "react-hook-form";
 import Input from '../../Inputs/Input';
 import { nameRegexp, dateRegexp, emailRegexp } from '../../../constants/regexp';
@@ -14,6 +14,7 @@ import { formatName } from '../../../constants/formatters/rootFormatter';
 import { setToken } from '../../../constants/auth';
 import { CommonFormatter } from '../../../constants/formatters/commonFormatter';
 import Icon from '../../Icon';
+import { AuthContext } from '../../Layout';
 
 
 interface Props {
@@ -61,6 +62,8 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
     link?: string[],
     work?: { place: string, start: string, end?: string }[],
   }
+
+  const { setAuthState } = useContext(AuthContext)
 
   const [submitting, submittingSet] = useState(false);
   const onSubmit = async (values: formValues) => {
@@ -129,7 +132,7 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
     if (response.status > 0) {
       setError("signUp", "signUpError", response.body)
     } else {
-      setToken(response.body);
+      setToken(response.body, setAuthState);
 
       nextStepHandler();
     }

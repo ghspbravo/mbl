@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useState, useContext } from 'react'
 import Icon from '../Icon'
 import Input from '../Inputs/Input'
 import Pages from '../../constants/pages'
@@ -11,6 +11,7 @@ import { fetcher } from '../../constants/fetcher'
 import Api from '../../constants/api'
 import { SignInFormatter } from '../../constants/formatters/authFormatter'
 import { setToken } from '../../constants/auth'
+import { AuthContext } from '../Layout'
 
 interface Props {
   successHandler?: any
@@ -20,6 +21,8 @@ export default function Login({ successHandler }: Props): ReactElement {
   const { handleSubmit, register, errors, setError, clearError } = useForm({
     mode: "onBlur"
   });
+  const { setAuthState } = useContext(AuthContext)
+
   const [submitting, submittingSet] = useState(false);
   const onSubmit = async values => {
     submittingSet(true);
@@ -41,7 +44,7 @@ export default function Login({ successHandler }: Props): ReactElement {
       setError("auth", "authError", response.body)
     } else {
       const token = response.body;
-      setToken(token);
+      setToken(token, setAuthState);
       if (successHandler) { return successHandler(); }
     }
     submittingSet(false)

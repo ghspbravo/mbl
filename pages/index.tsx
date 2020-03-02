@@ -65,6 +65,7 @@ function Home({ newsResponse }: Props) {
               margin-bottom: 0;
               margin-left: 0;
             }   
+            }
             @media screen and (max-width: 576px) {
             .brand-description {
               margin-top: 35px;

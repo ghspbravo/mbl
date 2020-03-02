@@ -1,30 +1,47 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, createContext } from 'react'
 
 import Head from 'next/head'
 import Header from './Header/Header'
 import Colors from '../constants/colors'
 import Footer from './Footer'
-import { setAuthToken } from '../constants/fetcher';
 import moment from 'moment'
 import { getToken, setToken } from '../constants/auth'
+import { userInterface } from '../constants/formatters/profileFormatter'
 
 interface Props {
   children: JSX.Element[] | JSX.Element
 }
 
+export const AuthContext = createContext({ isAuth: false, currentUser: {} as userInterface, setAuthState: null });
+
 function Layout({ children: pageContent }: Props) {
   moment.locale('ru');
   const [loaded, loadedSet] = useState(false)
 
+  const [isAuth, isAuthSet] = useState(null)
+  const [currentUser, currentUserSet] = useState({})
+
+  const setAuthState = (userInfo) => {
+    if (userInfo) {
+      isAuthSet(true);
+      currentUserSet(userInfo)
+    } else {
+      isAuthSet(false)
+      currentUserSet({})
+    }
+  }
   useEffect(() => {
     const token = getToken();
     if (token) {
-      setToken(token)
+      setToken(token, setAuthState)
+    } else {
+      isAuthSet(false);
     }
     loadedSet(true);
   }, [])
   return (loaded
-    ? <>
+    ? <AuthContext.Provider
+      value={{ isAuth, currentUser, setAuthState }} >
       <Head>
         <title>Молодежная бизнес лига</title>
         <meta
@@ -1601,7 +1618,7 @@ function Layout({ children: pageContent }: Props) {
             min-height: 57vh;
             }
         `}</style>
-    </>
+    </AuthContext.Provider>
     : <>
       <Head>
         <title>Молодежная бизнес лига</title>
