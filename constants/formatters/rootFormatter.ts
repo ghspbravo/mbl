@@ -4,6 +4,7 @@ import { nameRegexp } from "../regexp";
 export enum Status {
   success = 0,
   error = 1,
+  unauthorized = 2,
   critical = 9,
 
   loading = 10
@@ -45,6 +46,10 @@ export default class Formatter {
           this.status = Status.success
           return isJson ? response.json() : response.text();
 
+        case 401:
+          this.status = Status.unauthorized
+          return 'Запрос возможен только для авторизованных пользователей.';
+
         case 500:
           this.status = Status.critical
           return 'Критическая ошибка сервера. Корректная работа сайта невозможна.';
@@ -56,13 +61,13 @@ export default class Formatter {
     }).then((contents: any) => {
       // if error message exists
       if (this.status > 0) {
-        this.body = contents?.error || "Ошибка запроса данных от сервера"
+        this.body = contents?.error || contents || "Ошибка запроса данных от сервера."
       }
       // pass to other formatter
       return contents;
     }).catch((err) => {
       this.status = Status.error;
-      this.body = 'Ошибка парсинга ответа от сервера';
+      this.body = 'Ошибка парсинга ответа от сервера.';
     })
   }
 

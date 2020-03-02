@@ -4,6 +4,8 @@ const Api = {
   NewsList: 'News/List',
   NewsSingle: 'News/Details',
 
+  MembersList: 'User/List',
+
   ResetPassword: 'Account/ResetPassword',
   Login: 'Account/Login',
   Register: 'Account/Register',
