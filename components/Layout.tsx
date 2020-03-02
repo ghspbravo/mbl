@@ -26,7 +26,7 @@ function Layout({ children: pageContent }: Props) {
   return (loaded
     ? <>
       <Head>
-        <title>Молодежная бизнесс лига</title>
+        <title>Молодежная бизнес лига</title>
         <meta
           name="viewport"
           content="initial-scale=1.0, width=device-width"
@@ -1604,7 +1604,7 @@ function Layout({ children: pageContent }: Props) {
     </>
     : <>
       <Head>
-        <title>Молодежная бизнесс лига</title>
+        <title>Молодежная бизнес лига</title>
       </Head>
     </>
   )
