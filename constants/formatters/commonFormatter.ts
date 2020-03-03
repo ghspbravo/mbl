@@ -1,11 +1,12 @@
 import Formatter from "./rootFormatter";
+import { AxiosPromise } from "axios";
 
 export class CommonFormatter extends Formatter {
   constructor() {
     super();
   }
 
-  async formatRoles(fetchPromise: Promise<Response>) {
+  async formatRoles(fetchPromise: AxiosPromise<any>) {
     await this.responseHandle(fetchPromise)
       .then(contents => {
         if (this.status > 0) { return; }
@@ -18,7 +19,7 @@ export class CommonFormatter extends Formatter {
     }
   }
 
-  async formatSkills(fetchPromise: Promise<Response>) {
+  async formatSkills(fetchPromise: AxiosPromise<any>) {
     await this.responseHandle(fetchPromise)
       .then(contents => {
         if (this.status > 0) { return; }
