@@ -1,6 +1,5 @@
 import Formatter from "./rootFormatter";
 import pass from '../../assets/pass.png';
-import { AxiosPromise } from "axios";
 
 export interface userInterface {
   id?: string,
@@ -22,7 +21,7 @@ export class ProfileFormatter extends Formatter {
     super();
   }
 
-  async formatUser(fetchPromise: AxiosPromise<any>) {
+  async formatUser(fetchPromise: Promise<Response>) {
     await this.responseHandle(fetchPromise)
       .then(contents => {
         if (this.status > 0) { return; }

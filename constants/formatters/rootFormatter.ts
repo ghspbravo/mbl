@@ -1,6 +1,5 @@
 import moment from "moment";
 import { nameRegexp } from "../regexp";
-import { AxiosPromise } from "axios";
 
 export enum Status {
   success = 0,
@@ -37,15 +36,15 @@ export default class Formatter {
   protected status: number;
   protected body: any;
 
-  protected responseHandle(fetchPromise: AxiosPromise<any>) {
+  protected responseHandle(fetchPromise: Promise<Response>) {
     return fetchPromise.then(response => {
-      // const contentType = response.headers.get("content-type");
-      // const isJson = contentType && contentType.indexOf("application/json") !== -1
+      const contentType = response.headers.get("content-type");
+      const isJson = contentType && contentType.indexOf("application/json") !== -1
       const status = response.status;
       switch (status) {
         case 200:
           this.status = Status.success
-          return response.data;
+          return isJson ? response.json() : response.text();
 
         case 401:
           this.status = Status.unauthorized
@@ -57,7 +56,7 @@ export default class Formatter {
 
         default:
           this.status = Status.error
-          return response.data;
+          return isJson ? response.json() : response.text();
       }
     }).then((contents: any) => {
       // if error message exists

@@ -12,8 +12,6 @@ import unfetch from 'unfetch'
 import isounfetch from 'isomorphic-unfetch'
 import { API_BASE } from './api';
 
-import axios from "axios";
-
 interface userOptions {
   method?: 'POST' | 'GET',
   headers?: any,
@@ -73,7 +71,7 @@ class Fetcher extends Api {
 
   fetch(userPath: string, userOptions: userOptions = {}) {
     const { path, options } = this.processFetchParams(userPath, userOptions);
-    return axios(path, options);
+    return unfetch(path, options);
   }
 }
 
@@ -84,7 +82,7 @@ class IsoFetcher extends Api {
 
   fetch(userPath: string, userOptions: userOptions = {}) {
     const { path, options } = this.processFetchParams(userPath, userOptions);
-    return axios(path, options);
+    return isounfetch(path, options);
   }
 }
 

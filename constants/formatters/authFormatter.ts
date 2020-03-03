@@ -1,12 +1,11 @@
 import Formatter from "./rootFormatter";
-import { AxiosPromise } from "axios";
 
 export class RecoverFormatter extends Formatter {
   constructor() {
     super();
   }
 
-  async format(fetchPromise: AxiosPromise<any>) {
+  async format(fetchPromise: Promise<Response>) {
     await this.responseHandle(fetchPromise)
       .then(contents => {
         if (this.status > 0) { return; }
@@ -25,7 +24,7 @@ export class SignInFormatter extends Formatter {
     super();
   }
 
-  async format(fetchPromise: AxiosPromise<any>) {
+  async format(fetchPromise: Promise<Response>) {
     await this.responseHandle(fetchPromise)
       .then(contents => {
         if (this.status > 0) { return; }

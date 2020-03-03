@@ -1,6 +1,5 @@
 import Formatter from "./rootFormatter";
 import pass from '../../assets/pass.png';
-import { AxiosPromise } from "axios";
 
 interface membersApi {
   id: number,
@@ -25,7 +24,7 @@ export class MembersFormatter extends Formatter {
     super();
   }
 
-  async formatList(fetchPromise: AxiosPromise<any>) {
+  async formatList(fetchPromise: Promise<Response>) {
     await this.responseHandle(fetchPromise)
       .then(contents => {
         if (this.status > 0) { return; }

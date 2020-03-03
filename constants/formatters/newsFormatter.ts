@@ -1,7 +1,6 @@
 import Formatter, { formatDate } from "./rootFormatter";
 
 import pass from '../../assets/pass.png';
-import { AxiosPromise } from "axios";
 
 interface newsItemApi {
   announce: string,
@@ -26,7 +25,7 @@ export class NewsSingleFormatter extends Formatter {
     super();
   }
 
-  async format(fetchPromise: AxiosPromise<any>) {
+  async format(fetchPromise: Promise<Response>) {
     await this.responseHandle(fetchPromise)
       .then(contents => {
         if (this.status > 0) {
@@ -72,7 +71,7 @@ export class NewsListFormatter extends Formatter {
     super();
   }
 
-  async format(fetchPromise: AxiosPromise<any>) {
+  async format(fetchPromise: Promise<Response>) {
     await this.responseHandle(fetchPromise)
       .then(contents => {
         if (this.status > 0) {

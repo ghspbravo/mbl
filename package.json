@@ -6,7 +6,6 @@
   "dependencies": {
     "@seznam/compose-react-refs": "^1.0.4",
     "@types/js-cookie": "^2.2.5",
-    "axios": "^0.19.2",
     "evil-icons": "^1.10.1",
     "html-react-parser": "^0.10.1",
     "isomorphic-unfetch": "^3.0.0",
