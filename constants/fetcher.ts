@@ -10,7 +10,7 @@ import unfetch from 'unfetch'
 // When the results comes back Next.js will render the page.
 // Next.js will do this for every request that comes in.
 import isounfetch from 'isomorphic-unfetch'
-import { API_BASE } from './api';
+import { API_BASE_SERVER, API_BASE_CLIENT } from './api';
 
 interface userOptions {
   method?: 'POST' | 'GET',
@@ -23,7 +23,7 @@ class Api {
   private base: string;
   private token: string
 
-  constructor() {
+  constructor(API_BASE) {
     this.base = API_BASE;
   }
 
@@ -65,8 +65,8 @@ class Api {
 }
 
 class Fetcher extends Api {
-  constructor() {
-    super();
+  constructor(base) {
+    super(base);
   }
 
   fetch(userPath: string, userOptions: userOptions = {}) {
@@ -76,8 +76,8 @@ class Fetcher extends Api {
 }
 
 class IsoFetcher extends Api {
-  constructor() {
-    super();
+  constructor(base) {
+    super(base);
   }
 
   fetch(userPath: string, userOptions: userOptions = {}) {
@@ -87,8 +87,8 @@ class IsoFetcher extends Api {
 }
 
 
-export const fetcher = new Fetcher();
-export const isoFetcher = new IsoFetcher();
+export const fetcher = new Fetcher(API_BASE_CLIENT);
+export const isoFetcher = new IsoFetcher(API_BASE_SERVER);
 
 /**
  * set token in:

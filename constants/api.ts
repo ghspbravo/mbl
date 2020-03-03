@@ -1,4 +1,5 @@
-export const API_BASE = 'http://dev.mbl.mba/api/v1/';// i tak soidet
+export const API_BASE_CLIENT = 'http://dev.mbl.mba/api/v1/';
+export const API_BASE_SERVER = 'http://dev.mbl.mba/api/v1/';
 
 const Api = {
   NewsList: 'News/List',
