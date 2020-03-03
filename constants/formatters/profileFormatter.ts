@@ -21,7 +21,7 @@ export class ProfileFormatter extends Formatter {
     super();
   }
 
-  async formatCurrentUser(fetchPromise: Promise<Response>) {
+  async formatUser(fetchPromise: Promise<Response>) {
     await this.responseHandle(fetchPromise)
       .then(contents => {
         if (this.status > 0) { return; }

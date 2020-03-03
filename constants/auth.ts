@@ -38,7 +38,7 @@ export const setToken = async (token, setAuthState, expires = 30) => {
 
   const apiResponse = fetcher.fetch(Api.GetCurrentProfile);
 
-  const response = await profileFormatter.formatCurrentUser(apiResponse)
+  const response = await profileFormatter.formatUser(apiResponse)
   if (response.status > 0) {
     // TODO: remove token here won't cause re-render
     removeToken();

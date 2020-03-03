@@ -256,7 +256,6 @@ function Header({ router }): ReactElement {
                 </Link>
               </div>
               <div className="navigation-item d-none d-xl-block">
-                <Badge small>в разработке</Badge>
                 <Link href={Members.route} passHref={true}>
                   <a >{Members.title}</a>
                 </Link>
@@ -354,7 +353,6 @@ function Header({ router }): ReactElement {
                   </Link>
                 </div>
                 <div className="col-6 col-md-3 burger-navigation-item">
-                  <Badge small>в разработке</Badge>
                   <Link href={Members.route} passHref={true}>
                     <a >{Members.title}</a>
                   </Link>

@@ -7,6 +7,7 @@ import { Status } from '../../constants/formatters/rootFormatter'
 import { fetcher } from '../../constants/fetcher'
 import Api from '../../constants/api'
 import { MembersFormatter, members } from '../../constants/formatters/membersFormatter'
+import Link from 'next/link'
 
 interface Props {
 
@@ -69,13 +70,25 @@ export default function Members({ }: Props): ReactElement {
             ? <div>
               {(membersList as members[]).length > 0
                 ? <div className="row">
-                  {(membersList as members[]).map(item => <div key={item.id} className="col-lg-4 col-xl-3 col-md-6 col-12 mb-5">
-                    <img className="responsive" src={item.photo} alt="Фотография участника" />
-                    <div className="align-center mt-2">
-                      <b>{item.name}</b>
-                      <br /> {item.role}
-                    </div>
+                  {(membersList as members[]).map(item => <div key={item.id} className="col-sm-4 col-lg-3 col-6 mb-5">
+                    <Link href={Pages.Members.route + `/${item.id}`}>
+                      <div className="member-item">
+                        <img className="responsive" src={item.photo} alt="Фотография участника" />
+                        <div className="align-center mt-2">
+                          <span className="member__name"><b>{item.name}</b></span>
+                          <br /> {item.role}
+                        </div>
+                      </div>
+                    </Link>
                   </div>)}
+                  <style jsx>{`
+                    .member-item {
+                      cursor: pointer;
+                    }
+                    .member-item:hover .member__name {
+                      text-decoration: underline;
+                    }
+                    `}</style>
                 </div>
                 : <div>
                   Нет участников

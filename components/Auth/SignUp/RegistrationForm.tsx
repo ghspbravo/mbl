@@ -80,6 +80,7 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
     formData.append("Email", values.username)
     formData.append("Password", values.password)
 
+    if (values.study) { formData.append("Education", values.study) }
     if (values.role?.length) {
       let idx = 0;
       values.role.forEach((selected, index) => {
