@@ -1,5 +1,5 @@
-export const API_BASE_CLIENT = 'http://dev.mbl.mba/api/v1/';
-export const API_BASE_SERVER = 'http://dev.mbl.mba/api/v1/';
+export const API_BASE_CLIENT = process.env.API_BASE_CLIENT;
+export const API_BASE_SERVER = process.env.API_BASE_SERVER;
 
 const Api = {
   NewsList: 'News/List',

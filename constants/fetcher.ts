@@ -88,7 +88,7 @@ class IsoFetcher extends Api {
 
 
 export const fetcher = new Fetcher(API_BASE_CLIENT);
-export const isoFetcher = new IsoFetcher(API_BASE_SERVER);
+export const isoFetcher = new IsoFetcher(process.browser ? API_BASE_CLIENT : API_BASE_SERVER);
 
 /**
  * set token in:
