@@ -52,7 +52,7 @@ export default class Formatter {
 
         case 500:
           this.status = Status.critical
-          return 'Критическая ошибка сервера. Корректная работа сайта невозможна.';
+          return 'Ошибка сервера.';
 
         default:
           this.status = Status.error
@@ -67,7 +67,7 @@ export default class Formatter {
       return contents;
     }).catch((err) => {
       this.status = Status.error;
-      this.body = 'Ошибка парсинга ответа от сервера.';
+      this.body = 'Критическая ошибка сервера.';
     })
   }
 
