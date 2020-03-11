@@ -23,6 +23,7 @@ const Pages = {
   CreateEvent: { header: 'Создание мероприятия', title: 'Новое мероприятие', route: '/profile/events/create' },
   CreateCource: { header: 'Создание программы', title: 'Новая программа', route: '/profile/cources/create' },
   CreateProject: { header: 'Создание проекта', title: 'Новый проект', route: '/profile/projects/create' },
+  CreateCompany: { header: 'Создание компании', title: 'Привязать юр. лицо', route: '/profile/companies/create' },
 }
 
 export default Pages

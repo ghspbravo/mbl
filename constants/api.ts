@@ -8,6 +8,10 @@ const Api = {
   MembersList: 'User/List',
   MembersItem: 'User/Details',
 
+  CreateCompany: 'Company/Create',
+  CompanyList: 'Company/List',
+  CompanyItem: 'Company/Details',
+
   ResetPassword: 'Account/ResetPassword',
   Login: 'Account/Login',
   Register: 'Account/Register',

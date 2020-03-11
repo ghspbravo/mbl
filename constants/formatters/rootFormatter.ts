@@ -61,7 +61,11 @@ export default class Formatter {
     }).then((contents: any) => {
       // if error message exists
       if (this.status > 0) {
-        this.body = contents?.error || contents || "Ошибка запроса данных от сервера."
+        if (typeof contents === "string") {
+          this.body = contents
+        } else {
+          this.body = contents?.error || "Ошибка запроса данных от сервера."
+        }
       }
       // pass to other formatter
       return contents;

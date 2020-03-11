@@ -5,6 +5,7 @@ import Head from 'next/head'
 import Pages from '../../constants/pages';
 import Tag from '../../components/Tag';
 import moment from 'moment';
+import Link from 'next/link';
 
 interface Props {
 
@@ -13,18 +14,32 @@ interface Props {
 export default function Login({ }: Props): ReactElement {
 
   const buttons = () => <div>
-    <div className="mt-3">
-      <button disabled className="primary w-100">создать мероприятие</button>
-    </div>
-    <div className="mt-3">
-      <button disabled className="primary w-100">создать программу</button>
-    </div>
-    <div className="mt-3">
-      <button disabled className="primary w-100">создать проект</button>
-    </div>
-    <div className="mt-3">
-      <button disabled className="w-100">редактировать профиль</button>
-    </div>
+    <Link href={Pages.CreateEvent.route}>
+      <div className="mt-3">
+        <button className="primary w-100">создать мероприятие</button>
+      </div>
+    </Link>
+    <Link href={Pages.CreateCource.route}>
+      <div className="mt-3">
+        <button className="primary w-100">создать программу</button>
+      </div>
+    </Link>
+    <Link href={Pages.CreateProject.route}>
+      <div className="mt-3">
+        <button className="primary w-100">создать проект</button>
+      </div>
+    </Link>
+    <Link href={Pages.CreateCompany.route}>
+      <div className="mt-3">
+        <button className="primary w-100">привязать компанию</button>
+      </div>
+    </Link>
+    {/* TODO: edit profile link */}
+    <Link href={Pages.Profile.route}>
+      <div className="mt-3">
+        <button className="w-100">редактировать профиль</button>
+      </div>
+    </Link>
   </div>
 
   return (
