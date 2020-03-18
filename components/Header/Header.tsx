@@ -261,7 +261,6 @@ function Header({ router }): ReactElement {
                 </Link>
               </div>
               <div className="navigation-item d-none d-xl-block">
-                <Badge small>в разработке</Badge>
                 <Link href={Companies.route} passHref={true}>
                   <a >{Companies.title}</a>
                 </Link>

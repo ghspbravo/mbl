@@ -47,7 +47,6 @@ function Footer(): ReactElement {
                 </div>
                 <div className="col-6 col-xl-3 col-md-4">
                   <a className="footer-nav-item" href={Companies.route}>
-                    <Badge small>В разработке</Badge>
                     {Companies.title}</a>
                 </div>
                 <div className="col-6 col-xl-3 col-md-4">
