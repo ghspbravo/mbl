@@ -29,7 +29,7 @@ export default function CompanySingle({ status, body }: Props): ReactElement {
 				<div className="container">
 					<Breadcrumbs
 						pages={[
-							{ title: Pages.News.title, href: Pages.News.route },
+							{ title: Pages.Companies.title, href: Pages.Companies.route },
 							{ title: body.shortTitle },
 						]}
 					/>
