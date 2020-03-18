@@ -10,7 +10,7 @@ const Api = {
 
   CreateCompany: 'Company/Create',
   CompanyList: 'Company/List',
-  CompanyItem: 'Company/Details',
+  CompanySingle: 'Company/Details',
 
   ResetPassword: 'Account/ResetPassword',
   Login: 'Account/Login',

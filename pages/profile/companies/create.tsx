@@ -92,14 +92,16 @@ export default function CreateCompany({ }: Props): ReactElement {
       Email: values.email,
       Phone: values.phone,
       Site: values.site,
+      Occupations: values.sphere
+    }
 
-      // TODO: remove crunches
-      Photo: "",
-      OccupationIds: [0]
+    if (userPhoto) {
+      payload["Photo"] = userPhoto;
     }
 
     const apiResponse = fetcher.fetch(Api.CreateCompany, {
       method: "POST",
+      headers: { "Content-Type": "application/json-patch+json" },
       body: JSON.stringify(payload)
     })
     const formatter = new CompanyFormatter();
@@ -151,7 +153,7 @@ export default function CreateCompany({ }: Props): ReactElement {
 
                   <div className="mb-3">
                     <Input name="shortTitle" label="Сокращенное название компании"
-                      error={errors.title}
+                      error={errors.shortTitle}
                       ref={register({})}
                     />
                   </div>
