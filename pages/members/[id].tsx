@@ -4,7 +4,7 @@ import Api from '../../constants/api';
 import { ProfileFormatter, userInterface } from '../../constants/formatters/profileFormatter';
 import Layout from '../../components/Layout';
 import { Status } from '../../constants/formatters/rootFormatter';
-import { Head } from 'next/document';
+import Head from 'next/head';
 import Pages from '../../constants/pages';
 import Breadcrumbs from '../../components/Breadcrumbs';
 import Link from 'next/link'
@@ -31,7 +31,7 @@ export default function MemberItem({ status, body }: Props): ReactElement {
               { title: body.name }
             ]} />
 
-            <div className="row">
+            <div className="row mt-3">
               <div className="d-none d-lg-block col-lg-4">
                 <img className="responsive" src={body.photo} alt="Фотография человека" />
               </div>
