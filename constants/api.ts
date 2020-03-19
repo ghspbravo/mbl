@@ -1,5 +1,5 @@
-export const API_BASE_CLIENT = process.env.API_BASE_CLIENT;
-export const API_BASE_SERVER = process.env.API_BASE_SERVER;
+export const API_BASE_CLIENT = 'http://localhost:59029/api/v1/'//process.env.API_BASE_CLIENT;
+export const API_BASE_SERVER = 'http://localhost:59029/api/v1/'//process.env.API_BASE_SERVER;
 
 const Api = {
   NewsList: 'News/List',
