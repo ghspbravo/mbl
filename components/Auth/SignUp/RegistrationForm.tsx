@@ -121,7 +121,6 @@ export default function RegistrationForm({ nextStepHandler }: Props): ReactEleme
 
     const apiResponse = fetcher.fetch(Api.Register, {
       method: "POST",
-      headers: { "Content-Type": "multipart/form-data" },
       body: formData
     })
 
