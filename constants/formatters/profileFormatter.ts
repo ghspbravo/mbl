@@ -1,5 +1,6 @@
 import Formatter from "./rootFormatter";
 import pass from '../../assets/pass.png';
+import moment from 'moment'
 
 export interface userInterface {
   id?: string,
@@ -31,12 +32,12 @@ export class ProfileFormatter extends Formatter {
           achivements, wantToLearn, interests, education,
           skills, portfolio
         } = contents;
-        const formattedWorkExperiences = workExperiences?.map(work => ({ name: work.Name, start: work.Start, end: work.End }))
+        const formattedWorkExperiences = workExperiences?.map(work => ({ name: work.name, start: moment(work.start).format("LL"), end: work.end ? moment(work.end).format("LL") : null }))
 
         this.body = {
           id,
           name: `${surName} ${firstName} ${middleName || ""}`.trimEnd(),
-          photo: photo || pass, birthday: birthDate,
+          photo: photo || pass, birthday: moment(birthDate).format("LL"),
           roles: profileTypes || [],
           education, workList: formattedWorkExperiences,
           socialLinks: socialNetWorks || [],
