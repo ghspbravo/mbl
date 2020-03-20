@@ -210,20 +210,25 @@ function Layout({ children: pageContent }: Props) {
                 border: none;
                 padding: 0;
               }
-              fieldset input {
+              input, textarea {
                 padding-top: 30px;
-              }
-              input {
+                width: 100%;
                 color: ${Colors.Primary};
                 border: none;
                 border-bottom: 2px solid ${Colors.Primary};
               }
+              textarea {
+                resize: vertical;
+              }
               input:not([type="checkbox"]) {
                 width: 100%;
               }
+              textarea:hover,
+              textarea:focus,
               input:hover,
               input:focus {border-bottom-color: ${Colors.Acsent}}
-              input[data-error="true"] {
+              input[data-error="true"],
+              textarea[data-error="true"] {
                 border-bottom-color: red !important;
               }
               .label-text {
@@ -233,14 +238,17 @@ function Layout({ children: pageContent }: Props) {
               label > span {
                 display: block;
               }
+              .p-relative {position: relative;}
               @media screen and (max-width: 576px) {
                 .m-align-center {
                   text-align: center;
                 }
-                fieldset input {
+                fieldset input,
+                fieldset textarea {
                   padding-top: 10px;
                 }
-                input {
+                input,
+                textarea {
                   color: ${Colors.Primary};
                   border: none;
                   border-bottom: 2px solid ${Colors.Primary};
@@ -249,7 +257,8 @@ function Layout({ children: pageContent }: Props) {
                   font-size: 0.75rem;
                 }
               }
-              input:focus {
+              input:focus,
+              textarea:focus {
                 outline: none;
               }
 
