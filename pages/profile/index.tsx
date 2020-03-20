@@ -4,7 +4,6 @@ import Head from 'next/head'
 
 import Pages from '../../constants/pages';
 import Tag from '../../components/Tag';
-import moment from 'moment';
 import Link from 'next/link';
 
 interface Props {
@@ -79,7 +78,7 @@ export default function Login({ }: Props): ReactElement {
 
                   {currentUser.birthday && <div className="row mb-3">
                     <div className="col-lg-4 col-xl-3 col-md-6 text"><b>Дата рождния:</b></div>
-                    <div className="col-lg-8 col-xl-9 col-md-6 text">{moment(currentUser.birthday).format("LL")}</div>
+                    <div className="col-lg-8 col-xl-9 col-md-6 text">{currentUser.birthday}</div>
                   </div>}
                   {currentUser.education && <div className="row mb-3">
                     <div className="col-lg-4 col-xl-3 col-md-6 text"><b>Место учебы:</b></div>
