@@ -238,6 +238,7 @@ function Layout({ children: pageContent }: Props) {
               label > span {
                 display: block;
               }
+              .p-relative {position: relative;}
               @media screen and (max-width: 576px) {
                 .m-align-center {
                   text-align: center;
