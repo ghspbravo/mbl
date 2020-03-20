@@ -88,7 +88,7 @@ export default function Login({ }: Props): ReactElement {
                     <div className="col-lg-4 col-xl-3 col-md-6 text"><b>Место работы:</b></div>
                     <div className="col-lg-8 col-xl-9 col-md-6 text">
                       {currentUser.workList.map((work, index) => <div key={index}>
-                        {`${work.name}, ${work.end ? `${work.start} – ${work.end} гг.` : `с ${work.start} г.`}`}
+                        {`${work.name}, ${work.end ? `${work.start} – ${work.end}` : `с ${work.start}`}`}
                       </div>)}
                     </div>
                   </div>}
