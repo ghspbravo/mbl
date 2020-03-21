@@ -91,19 +91,19 @@ function Header({ router }): ReactElement {
 						<Link href={Pages.Profile.route} passHref>
 							<a className="clear primary dropdown__item">Профиль</a>
 						</Link>
-						<Link href={Pages.MyEvents.route} passHref>
+						<Link href={Pages.MyEvents.route} passHref prefetch={false}>
 							<a className="clear dropdown__item p-relative">
 								<Badge small>В разработке</Badge>
 								Мои мероприятия
 							</a>
 						</Link>
-						<Link href={Pages.MyCources.route} passHref>
+						<Link href={Pages.MyCources.route} passHref prefetch={false}>
 							<a className="clear dropdown__item p-relative">
 								<Badge small>В разработке</Badge>
 								Мои программы
 							</a>
 						</Link>
-						<Link href={Pages.MyProjects.route} passHref>
+						<Link href={Pages.MyProjects.route} passHref prefetch={false}>
 							<a className="clear dropdown__item p-relative">
 								<Badge small>В разработке</Badge>
 								Мои проекты
