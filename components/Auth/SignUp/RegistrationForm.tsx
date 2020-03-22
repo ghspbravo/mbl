@@ -143,7 +143,6 @@ export default function RegistrationForm({
 
 		const apiResponse = fetcher.fetch(Api.Register, {
 			method: "POST",
-			headers: { "Content-Type": "multipart/form-data" },
 			body: formData,
 		});
 
