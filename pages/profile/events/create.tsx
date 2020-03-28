@@ -19,7 +19,9 @@ interface formValues {
 	dateStart: string;
 	dateEnd: string;
 	contacts: string;
-	about: string;
+
+	shortDescription: string;
+	fullDescription: string;
 }
 
 enum steps {
@@ -56,21 +58,32 @@ export default function CreateEvent({}: Props): ReactElement {
 		mode: "onBlur",
 	});
 
-  const [processing, processingSet] = useState(false);
-  // TODO: add submit method
+	const [processing, processingSet] = useState(false);
 	const onSubmit = async (values: formValues) => {
-    currentStepSet(steps.success);
-    return;
 		clearError("formError");
 		processingSet(true);
 
-		const payload = {};
+		const today = new Date();
+		const payload = {
+			Title: values.title,
+			Announce: values.shortDescription,
+			Content: values.fullDescription,
+			Contacts: values.contacts,
+			StartEvent: values.dateStart.replace(/\./g, "-"),
+			EndEvent: values.dateEnd.replace(/\./g, "-"),
+			StartRegistration: `${today.getDate()}-${today.getMonth()}-${
+				today.getFullYear()
+			}`,
+			EndRegistration: values.dateStart.replace(/\./g, "-"),
+			// TODO: add company authorship
+			// CreateByCompanyId: ,
+		};
 
 		if (userPhoto) {
 			payload["Photo"] = userPhoto;
 		}
 
-		const apiResponse = fetcher.fetch(Api.CreateCompany, {
+		const apiResponse = fetcher.fetch(Api.CreateEvent, {
 			method: "POST",
 			headers: { "Content-Type": "application/json-patch+json" },
 			body: JSON.stringify(payload),
@@ -153,7 +166,7 @@ export default function CreateEvent({}: Props): ReactElement {
 									</div>
 								</fieldset>
 
-                {/* TODO: add photo
+								{/* TODO: add photo
                 <div className="mb-5">
 									<PhotoInput
 										image={userPhoto}
@@ -165,7 +178,7 @@ export default function CreateEvent({}: Props): ReactElement {
 								<div className="mb-3">
 									<Input
 										multiline
-										name="announce"
+										name="shortDescription"
 										placeholder="В двух словах..."
 										label="Краткое описание"
 										ref={register()}
@@ -175,7 +188,7 @@ export default function CreateEvent({}: Props): ReactElement {
 								<div className="mb-3">
 									<Input
 										multiline
-										name="about"
+										name="fullDescription"
 										label="Полное описание мероприятия"
 										ref={register()}
 									/>
