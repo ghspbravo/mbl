@@ -12,6 +12,10 @@ const Api = {
   CompanyList: 'Company/List',
   CompanySingle: 'Company/Details',
 
+  CreateEvent: 'Event/Create',
+  EventList: 'Event/List',
+  EventSingle: 'Event/Details',
+
   ResetPassword: 'Account/ResetPassword',
   Login: 'Account/Login',
   Register: 'Account/Register',

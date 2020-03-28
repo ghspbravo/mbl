@@ -12,7 +12,7 @@ interface Props {}
 export default function Login({}: Props): ReactElement {
 	const buttons = () => (
 		<div>
-			<Link prefetch={false} href={Pages.CreateEvent.route}>
+			<Link href={Pages.CreateEvent.route}>
 				<div className="mt-3">
 					<button className="p-relative primary w-100">
 						создать мероприятие
