@@ -17,7 +17,6 @@ export interface Event {
 	id: number;
 	photo: string;
 	title: string;
-	shortDescription: string;
 
 	fullDescription: string;
 	documents: string[];
@@ -25,6 +24,7 @@ export interface Event {
 	contacts: string;
 
 	canApply: boolean;
+	isApplied: boolean;
 
 	startDate: string;
 	endDate: string;
@@ -47,6 +47,20 @@ export class EventsFormatter extends Formatter {
 			status: this.status,
 			body: this.body,
 		};
+  }
+  
+	async applyEvent(fetchPromise: Promise<Response>) {
+		await this.responseHandle(fetchPromise).then(contents => {
+			if (this.status > 0) {
+				return;
+			}
+			this.body = contents;
+		});
+
+		return {
+			status: this.status,
+			body: this.body,
+		};
 	}
 
 	async eventsList(fetchPromise: Promise<Response>) {
@@ -57,21 +71,51 @@ export class EventsFormatter extends Formatter {
 			this.body = {
 				hasNext: contents.isExistNextPage,
 				events: contents.items.map(item => {
-					const formatedItem:shortEvent = {
+					const formatedItem: shortEvent = {
 						id: item.id,
 						title: item.title,
-            photo: item.imagePreview || pass,
+						photo: item.imagePreview || pass,
 
-            shortDescription: item.announce,
+						shortDescription: item.announce,
 
-            startDate: formatDate(item.startEvent),
-            endDate: formatDate(item.endEvent),
+						startDate: formatDate(item.startEvent),
+						endDate: formatDate(item.endEvent),
 
-            canApply: item.registrationIsAvailable && !item.alreadyRegistered
-          };
-          return formatedItem
+						canApply: item.registrationIsAvailable,
+					};
+					return formatedItem;
 				}),
 			};
+		});
+
+		return {
+			status: this.status,
+			body: this.body,
+		};
+	}
+
+	async companySingle(fetchPromise: Promise<Response>) {
+		await this.responseHandle(fetchPromise).then(contents => {
+			if (this.status > 0) {
+				return;
+			}
+			const payload: Event = {
+				id: contents.id,
+				title: contents.title,
+				photo: contents.imagePreview || pass,
+
+				fullDescription: contents.content,
+				contacts: contents.contacts,
+
+				startDate: formatDate(contents.startEvent),
+				endDate: formatDate(contents.endEvent),
+
+				canApply: contents.registrationIsAvailable,
+				isApplied: contents.alreadyRegistered,
+
+				documents: contents.documents || [],
+			};
+			this.body = payload;
 		});
 
 		return {

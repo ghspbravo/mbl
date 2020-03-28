@@ -2,28 +2,29 @@ export const API_BASE_CLIENT = process.env.API_BASE_CLIENT;
 export const API_BASE_SERVER = process.env.API_BASE_SERVER;
 
 const Api = {
-  NewsList: 'News/List',
-  NewsSingle: 'News/Details',
+	NewsList: "News/List",
+	NewsSingle: "News/Details",
 
-  MembersList: 'User/List',
-  MembersItem: 'User/Details',
+	MembersList: "User/List",
+	MembersItem: "User/Details",
 
-  CreateCompany: 'Company/Create',
-  CompanyList: 'Company/List',
-  CompanySingle: 'Company/Details',
+	CreateCompany: "Company/Create",
+	CompanyList: "Company/List",
+	CompanySingle: "Company/Details",
 
-  CreateEvent: 'Event/Create',
-  EventList: 'Event/List',
-  EventSingle: 'Event/Details',
+	CreateEvent: "Event/Create",
+	EventList: "Event/List",
+	EventSingle: "Event/Details",
+	EventApply: "Event/ToRegister",
 
-  ResetPassword: 'Account/ResetPassword',
-  Login: 'Account/Login',
-  Register: 'Account/Register',
+	ResetPassword: "Account/ResetPassword",
+	Login: "Account/Login",
+	Register: "Account/Register",
 
-  GetRoles: 'ProfileType/GetList',
-  GetSkills: 'Skill/GetListForUser',
+	GetRoles: "ProfileType/GetList",
+	GetSkills: "Skill/GetListForUser",
 
-  GetCurrentProfile: 'User/Profile'
-}
+	GetCurrentProfile: "User/Profile",
+};
 
 export default Api;
