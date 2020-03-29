@@ -94,7 +94,7 @@ export class EventsFormatter extends Formatter {
 		};
 	}
 
-	async companySingle(fetchPromise: Promise<Response>) {
+	async eventSingle(fetchPromise: Promise<Response>) {
 		await this.responseHandle(fetchPromise).then(contents => {
 			if (this.status > 0) {
 				return;

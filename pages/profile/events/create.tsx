@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from "react";
-import Layout from "../../../components/Layout";
+import Layout, { AuthContext } from "../../../components/Layout";
 import Head from "next/head";
 import Pages from "../../../constants/pages";
 import Breadcrumbs from "../../../components/Breadcrumbs";
@@ -11,6 +11,7 @@ import Api from "../../../constants/api";
 import { useForm } from "react-hook-form";
 import { EventsFormatter } from "../../../constants/formatters/eventsFormatter";
 import DateInput from "../../../components/Inputs/DateInput";
+import { userInterface } from "../../../constants/formatters/profileFormatter";
 
 interface Props {}
 
@@ -59,8 +60,15 @@ export default function CreateEvent({}: Props): ReactElement {
 	});
 
 	const [processing, processingSet] = useState(false);
-	const onSubmit = async (values: formValues) => {
+	const onSubmit = async (values: formValues, currentUser: userInterface) => {
 		clearError("formError");
+		if (!currentUser.companies[0]) {
+			return setError(
+				"formError",
+				"company",
+				"К вам не привязана ни одна компания. Создайте компанию в личном кабинете, чтобы иметь возможность создавать мероприятия, проекты и программы."
+			);
+		}
 		processingSet(true);
 
 		const today = new Date();
@@ -71,12 +79,9 @@ export default function CreateEvent({}: Props): ReactElement {
 			Contacts: values.contacts,
 			StartEvent: values.dateStart.replace(/\./g, "-"),
 			EndEvent: values.dateEnd.replace(/\./g, "-"),
-			StartRegistration: `${today.getDate()}-${today.getMonth()}-${
-				today.getFullYear()
-			}`,
+			StartRegistration: today,
 			EndRegistration: values.dateStart.replace(/\./g, "-"),
-			// TODO: add company authorship
-			// CreateByCompanyId: ,
+			CreateByCompanyId: currentUser.companies[0],
 		};
 
 		if (userPhoto) {
@@ -120,53 +125,59 @@ export default function CreateEvent({}: Props): ReactElement {
 				{currentStep === steps.main && (
 					<div className="container">
 						<div className="col-lg-8 px-0">
-							<form onSubmit={handleSubmit(onSubmit)}>
-								{/* Common */}
-								<fieldset>
-									<div className="mb-3">
-										<Input
-											name="title"
-											label="Название мероприятия"
-											required
-											error={errors.title}
-											ref={register({
-												required: true,
-											})}
-										/>
-									</div>
+							<AuthContext.Consumer>
+								{({ currentUser }) => (
+									<form
+										onSubmit={handleSubmit((values: formValues) =>
+											onSubmit(values, currentUser)
+										)}
+									>
+										{/* Common */}
+										<fieldset>
+											<div className="mb-3">
+												<Input
+													name="title"
+													label="Название мероприятия"
+													required
+													error={errors.title}
+													ref={register({
+														required: true,
+													})}
+												/>
+											</div>
 
-									<div className="row">
-										<div className="mb-3 col-sm-6 col-12">
-											<DateInput
-												name="dateStart"
-												label="Дата начала"
-												error={errors.dateStart}
-												required
-												register={register}
-											/>
-										</div>
-										<div className="mb-3 col-sm-6 col-12">
-											<DateInput
-												name="dateEnd"
-												label="Дата окончания"
-												error={errors.dateEnd}
-												required
-												register={register}
-											/>
-										</div>
-									</div>
+											<div className="row">
+												<div className="mb-3 col-sm-6 col-12">
+													<DateInput
+														name="dateStart"
+														label="Дата начала"
+														error={errors.dateStart}
+														required
+														register={register}
+													/>
+												</div>
+												<div className="mb-3 col-sm-6 col-12">
+													<DateInput
+														name="dateEnd"
+														label="Дата окончания"
+														error={errors.dateEnd}
+														required
+														register={register}
+													/>
+												</div>
+											</div>
 
-									<div className="mb-3">
-										<Input
-											name="contacts"
-											label="Контакты"
-											error={errors.contacts}
-											ref={register({})}
-										/>
-									</div>
-								</fieldset>
+											<div className="mb-3">
+												<Input
+													name="contacts"
+													label="Контакты"
+													error={errors.contacts}
+													ref={register({})}
+												/>
+											</div>
+										</fieldset>
 
-								{/* TODO: add photo
+										{/* TODO: add photo
                 <div className="mb-5">
 									<PhotoInput
 										image={userPhoto}
@@ -175,35 +186,37 @@ export default function CreateEvent({}: Props): ReactElement {
 									/>
 								</div> */}
 
-								<div className="mb-3">
-									<Input
-										multiline
-										name="shortDescription"
-										placeholder="В двух словах..."
-										label="Краткое описание"
-										ref={register()}
-									/>
-								</div>
+										<div className="mb-3">
+											<Input
+												multiline
+												name="shortDescription"
+												placeholder="В двух словах..."
+												label="Краткое описание"
+												ref={register()}
+											/>
+										</div>
 
-								<div className="mb-3">
-									<Input
-										multiline
-										name="fullDescription"
-										label="Полное описание мероприятия"
-										ref={register()}
-									/>
-								</div>
+										<div className="mb-3">
+											<Input
+												multiline
+												name="fullDescription"
+												label="Полное описание мероприятия"
+												ref={register()}
+											/>
+										</div>
 
-								{errors.formError && (
-									<div className="mb-2 error">
-										{(errors.formError as any).message}
-									</div>
+										{errors.formError && (
+											<div className="mb-2 error">
+												{(errors.formError as any).message}
+											</div>
+										)}
+
+										<button disabled={processing} className="primary">
+											{processing ? "Создание..." : "Опубликовать"}
+										</button>
+									</form>
 								)}
-
-								<button disabled={processing} className="primary">
-									{processing ? "Создание..." : "Опубликовать"}
-								</button>
-							</form>
+							</AuthContext.Consumer>
 						</div>
 					</div>
 				)}

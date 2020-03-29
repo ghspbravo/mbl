@@ -195,7 +195,7 @@ EventSingle.getInitialProps = async context => {
 		},
 	});
 	const formatter = new EventsFormatter(),
-		item = await formatter.companySingle(response);
+		item = await formatter.eventSingle(response);
 
 	const props = {
 		status: item.status,
