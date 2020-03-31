@@ -159,8 +159,19 @@ export default function CreateCompany({ }: Props): ReactElement {
                   </div>
 
                   <div className="mb-3">
+                    {/* TODO: add input mask */}
                     <Input name="inn" label="ИНН"
-                      ref={register()} />
+                      error={errors.inn}
+                      ref={register({
+                        minLength: {
+                          value: 10,
+                          message: "ИНН должен состоять из 10 чисел"
+                        },
+                        maxLength: {
+                          value: 10,
+                          message: "ИНН должен состоять из 10 чисел"
+                        }
+                      })} />
                   </div>
 
                   <div className="mb-3">
