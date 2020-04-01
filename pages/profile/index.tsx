@@ -22,10 +22,9 @@ export default function Login({}: Props): ReactElement {
 					</button>
 				</div>
 			</Link>
-			<Link prefetch={false} href={Pages.CreateCource.route}>
+			<Link href={Pages.CreateCource.route}>
 				<div className="mt-3">
 					<button className="p-relative primary w-100">
-						<Badge small>В разработке</Badge>
 						создать программу
 					</button>
 				</div>

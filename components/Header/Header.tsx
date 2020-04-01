@@ -94,9 +94,8 @@ function Header({ router }): ReactElement {
 						<Link href={Pages.MyEvents.route} passHref>
 							<a className="clear dropdown__item p-relative">Мои мероприятия</a>
 						</Link>
-						<Link href={Pages.MyCources.route} passHref prefetch={false}>
+						<Link href={Pages.MyCources.route} passHref>
 							<a className="clear dropdown__item p-relative">
-								<Badge small>В разработке</Badge>
 								Мои программы
 							</a>
 						</Link>

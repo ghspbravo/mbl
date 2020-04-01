@@ -17,6 +17,11 @@ const Api = {
 	EventSingle: "Event/Details",
 	EventApply: "Event/ToRegister",
 
+	CreateCource: "Program/Create",
+	CourceList: "Program/List",
+	CourceSingle: "Program/Details",
+	CourceApply: "Program/ToRegister",
+
 	ResetPassword: "Account/ResetPassword",
 	Login: "Account/Login",
 	Register: "Account/Register",
