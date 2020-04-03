@@ -1,12 +1,25 @@
 import Formatter, { formatDate } from "./rootFormatter";
 import pass from "../../assets/pass.png";
+import { shortCompany } from "./companyFormatter";
 
 export interface shortCource {
 	id: number;
+	title: string;
+	shortDescription: string;
+	duration: string;
 }
 
 export interface Cource {
 	id: number;
+	title: string;
+	duration: string;
+	contacts: string;
+  fullDescription: string;
+
+  isApplied: boolean,
+  canApply: boolean,
+  
+	organisator: shortCompany;
 }
 
 export class CourcesFormatter extends Formatter {
@@ -26,8 +39,8 @@ export class CourcesFormatter extends Formatter {
 			status: this.status,
 			body: this.body,
 		};
-  }
-  
+	}
+
 	async applyCource(fetchPromise: Promise<Response>) {
 		await this.responseHandle(fetchPromise).then(contents => {
 			if (this.status > 0) {
@@ -41,7 +54,7 @@ export class CourcesFormatter extends Formatter {
 			body: this.body,
 		};
 	}
-/*
+	/*
 	async courcesList(fetchPromise: Promise<Response>) {
 		await this.responseHandle(fetchPromise).then(contents => {
 			if (this.status > 0) {
