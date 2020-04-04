@@ -22,6 +22,10 @@ const Api = {
 	CourceSingle: "Program/Details",
 	CourceApply: "Program/ToRegister",
 
+	CreateProject: "Project/CreateProject",
+	ProjectList: "Project/List",
+	ProjectSingle: "Project/Details",
+
 	ResetPassword: "Account/ResetPassword",
 	Login: "Account/Login",
 	Register: "Account/Register",
