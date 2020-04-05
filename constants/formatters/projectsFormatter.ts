@@ -41,7 +41,6 @@ export class ProjectsFormatter extends Formatter {
 		};
   }
   
-	/*
 	async ProjectsList(fetchPromise: Promise<Response>) {
 		await this.responseHandle(fetchPromise).then(contents => {
 			if (this.status > 0) {
@@ -50,17 +49,16 @@ export class ProjectsFormatter extends Formatter {
 			this.body = {
 				hasNext: contents.isExistNextPage,
 				events: contents.items.map(item => {
-					const formatedItem: shortEvent = {
+					const formatedItem: shortProject = {
 						id: item.id,
 						title: item.title,
-						photo: item.imagePreview || pass,
-
-						shortDescription: item.announce,
-
-						startDate: formatDate(item.startEvent),
-						endDate: formatDate(item.endEvent),
-
-						canApply: item.registrationIsAvailable,
+            description: item.content,
+            goal: item.projectObjective,
+            organisator: {
+              id: item.ownerCompany?.id,
+              shortTitle: item.ownerCompany?.shortName,
+              photo: item.ownerCompany?.logo || pass,
+            }
 					};
 					return formatedItem;
 				}),
@@ -72,7 +70,7 @@ export class ProjectsFormatter extends Formatter {
 			body: this.body,
 		};
 	}
-*/
+
 	async projectSingle(fetchPromise: Promise<Response>) {
 		await this.responseHandle(fetchPromise).then(contents => {
 			if (this.status > 0) {

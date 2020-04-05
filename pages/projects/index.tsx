@@ -6,12 +6,10 @@ import Breadcrumbs from "../../components/Breadcrumbs";
 import { Status } from "../../constants/formatters/rootFormatter";
 import { fetcher } from "../../constants/fetcher";
 import Api from "../../constants/api";
-import EventsFormatter, {
-	shortEvent,
-} from "../../constants/formatters/eventsFormatter";
-import EventItem from "../../components/Events/EventItem";
 import ProjectItem from "../../components/Projects/ProjectItem";
-import { shortProject } from "../../constants/formatters/projectsFormatter";
+import ProjectsFormatter, {
+	shortProject,
+} from "../../constants/formatters/projectsFormatter";
 
 interface Props {}
 
@@ -23,68 +21,35 @@ export default function Projects({}: Props): ReactElement {
 	const [list, listSet] = useState<shortProject[]>([]);
 	const [hasNext, hasNextSet] = useState(false);
 
-	// const fetchEvents = async () => {
-	// 	statusSet(Status.loading);
-	// 	const responseApi = fetcher.fetch(Api.EventList, {
-	// 		params: {
-	// 			count: 20,
-	// 			page: ++currentPage,
-	// 		},
-	// 	});
-	// 	const formatter = new EventsFormatter();
+	const fetchProjects = async () => {
+		statusSet(Status.loading);
+		const responseApi = fetcher.fetch(Api.ProjectList, {
+			params: {
+				count: 20,
+				page: ++currentPage,
+			},
+		});
+		const formatter = new ProjectsFormatter();
 
-	// 	const response = await formatter.eventsList(responseApi);
-	// 	if (response.status > 0) {
-	// 		statusSet(response.status);
-	// 		errorSet(response.body);
-	// 	} else {
-	// 		statusSet(response.status);
-	// 		listSet([...list, ...response.body.events]);
-	// 		hasNextSet(response.body.hasNext);
-	// 	}
-	// };
+		const response = await formatter.ProjectsList(responseApi);
+		if (response.status > 0) {
+			statusSet(response.status);
+			errorSet(response.body);
+		} else {
+			statusSet(response.status);
+			listSet([...list, ...response.body.events]);
+			hasNextSet(response.body.hasNext);
+		}
+	};
 
 	useEffect(() => {
 		currentPage = 0;
 
-		// mock projects
-		statusSet(Status.success);
-		listSet([
-			{
-				id: 1,
-				title: "Онлайн-школа испанского языка",
-        goal: "Учить испанскому языку",
-        description: "Онлайн-сервис объедияет студентов и преподавателей по всему миру. Предлагает различные курсы и частные уроки испанского языка для любого уровня подготовки. Определите цель изучения...",
-        organisator: {
-          id: 1, shortTitle: "Company 1", photo: "pass"
-        }
-			},
-			{
-				id: 2,
-				title: "Онлайн-школа испанского языка",
-        goal: "Учить испанскому языку",
-        description: "Онлайн-сервис объедияет студентов и преподавателей по всему миру. Предлагает различные курсы и частные уроки испанского языка для любого уровня подготовки. Определите цель изучения...",
-        organisator: {
-          id: 1, shortTitle: "Company 1", photo: "pass"
-        }
-			},
-			{
-				id: 3,
-				title: "Онлайн-школа испанского языка",
-        goal: "Учить испанскому языку",
-        description: "Онлайн-сервис объедияет студентов и преподавателей по всему миру. Предлагает различные курсы и частные уроки испанского языка для любого уровня подготовки. Определите цель изучения...",
-        organisator: {
-          id: 1, shortTitle: "Company 1", photo: "pass"
-        }
-			},
-		]);
-
-		// TODO: fetch programs
-		// fetchEvents();
+		fetchProjects();
 	}, []);
 
 	const onLoadMoreHandler = () => {
-		// fetchEvents();
+		fetchProjects();
 	};
 
 	const hasItems = list.length > 0;
@@ -103,8 +68,11 @@ export default function Projects({}: Props): ReactElement {
 					{hasItems ? (
 						<div>
 							<div className="row">
-								{list.map(item => (
-									<div className="col-sm-6 col-12 mb-5 cource-item" key={item.id}>
+								{list.map((item) => (
+									<div
+										className="col-sm-6 col-12 mb-5 cource-item"
+										key={item.id}
+									>
 										<ProjectItem content={item} />
 									</div>
 								))}
