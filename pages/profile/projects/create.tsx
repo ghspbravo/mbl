@@ -35,7 +35,7 @@ export default function CreateProject({}: Props): ReactElement {
 	const [processing, processingSet] = useState(false);
 	const onSubmit = async (values: formValues, currentUser: userInterface) => {
 		clearError("formError");
-		const userCompanyId = currentUser.companies[0];
+		const userCompanyId = currentUser.companyId;
 		if (!userCompanyId) {
 			return setError(
 				"formError",
@@ -49,7 +49,7 @@ export default function CreateProject({}: Props): ReactElement {
 			Title: values.title,
 			ProjectObjective: values.goal,
 			Content: values.description,
-			CreateByCompanyId: currentUser.companies[0],
+			CreateByCompanyId: currentUser.companyId,
 		};
 
 		const apiResponse = fetcher.fetch(Api.CreateProject, {

@@ -36,7 +36,7 @@ export default function CreateCource({}: Props): ReactElement {
 	const [processing, processingSet] = useState(false);
 	const onSubmit = async (values: formValues, currentUser: userInterface) => {
     clearError("formError");
-    const userCompanyId = currentUser.companies[0]
+    const userCompanyId = currentUser.companyId
 		if (!userCompanyId) {
 			return setError(
 				"formError",

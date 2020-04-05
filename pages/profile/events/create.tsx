@@ -62,7 +62,7 @@ export default function CreateEvent({}: Props): ReactElement {
 	const [processing, processingSet] = useState(false);
 	const onSubmit = async (values: formValues, currentUser: userInterface) => {
 		clearError("formError");
-		if (!currentUser.companies[0]) {
+		if (!currentUser.companyId) {
 			return setError(
 				"formError",
 				"company",
@@ -81,7 +81,7 @@ export default function CreateEvent({}: Props): ReactElement {
 			EndEvent: values.dateEnd.replace(/\./g, "-"),
 			StartRegistration: today,
 			EndRegistration: values.dateStart.replace(/\./g, "-"),
-			CreateByCompanyId: currentUser.companies[0],
+			CreateByCompanyId: currentUser.companyId,
 		};
 
 		if (userPhoto) {

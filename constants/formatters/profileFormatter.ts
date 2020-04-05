@@ -9,7 +9,7 @@ export interface userInterface {
 	birthday?: Date;
 	roles?: { id: string; name: string }[];
 	education?: string;
-	companies?: number[];
+	companyId?: number;
 	workList?: { name: string; start: string; end: string }[];
 	socialLinks?: string[];
 	spheresList?: { id: string; name: string }[];
@@ -60,7 +60,7 @@ export class ProfileFormatter extends Formatter {
 				roles: profileTypes || [],
 				education,
 				workList: formattedWorkExperiences,
-				companies,
+				companyId: companies && companies[0],
 				socialLinks: socialNetWorks || [],
 				spheresList: skills || [],
 				achievements: achivements,
