@@ -72,27 +72,20 @@ export class ProjectsFormatter extends Formatter {
 			body: this.body,
 		};
 	}
-
-	async eventSingle(fetchPromise: Promise<Response>) {
+*/
+	async projectSingle(fetchPromise: Promise<Response>) {
 		await this.responseHandle(fetchPromise).then(contents => {
 			if (this.status > 0) {
 				return;
 			}
-			const payload: Event = {
+			const payload: Project = {
 				id: contents.id,
 				title: contents.title,
-				photo: contents.imagePreview || pass,
-
-				fullDescription: contents.content,
-				contacts: contents.contacts,
-
-				startDate: formatDate(contents.startEvent),
-				endDate: formatDate(contents.endEvent),
-
-				canApply: contents.registrationIsAvailable,
-				isApplied: contents.alreadyRegistered,
-
-				documents: contents.documents || [],
+        description: contents.content,
+        goal: contents.projectObjective,
+        organisator: {
+          id: 0, shortTitle: contents.ownerCompanyName, photo: pass
+        }
 			};
 			this.body = payload;
 		});
@@ -102,7 +95,6 @@ export class ProjectsFormatter extends Formatter {
 			body: this.body,
 		};
   }
-  */
 }
 
 export default ProjectsFormatter;
