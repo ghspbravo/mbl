@@ -15,6 +15,7 @@ export default function Badge({ children: value, small }: Props): ReactElement {
         .badge {
           font-size: ${small ? 8 : 16}px;
           position: absolute;
+          z-index: 5;
           left: 10%;
           top: -10px;
 

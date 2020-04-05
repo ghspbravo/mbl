@@ -5,24 +5,19 @@ import Pages from "../../../constants/pages";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import Link from "next/link";
 import Input from "../../../components/Inputs/Input";
-import PhotoInput from "../../../components/Inputs/PhotoInput";
 import { fetcher } from "../../../constants/fetcher";
 import Api from "../../../constants/api";
 import { useForm } from "react-hook-form";
-import { EventsFormatter } from "../../../constants/formatters/eventsFormatter";
-import DateInput from "../../../components/Inputs/DateInput";
 import { userInterface } from "../../../constants/formatters/profileFormatter";
+import { CourcesFormatter } from "../../../constants/formatters/courcesFormatter";
+import ProjectsFormatter from "../../../constants/formatters/projectsFormatter";
 
 interface Props {}
 
 interface formValues {
 	title: string;
-	dateStart: string;
-	dateEnd: string;
-	contacts: string;
-
-	shortDescription: string;
-	fullDescription: string;
+	goal: string;
+	description: string;
 }
 
 enum steps {
@@ -30,30 +25,8 @@ enum steps {
 	success,
 }
 
-export default function CreateEvent({}: Props): ReactElement {
+export default function CreateProject({}: Props): ReactElement {
 	const [currentStep, currentStepSet] = useState(steps.main);
-
-	const [userPhoto, userPhotoSet] = useState<any>();
-	let photoFile: File;
-	const onPhotoChange = e => {
-		const input = e.target;
-
-		if (input.files && input.files[0]) {
-			photoFile = input.files[0];
-			var reader = new FileReader();
-
-			reader.onload = function(e) {
-				const filePath = e.target.result;
-				userPhotoSet(filePath);
-			};
-
-			reader.readAsDataURL(photoFile);
-		}
-	};
-	const onPhotoRemove = () => {
-		userPhotoSet(undefined);
-		photoFile = null;
-	};
 
 	const { handleSubmit, register, errors, setError, clearError } = useForm({
 		mode: "onBlur",
@@ -62,7 +35,8 @@ export default function CreateEvent({}: Props): ReactElement {
 	const [processing, processingSet] = useState(false);
 	const onSubmit = async (values: formValues, currentUser: userInterface) => {
 		clearError("formError");
-		if (!currentUser.companyId) {
+		const userCompanyId = currentUser.companyId;
+		if (!userCompanyId) {
 			return setError(
 				"formError",
 				"company",
@@ -71,31 +45,21 @@ export default function CreateEvent({}: Props): ReactElement {
 		}
 		processingSet(true);
 
-		const today = new Date();
 		const payload = {
 			Title: values.title,
-			Announce: values.shortDescription,
-			Content: values.fullDescription,
-			Contacts: values.contacts,
-			StartEvent: values.dateStart.replace(/\./g, "-"),
-			EndEvent: values.dateEnd.replace(/\./g, "-"),
-			StartRegistration: today,
-			EndRegistration: values.dateStart.replace(/\./g, "-"),
+			ProjectObjective: values.goal,
+			Content: values.description,
 			CreateByCompanyId: currentUser.companyId,
 		};
 
-		if (userPhoto) {
-			payload["Photo"] = userPhoto;
-		}
-
-		const apiResponse = fetcher.fetch(Api.CreateEvent, {
+		const apiResponse = fetcher.fetch(Api.CreateProject, {
 			method: "POST",
 			headers: { "Content-Type": "application/json-patch+json" },
 			body: JSON.stringify(payload),
 		});
-		const formatter = new EventsFormatter();
+		const formatter = new ProjectsFormatter();
 
-		const response = await formatter.createEvent(apiResponse);
+		const response = await formatter.createProject(apiResponse);
 		if (response.status > 0) {
 			setError("formError", "formError", response.body);
 		} else {
@@ -107,7 +71,7 @@ export default function CreateEvent({}: Props): ReactElement {
 	return (
 		<Layout>
 			<Head>
-				<title>{Pages.CreateEvent.title}</title>
+				<title>{Pages.CreateProject.title}</title>
 			</Head>
 
 			<section>
@@ -115,11 +79,11 @@ export default function CreateEvent({}: Props): ReactElement {
 					<Breadcrumbs
 						pages={[
 							{ title: Pages.Profile.header, href: Pages.Profile.route },
-							{ title: Pages.CreateEvent.header },
+							{ title: Pages.CreateProject.header },
 						]}
 					/>
 
-					<h1>{Pages.CreateEvent.header}</h1>
+					<h1>{Pages.CreateProject.header}</h1>
 				</div>
 
 				{currentStep === steps.main && (
@@ -137,7 +101,7 @@ export default function CreateEvent({}: Props): ReactElement {
 											<div className="mb-3">
 												<Input
 													name="title"
-													label="Название мероприятия"
+													label="Название"
 													required
 													error={errors.title}
 													ref={register({
@@ -146,64 +110,33 @@ export default function CreateEvent({}: Props): ReactElement {
 												/>
 											</div>
 
-											<div className="row">
-												<div className="mb-3 col-sm-6 col-12">
-													<DateInput
-														name="dateStart"
-														label="Дата начала"
-														error={errors.dateStart}
-														required
-														register={register}
-													/>
-												</div>
-												<div className="mb-3 col-sm-6 col-12">
-													<DateInput
-														name="dateEnd"
-														label="Дата окончания"
-														error={errors.dateEnd}
-														required
-														register={register}
-													/>
-												</div>
-											</div>
-
 											<div className="mb-3">
 												<Input
-													name="contacts"
-													label="Контакты"
-													error={errors.contacts}
-													ref={register({})}
+													name="goal"
+													label="Цель проекта"
+													required
+													error={errors.goal}
+													ref={register({
+														required: true,
+													})}
 												/>
 											</div>
 										</fieldset>
 
-										{/* TODO: add photo
-                <div className="mb-5">
-									<PhotoInput
-										image={userPhoto}
-										onRemove={onPhotoRemove}
-										onChange={onPhotoChange}
-									/>
-								</div> */}
-
 										<div className="mb-3">
 											<Input
 												multiline
-												name="shortDescription"
-												placeholder="В двух словах..."
-												label="Краткое описание"
-												ref={register()}
+												required
+												error={errors.description}
+												name="description"
+												label="О проекте"
+												ref={register({
+													required: true,
+												})}
 											/>
 										</div>
 
-										<div className="mb-3">
-											<Input
-												multiline
-												name="fullDescription"
-												label="Полное описание мероприятия"
-												ref={register()}
-											/>
-										</div>
+										{/* TODO: add co-authors */}
 
 										{errors.formError && (
 											<div className="mb-2 error">
@@ -224,7 +157,7 @@ export default function CreateEvent({}: Props): ReactElement {
 				{currentStep === steps.success && (
 					<div className="container">
 						<h1>Успех!</h1>
-						<p>Мероприятие создано.</p>
+						<p>Проект создан.</p>
 						<Link passHref href={Pages.Profile.route}>
 							<a className="clear button">Вернуться в личный кабинет</a>
 						</Link>

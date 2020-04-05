@@ -94,15 +94,13 @@ function Header({ router }): ReactElement {
 						<Link href={Pages.MyEvents.route} passHref>
 							<a className="clear dropdown__item p-relative">Мои мероприятия</a>
 						</Link>
-						<Link href={Pages.MyCources.route} passHref prefetch={false}>
+						<Link href={Pages.MyCources.route} passHref>
 							<a className="clear dropdown__item p-relative">
-								<Badge small>В разработке</Badge>
 								Мои программы
 							</a>
 						</Link>
-						<Link href={Pages.MyProjects.route} passHref prefetch={false}>
+						<Link href={Pages.MyProjects.route} passHref>
 							<a className="clear dropdown__item p-relative">
-								<Badge small>В разработке</Badge>
 								Мои проекты
 							</a>
 						</Link>
@@ -326,8 +324,7 @@ function Header({ router }): ReactElement {
 									</Link>
 								</div>
 								<div className="navigation-item d-none d-xl-block">
-									<Badge small>в разработке</Badge>
-									<Link prefetch={false} href={Projects.route} passHref={true}>
+									<Link href={Projects.route} passHref={true}>
 										<a>{Projects.title}</a>
 									</Link>
 								</div>
@@ -445,8 +442,7 @@ function Header({ router }): ReactElement {
 											</Link>
 										</div>
 										<div className="col-6 col-md-3 burger-navigation-item">
-											<Badge small>в разработке</Badge>
-											<Link href={Projects.route} passHref={true} prefetch={false}>
+											<Link href={Projects.route} passHref={true}>
 												<a>{Projects.title}</a>
 											</Link>
 										</div>
