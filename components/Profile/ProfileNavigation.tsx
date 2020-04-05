@@ -5,8 +5,9 @@ import { useRouter } from "next/router";
 
 export enum profileTabs {
 	profile = 0,
-  events = 1,
-  cources = 2,
+	events = 1,
+	cources = 2,
+	projects = 3,
 }
 
 interface Props {
@@ -26,6 +27,9 @@ export default function ProfileNavigation({ currentTab }: Props): ReactElement {
 			case profileTabs.cources:
 				router.push(Pages.MyCources.route);
 				break;
+			case profileTabs.projects:
+				router.push(Pages.MyProjects.route);
+				break;
 
 			default:
 				break;
@@ -34,7 +38,12 @@ export default function ProfileNavigation({ currentTab }: Props): ReactElement {
 	return (
 		<TabsContainer
 			activeTab={currentTab}
-			names={[Pages.Profile.title, Pages.MyEvents.header, Pages.MyCources.header]}
+			names={[
+				Pages.Profile.title,
+				Pages.MyEvents.header,
+				Pages.MyCources.header,
+				Pages.MyProjects.header,
+			]}
 			customAction={onTabChange}
 		/>
 	);
