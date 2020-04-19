@@ -43,11 +43,9 @@ export default function Login({}: Props): ReactElement {
 					</button>
 				</div>
 			</Link>
-			{/* TODO: edit profile link */}
-			<Link prefetch={false} href={Pages.Profile.route}>
+			<Link href={Pages.ProfileEdit.route}>
 				<div className="mt-3">
 					<button className="p-relative w-100">
-						<Badge small>В разработке</Badge>
 						редактировать профиль
 					</button>
 				</div>

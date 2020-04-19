@@ -16,7 +16,8 @@ interface userOptions {
   method?: 'POST' | 'GET',
   headers?: any,
   body?: any,
-  params?: any
+  params?: any,
+  customBase?: boolean
 }
 
 class Api {
@@ -58,7 +59,7 @@ class Api {
     }
 
     return {
-      path: this.base + path,
+      path: options.customBase ? path : this.base + path,
       options: fetchOptions
     }
   }

@@ -11,25 +11,27 @@ import { userInterface } from '../constants/formatters/profileFormatter'
 interface Props {
   children: JSX.Element[] | JSX.Element
 }
+let currentUser:userInterface;
+const getCurrentUser = () => currentUser;
 
-export const AuthContext = createContext({ isAuth: false, currentUser: {} as userInterface, setAuthState: null });
 
+export const AuthContext = createContext<any>({ isAuth: false, currentUser: {} as userInterface, setAuthState: null, getCurrentUser });
 function Layout({ children: pageContent }: Props) {
   moment.locale('ru');
   const [loaded, loadedSet] = useState(false)
 
   const [isAuth, isAuthSet] = useState(null)
-  const [currentUser, currentUserSet] = useState({})
-
+  
   const setAuthState = (userInfo) => {
     if (userInfo) {
-      isAuthSet(true);
-      currentUserSet(userInfo)
+      currentUser = {...userInfo}
+      isAuthSet(true)
     } else {
+      currentUser = {}
       isAuthSet(false)
-      currentUserSet({})
     }
   }
+
   useEffect(() => {
     const token = getToken();
     if (token) {
@@ -220,8 +222,8 @@ function Layout({ children: pageContent }: Props) {
               textarea {
                 resize: vertical;
               }
-              input:not([type="checkbox"]) {
-                width: 100%;
+              input[type="checkbox"] {
+                width: auto;
               }
               textarea:hover,
               textarea:focus,

@@ -40,4 +40,4 @@ function Checkbox({ name, checked = false, children }: Props, ref): ReactElement
   )
 }
 
-export default forwardRef(Checkbox)
+export default forwardRef<any, Props | React.HTMLAttributes<HTMLInputElement>>(Checkbox)

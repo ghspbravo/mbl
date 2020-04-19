@@ -33,7 +33,10 @@ const Api = {
 	GetRoles: "ProfileType/GetList",
 	GetSkills: "Skill/GetListForUser",
 
-	GetCurrentProfile: "User/Profile",
+  GetCurrentProfile: "User/Profile",
+  EditProfile: "User/EditProfile",
+
+  UploadFile: "File/Upload"
 };
 
 export default Api;
