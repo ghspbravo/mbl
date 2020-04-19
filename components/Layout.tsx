@@ -1,17 +1,24 @@
 import React, { useEffect, useState, createContext } from 'react'
 
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import Header from './Header/Header'
 import Colors from '../constants/colors'
 import Footer from './Footer'
 import moment from 'moment'
 import { getToken, setToken } from '../constants/auth'
 import { userInterface } from '../constants/formatters/profileFormatter'
+import Pages from '../constants/pages'
 
 interface Props {
   children: JSX.Element[] | JSX.Element
 }
-let currentUser:userInterface;
+let currentUser:userInterface = {
+  workList: [],
+  socialLinks: [],
+  roles: [],
+  spheresList: []
+};
 const getCurrentUser = () => currentUser;
 
 
@@ -41,6 +48,41 @@ function Layout({ children: pageContent }: Props) {
     }
     loadedSet(true);
   }, [])
+
+  const router = useRouter()
+  useEffect(() => {
+    if (isAuth === null) {return}
+    if (isAuth) {
+      switch (router.pathname) {
+        case Pages.SignIn.route:
+        case Pages.SignUp.route:
+        case Pages.Recover.route:
+          router.replace(Pages.Home.route);
+          break;
+      
+        default:
+          break;
+      }
+    } else {
+      switch (router.pathname) {
+        case Pages.Profile.route:
+        case Pages.ProfileEdit.route:
+        case Pages.CompanyEdit.route:
+        case Pages.MyEvents.route:
+        case Pages.MyCources.route:
+        case Pages.MyProjects.route:
+        case Pages.CreateCompany.route:
+        case Pages.CreateCource.route:
+        case Pages.CreateEvent.route:
+        case Pages.CreateProject.route:
+          router.replace(Pages.Home.route);
+          break;
+      
+        default:
+          break;
+      }
+    }
+  }, [isAuth])
   return (loaded
     ? <AuthContext.Provider
       value={{ isAuth, currentUser, setAuthState }} >
