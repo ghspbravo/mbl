@@ -57,11 +57,16 @@ export default function EditProfile({}: Props): ReactElement {
 				end: work.endRaw || "",
 			}))
 		);
-		currentUser.workList.forEach((work, index) =>
-			setValue([
-				{ [`work[${index}].start`]: work.startRaw },
-				{ [`work[${index}].end`]: work.endRaw },
-			])
+		// resolving conflicts with worksListSet
+		setTimeout(
+			() =>
+				currentUser.workList.forEach((work, index) =>
+					setValue([
+						{ [`work[${index}].start`]: work.startRaw },
+						{ [`work[${index}].end`]: work.endRaw },
+					])
+				),
+			300
 		);
 
 		linksListSet(
@@ -71,11 +76,32 @@ export default function EditProfile({}: Props): ReactElement {
 			}))
 		);
 
+		const commonFormatter = new CommonFormatter();
+		commonFormatter
+			.formatSkills(fetcher.fetch(Api.GetSkills))
+			.then((response) => {
+				if (response.status > 0) {
+					setError("skills", "skillsError", response.body);
+				} else {
+					skillsListSet(
+						response.body.map((skill) => {
+							skill.checked =
+								currentUser.spheresList.filter(function (item) {
+									return item.id === skill.id;
+                }).length > 0;
+							return skill;
+						})
+					);
+				}
+			});
+
 		userPhotoSet(currentUser.photo);
 	}, [currentUser]);
 
 	const [userPhoto, userPhotoSet] = useState<any>();
 	let photoFile: File;
+	let photoPath: string = currentUser.photo;
+	// TODO: refactor dublicate
 	const onPhotoChange = (e) => {
 		const input = e.target;
 
@@ -92,7 +118,8 @@ export default function EditProfile({}: Props): ReactElement {
 
 			const fileFormData = new FormData();
 
-			fileFormData.append("photo", photoFile);
+			fileFormData.append("file", photoFile);
+			fileFormData.append("AttachType", "0");
 
 			fetcher
 				.fetch(Api.UploadFile, {
@@ -100,7 +127,16 @@ export default function EditProfile({}: Props): ReactElement {
 					body: fileFormData,
 				})
 				.then((response) => {
-					console.log(response);
+					if (response.status === 200) {
+						return response.json();
+					} else {
+						return {
+							path: "",
+						};
+					}
+				})
+				.then((responseJson) => {
+					photoPath = responseJson.path;
 				});
 		}
 	};
@@ -110,18 +146,6 @@ export default function EditProfile({}: Props): ReactElement {
 	};
 
 	const [skillsList, skillsListSet] = useState(null);
-	useEffect(() => {
-		const commonFormatter = new CommonFormatter();
-		commonFormatter
-			.formatSkills(fetcher.fetch(Api.GetSkills))
-			.then((response) => {
-				if (response.status > 0) {
-					setError("skills", "skillsError", response.body);
-				} else {
-					skillsListSet(response.body);
-				}
-			});
-	}, []);
 
 	const {
 		handleSubmit,
@@ -149,7 +173,7 @@ export default function EditProfile({}: Props): ReactElement {
 	const removeWork = (index: number) =>
 		worksListSet(() => {
 			worksList.splice(index, 1);
-			return worksList;
+			return [...worksList];
 		});
 	const editWork = (value: workItem, index) =>
 		worksListSet(() => {
@@ -185,7 +209,7 @@ export default function EditProfile({}: Props): ReactElement {
 	const editLink = (value, index) =>
 		linksListSet(() => {
 			linksList[index] = { ...linksList[index], value };
-			return linksList;
+			return [...linksList];
 		});
 	const onLinkAddClick = () =>
 		appendLink([
@@ -258,8 +282,8 @@ export default function EditProfile({}: Props): ReactElement {
 			});
 		}
 
-		if (userPhoto) {
-			formData.append("Photo", userPhoto);
+		if (photoPath) {
+			formData.append("Photo", photoPath);
 		}
 
 		const apiResponse = fetcher.fetch(Api.EditProfile, {
@@ -454,6 +478,7 @@ export default function EditProfile({}: Props): ReactElement {
 													<div key={sphere.id} className="mr-3 mb-2">
 														<Checkbox
 															ref={register({})}
+															checked={sphere.checked}
 															name={`sphere[${sphere.id}]`}
 														>
 															{sphere.name}
@@ -506,18 +531,6 @@ export default function EditProfile({}: Props): ReactElement {
 										</button>
 									</div>
 								</div>
-							</div>
-
-							<div className="mb-2">
-								<button
-									type="button"
-									onClick={() => {
-										const values = getValues();
-										console.log(values);
-									}}
-								>
-									log values
-								</button>
 							</div>
 
 							{errors.formError && (

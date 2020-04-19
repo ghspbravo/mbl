@@ -38,6 +38,8 @@ export default function RegistrationForm({
 
 	const [userPhoto, userPhotoSet] = useState<any>();
 	let photoFile: File;
+  let photoPath:string;
+  // TODO: refactor dublicate
 	const onPhotoChange = e => {
 		const input = e.target;
 
@@ -50,7 +52,30 @@ export default function RegistrationForm({
 				userPhotoSet(filePath);
 			};
 
-			reader.readAsDataURL(photoFile);
+      reader.readAsDataURL(photoFile);
+      
+      const fileFormData = new FormData();
+
+			fileFormData.append("file", photoFile);
+			fileFormData.append("AttachType", "0");
+
+			fetcher
+				.fetch(Api.UploadFile, {
+					method: "POST",
+					body: fileFormData,
+				})
+				.then((response) => {
+					if (response.status === 200) {
+						return response.json();
+					} else {
+						return {
+							path: "",
+						};
+					}
+        })
+        .then((responseJson) => {
+          photoPath = responseJson.path
+        });
 		}
 	};
 	const onPhotoRemove = () => {
@@ -137,8 +162,8 @@ export default function RegistrationForm({
 			});
 		}
 
-		if (photoFile) {
-			formData.append("Photo", photoFile);
+		if (photoPath) {
+			formData.append("Photo", photoPath);
 		}
 
 		const apiResponse = fetcher.fetch(Api.Register, {

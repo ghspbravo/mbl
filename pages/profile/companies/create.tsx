@@ -41,6 +41,8 @@ export default function CreateCompany({ }: Props): ReactElement {
 
   const [userPhoto, userPhotoSet] = useState<any>();
   let photoFile: File;
+  let photoPath: string;
+  // TODO: refactor dublicate
   const onPhotoChange = (e) => {
     const input = e.target;
 
@@ -54,6 +56,29 @@ export default function CreateCompany({ }: Props): ReactElement {
       }
 
       reader.readAsDataURL(photoFile);
+
+      const fileFormData = new FormData();
+
+			fileFormData.append("file", photoFile);
+			fileFormData.append("AttachType", "0");
+
+			fetcher
+				.fetch(Api.UploadFile, {
+					method: "POST",
+					body: fileFormData,
+				})
+				.then((response) => {
+					if (response.status === 200) {
+						return response.json();
+					} else {
+						return {
+							path: "",
+						};
+					}
+        })
+        .then((responseJson) => {
+          photoPath = responseJson.path
+        });
     }
   }
   const onPhotoRemove = () => {
@@ -95,8 +120,8 @@ export default function CreateCompany({ }: Props): ReactElement {
       Occupations: values.sphere
     }
 
-    if (userPhoto) {
-      payload["Photo"] = userPhoto;
+    if (photoPath) {
+      payload["Photo"] = photoPath;
     }
 
     const apiResponse = fetcher.fetch(Api.CreateCompany, {

@@ -35,19 +35,44 @@ export default function CreateEvent({}: Props): ReactElement {
 
 	const [userPhoto, userPhotoSet] = useState<any>();
 	let photoFile: File;
-	const onPhotoChange = e => {
+	let photoPath: string;
+  // TODO: refactor dublicate
+	const onPhotoChange = (e) => {
 		const input = e.target;
 
 		if (input.files && input.files[0]) {
 			photoFile = input.files[0];
 			var reader = new FileReader();
 
-			reader.onload = function(e) {
+			reader.onload = function (e) {
 				const filePath = e.target.result;
 				userPhotoSet(filePath);
 			};
 
 			reader.readAsDataURL(photoFile);
+
+			const fileFormData = new FormData();
+
+			fileFormData.append("file", photoFile);
+			fileFormData.append("AttachType", "0");
+
+			fetcher
+				.fetch(Api.UploadFile, {
+					method: "POST",
+					body: fileFormData,
+				})
+				.then((response) => {
+					if (response.status === 200) {
+						return response.json();
+					} else {
+						return {
+							path: "",
+						};
+					}
+				})
+				.then((responseJson) => {
+					photoPath = responseJson.path;
+				});
 		}
 	};
 	const onPhotoRemove = () => {
@@ -84,8 +109,8 @@ export default function CreateEvent({}: Props): ReactElement {
 			CreateByCompanyId: currentUser.companyId,
 		};
 
-		if (userPhoto) {
-			payload["Photo"] = userPhoto;
+		if (photoPath) {
+			payload["Photo"] = photoPath;
 		}
 
 		const apiResponse = fetcher.fetch(Api.CreateEvent, {
@@ -177,14 +202,13 @@ export default function CreateEvent({}: Props): ReactElement {
 											</div>
 										</fieldset>
 
-										{/* TODO: add photo
-                <div className="mb-5">
-									<PhotoInput
-										image={userPhoto}
-										onRemove={onPhotoRemove}
-										onChange={onPhotoChange}
-									/>
-								</div> */}
+										<div className="mb-5">
+											<PhotoInput
+												image={userPhoto}
+												onRemove={onPhotoRemove}
+												onChange={onPhotoChange}
+											/>
+										</div>
 
 										<div className="mb-3">
 											<Input

@@ -63,4 +63,4 @@ function Input(
 	);
 }
 
-export default forwardRef<any, Props | React.HTMLAttributes<HTMLInputElement>>(Input);
+export default forwardRef<any, Props | React.HTMLProps<HTMLInputElement>>(Input);
