@@ -35,7 +35,6 @@ export default function CreateEvent({}: Props): ReactElement {
 
 	const [userPhoto, userPhotoSet] = useState<any>();
 	let photoFile: File;
-	let photoPath: string;
   // TODO: refactor dublicate
 	const onPhotoChange = (e) => {
 		const input = e.target;
@@ -71,7 +70,7 @@ export default function CreateEvent({}: Props): ReactElement {
 					}
 				})
 				.then((responseJson) => {
-					photoPath = responseJson.path;
+					userPhotoSet(responseJson.path)
 				});
 		}
 	};
@@ -109,8 +108,8 @@ export default function CreateEvent({}: Props): ReactElement {
 			CreateByCompanyId: currentUser.companyId,
 		};
 
-		if (photoPath) {
-			payload["Photo"] = photoPath;
+		if (userPhoto) {
+			payload["Photo"] = userPhoto;
 		}
 
 		const apiResponse = fetcher.fetch(Api.CreateEvent, {

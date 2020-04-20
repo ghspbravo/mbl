@@ -99,7 +99,6 @@ export default function EditProfile({}: Props): ReactElement {
 
 	const [userPhoto, userPhotoSet] = useState<any>();
 	let photoFile: File;
-	let photoPath: string = currentUser.photo;
 	// TODO: refactor dublicate
 	const onPhotoChange = (e) => {
 		const input = e.target;
@@ -135,7 +134,7 @@ export default function EditProfile({}: Props): ReactElement {
 					}
 				})
 				.then((responseJson) => {
-					photoPath = responseJson.path;
+					userPhotoSet(responseJson.path)
 				});
 		}
 	};
@@ -281,8 +280,8 @@ export default function EditProfile({}: Props): ReactElement {
 			});
 		}
 
-		if (photoPath) {
-			formData.append("Photo", photoPath);
+		if (userPhoto) {
+			formData.append("Photo", userPhoto);
 		}
 
 		const apiResponse = fetcher.fetch(Api.EditProfile, {
