@@ -14,7 +14,7 @@ import { Company } from '../constants/formatters/companyFormatter'
 interface Props {
   children: JSX.Element[] | JSX.Element
 }
-let currentUser:userInterface = {
+let currentUser = {
   workList: [],
   socialLinks: [],
   roles: [],
@@ -68,7 +68,7 @@ function Layout({ children: pageContent }: Props) {
       currentUser = {...userInfo}
       isAuthSet(true)
     } else {
-      currentUser = {}
+      currentUser = {} as userInterface
       isAuthSet(false)
     }
     redirectAuth(!!userInfo);

@@ -106,7 +106,7 @@ export default function Login({}: Props): ReactElement {
 								/>
 							</div>
 
-							{currentUser.company && (
+							{currentUser.companyId && (
 								<div className="row mb-3">
 									<div className="col-lg-4 col-xl-3 col-md-6 text">
 										<b>Компания:</b>

@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useState, useContext } from "react";
 import Layout, { AuthContext } from "../../../components/Layout";
 import Head from "next/head";
 import Pages from "../../../constants/pages";
@@ -10,6 +10,7 @@ import Api from "../../../constants/api";
 import { useForm } from "react-hook-form";
 import { userInterface } from "../../../constants/formatters/profileFormatter";
 import { CourcesFormatter } from "../../../constants/formatters/courcesFormatter";
+import Select from "../../../components/Inputs/Select";
 
 interface Props {}
 
@@ -17,8 +18,8 @@ interface formValues {
 	title: string;
 	duration: string;
 	contacts: string;
-  aboutCource: string;
-  shortDescription: string;
+	aboutCource: string;
+	shortDescription: string;
 }
 
 enum steps {
@@ -33,10 +34,26 @@ export default function CreateCource({}: Props): ReactElement {
 		mode: "onBlur",
 	});
 
+	const { getCurrentUser } = useContext(AuthContext);
+	const currentUser: userInterface = getCurrentUser();
+	const projectsList = currentUser.myProjects
+		.filter((item) => item.isCreator)
+		.map((item) => ({
+			value: item.id,
+			name: item.title,
+		}));
+
+	const [project, projectSet] = useState("Выберите проект");
+	const [projectId, projectIdSet] = useState();
+	const onProjectSelect = (value, index) => {
+		projectSet(projectsList[index].name);
+		projectIdSet(value);
+	};
+
 	const [processing, processingSet] = useState(false);
 	const onSubmit = async (values: formValues, currentUser: userInterface) => {
-    clearError("formError");
-    const userCompanyId = currentUser.companyId
+		clearError("formError");
+		const userCompanyId = currentUser.companyId;
 		if (!userCompanyId) {
 			return setError(
 				"formError",
@@ -44,17 +61,25 @@ export default function CreateCource({}: Props): ReactElement {
 				"К вам не привязана ни одна компания. Создайте компанию в личном кабинете, чтобы иметь возможность создавать мероприятия, проекты и программы."
 			);
 		}
+		if (!projectId) {
+			return setError(
+				"formError",
+				"projectId",
+				"Выберите целевой проект для данной программы."
+			);
+		}
 		processingSet(true);
 
 		const payload = {
-      "Title": values.title,
-      "Announce": values.shortDescription,
-      "Content": values.aboutCource,
-      "Contacts": values.contacts,
-      "Duration": parseInt(values.duration),
-      "DurationModifier": 0,
-      "CreateByCompanyId": userCompanyId,
-    };
+			Title: values.title,
+			Announce: values.shortDescription,
+			Content: values.aboutCource,
+			Contacts: values.contacts,
+			Duration: parseInt(values.duration),
+			DurationModifier: 0,
+			CreateByCompanyId: userCompanyId,
+			CreateForProjectId: projectId,
+		};
 
 		const apiResponse = fetcher.fetch(Api.CreateCource, {
 			method: "POST",
@@ -114,64 +139,69 @@ export default function CreateCource({}: Props): ReactElement {
 												/>
 											</div>
 
-											<div className="row">
-												<div className="mb-3 col-sm-6 col-12">
-													<Input
-														name="duration"
-														label="Длительность (в днях)"
-                            error={errors.duration}
-                            min="1"
-														required
-														type="number"
-														ref={register({
-                              required: true,
-															min: {
-																value: 1,
-																message:
-																	"Введите длительность программы в днях",
-															},
-														})}
-													/>
-												</div>
+											<div className="px-0 mb-3 col-sm-6 col-12">
+												<Input
+													name="duration"
+													label="Длительность (в днях)"
+													error={errors.duration}
+													min="1"
+													required
+													type="number"
+													ref={register({
+														required: true,
+														min: {
+															value: 1,
+															message: "Введите длительность программы в днях",
+														},
+													})}
+												/>
+											</div>
+											<div className="px-0 mb-3 col-sm-6 col-12">
+												<Select
+													changeHandler={onProjectSelect}
+													items={projectsList}
+												>
+													{project}
+												</Select>
 											</div>
 
 											<div className="mb-3">
 												<Input
 													name="contacts"
-                          label="Контакты"
-                          required
+													label="Контакты"
+													required
 													error={errors.contacts}
 													ref={register({
-                            required: true,
-                          })}
+														required: true,
+													})}
 												/>
 											</div>
 										</fieldset>
 
 										<div className="mb-3">
 											<Input
-                        multiline
-                        required
-                        placeholder="В двух словах..."
-                        name="shortDescription"
-                        error={errors.shortDescription}
+												multiline
+												required
+												placeholder="В двух словах..."
+												name="shortDescription"
+												error={errors.shortDescription}
 												label="Краткое описание программы"
 												ref={register({
-                          required: true,
-                        })}
+													required: true,
+												})}
 											/>
 										</div>
 
 										<div className="mb-3">
 											<Input
-                        multiline
-                        required
-                        error={errors.aboutCource}
+												multiline
+												required
+												error={errors.aboutCource}
 												name="aboutCource"
 												label="О программе"
 												ref={register({
-                          required: true,
-                        })}
+													required: true,
+												})}
 											/>
 										</div>
 

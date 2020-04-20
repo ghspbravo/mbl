@@ -4,21 +4,47 @@ import moment from "moment";
 import { Company } from "./companyFormatter";
 
 export interface userInterface {
-	id?: string;
-	name?: string;
-	photo?: string;
-	birthday?: String;
-	birthdayRaw?: string;
-	roles?: { id: string; name: string }[];
-	education?: string;
-	companyId?: number;
-	company?: Company;
-	workList?: { name: string; start: string; startRaw: string; end: string; endRaw: string }[];
-	socialLinks?: string[];
-	spheresList?: { id: string; name: string }[];
-	achievements?: string;
-	interests?: string;
-	wishes?: string;
+	id: string;
+	name: string;
+	photo: string;
+	birthday: String;
+	birthdayRaw: string;
+
+	roles: { id: string; name: string }[];
+
+	education: string;
+	workList: {
+		name: string;
+		start: string;
+		startRaw: string;
+		end: string;
+		endRaw: string;
+	}[];
+
+	companyId: number;
+	company: Company;
+
+	socialLinks: string[];
+	spheresList: { id: string; name: string }[];
+	achievements: string;
+	interests: string;
+	wishes: string;
+
+	myProjects: {
+		id: number;
+		title: string;
+		isCreator: boolean;
+	}[];
+	myEvents: {
+		id: number;
+		title: string;
+		isCreator: boolean;
+	}[];
+	myCources: {
+		id: number;
+		title: string;
+		isCreator: boolean;
+	}[];
 }
 
 export class ProfileFormatter extends Formatter {
@@ -57,22 +83,45 @@ export class ProfileFormatter extends Formatter {
 				endRaw: work.end ? moment(work.end).format("L") : null,
 			}));
 
-			this.body = {
+			const formattedUser: userInterface = {
 				id,
 				name: `${surName} ${firstName} ${middleName || ""}`.trimEnd(),
 				photo: photo || pass,
 				birthday: moment(birthDate).format("LL"),
-				birthdayRaw: moment(birthDate).format("L"),
-				roles: profileTypes || [],
+        birthdayRaw: moment(birthDate).format("L"),
+        
+        roles: profileTypes || [],
+        
 				education,
-				workList: formattedWorkExperiences,
-				companyId: companies && companies[0],
+        workList: formattedWorkExperiences,
+        
+        companyId: companies && companies[0],
+        company: {} as Company,
+
 				socialLinks: socialNetWorks || [],
 				spheresList: skills || [],
 				achievements: achivements,
 				interests,
 				wishes: wantToLearn,
+
+				myCources: portfolio.currentPrograms.map((item) => ({
+					id: item.id,
+					title: item.title,
+					isCreator: item.isInitiator,
+				})),
+				myProjects: portfolio.currentProjects.map((item) => ({
+					id: item.id,
+					title: item.title,
+					isCreator: item.isInitiator,
+				})),
+				myEvents: portfolio.events.map((item) => ({
+					id: item.id,
+					title: item.title,
+					isCreator: item.isInitiator,
+				})),
 			};
+
+			this.body = formattedUser;
 		});
 
 		return {
@@ -82,9 +131,9 @@ export class ProfileFormatter extends Formatter {
 	}
 
 	async editUser(fetchPromise: Promise<Response>) {
-    await this.responseHandle(fetchPromise);
+		await this.responseHandle(fetchPromise);
 
-    return {
+		return {
 			status: this.status,
 			body: this.body,
 		};

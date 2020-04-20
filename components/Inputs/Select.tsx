@@ -8,7 +8,7 @@ interface Props {
   dropdownStyle?: React.CSSProperties,
 
   children: JSX.Element | String,
-  changeHandler: (value: string | number) => void,
+  changeHandler: (value: string | number, index?: number) => void,
   items: { value: number | string, name: string }[],
 
   openCallback?: Function
@@ -24,9 +24,9 @@ function Select({ children: value, changeHandler, openCallback, dropdownStyle, i
   }
 
   const closeDropDown = () => { dropdownVisibleSet(false); }
-  const selectItemHandler = (value: string | number) => {
+  const selectItemHandler = (value: string | number, index: number) => {
     closeDropDown();
-    changeHandler(value)
+    changeHandler(value, index)
   }
   return (
     <>
@@ -57,7 +57,7 @@ function Select({ children: value, changeHandler, openCallback, dropdownStyle, i
       </div>
       {dropdownVisible && <Dropdown style={dropdownStyle} closeHandler={closeDropDown}>
         {items.length
-          ? items.map(({ value, name }, index) => <div key={index} onClick={() => selectItemHandler(value)} className="select-item">
+          ? items.map(({ value, name }, index) => <div key={index} onClick={() => selectItemHandler(value, index)} className="select-item">
             {name}
             <style jsx>{`
               .select-item {

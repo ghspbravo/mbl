@@ -96,10 +96,10 @@ export default function CreateCompany({ }: Props): ReactElement {
   });
 
   const [businessSize, businessSizeSet] = useState(businessSizesList[0].name)
-  let businessSizeValue = 0;
+  const [businessSizeValue, businessSizeValueSet] = useState(0);
   const onBusinessSizeChange = (value: string) => {
     businessSizeSet(businessSizesList[value].name);
-    businessSizeValue = parseInt(value);
+    businessSizeValueSet(parseInt(value));
   }
 
   const [processing, processingSet] = useState(false);

@@ -129,13 +129,13 @@ export default function EditCompany({}: Props): ReactElement {
 			},
 		]);
 
-  let businessSizeValue = currentCompany.sizeRaw;
+  const [businessSizeValue, businessSizeValueSet] = useState(currentCompany.sizeRaw);
 	const [businessSize, businessSizeSet] = useState(
 		businessSizesList[businessSizeValue].name
 	);
 	const onBusinessSizeChange = (value: string) => {
 		businessSizeSet(businessSizesList[value].name);
-		businessSizeValue = parseInt(value);
+		businessSizeValueSet(parseInt(value));
 	};
 
 	const [processing, processingSet] = useState(false);
