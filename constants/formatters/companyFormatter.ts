@@ -14,6 +14,7 @@ export interface Company {
 	title: string;
 	shortTitle: string;
 	size: string;
+	sizeRaw: number;
 
 	creator: string;
 
@@ -22,6 +23,10 @@ export interface Company {
 	costValue: number;
 
 	spheres: string;
+	spheresRaw: {
+		id: number;
+		name: string;
+	}[];
 
 	email: string;
 	phone: string;
@@ -34,7 +39,7 @@ export class CompanyFormatter extends Formatter {
 	}
 
 	async createCompany(fetchPromise: Promise<Response>) {
-		await this.responseHandle(fetchPromise).then(contents => {
+		await this.responseHandle(fetchPromise).then((contents) => {
 			if (this.status > 0) {
 				return;
 			}
@@ -48,19 +53,21 @@ export class CompanyFormatter extends Formatter {
 	}
 
 	async companySingle(fetchPromise: Promise<Response>) {
-		await this.responseHandle(fetchPromise).then(contents => {
+		await this.responseHandle(fetchPromise).then((contents) => {
 			if (this.status > 0) {
 				return;
 			}
 			const creator = contents.createdBy;
 			this.body = {
-        id: contents.id,
-        title: contents.fullName,
-        shortTitle: contents.shortName,
+				id: contents.id,
+				title: contents.fullName,
+				shortTitle: contents.shortName,
 				photo: contents.photo || pass,
 				creator: `${creator.surName} ${creator.firstName} ${creator.middleName}`,
+				sizeRaw: parseInt(contents.size || 0),
 
-				spheres: contents.occupations.map(item => item.name).join(","),
+				spheres: (contents.occupations || []).map((item) => item.name).join(","),
+				spheresRaw: contents.occupations || [],
 
 				inn: contents.inn,
 				membersCount: contents.employeeCount,
@@ -84,13 +91,13 @@ export class CompanyFormatter extends Formatter {
 	}
 
 	async companiesList(fetchPromise: Promise<Response>) {
-		await this.responseHandle(fetchPromise).then(contents => {
+		await this.responseHandle(fetchPromise).then((contents) => {
 			if (this.status > 0) {
 				return;
 			}
 			this.body = {
 				hasNext: contents.isExistNextPage,
-				companies: contents.items.map(item => ({
+				companies: contents.items.map((item) => ({
 					id: item.id,
 					title: item.fullName,
 					shortTitle: item.shortName,

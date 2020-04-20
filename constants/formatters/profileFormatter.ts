@@ -1,21 +1,50 @@
 import Formatter from "./rootFormatter";
 import pass from "../../assets/pass.png";
 import moment from "moment";
+import { Company } from "./companyFormatter";
 
 export interface userInterface {
-	id?: string;
-	name?: string;
-	photo?: string;
-	birthday?: Date;
-	roles?: { id: string; name: string }[];
-	education?: string;
-	companyId?: number;
-	workList?: { name: string; start: string; end: string }[];
-	socialLinks?: string[];
-	spheresList?: { id: string; name: string }[];
-	achievements?: string;
-	interests?: string;
-	wishes?: string;
+	id: string;
+	name: string;
+	photo: string;
+	birthday: String;
+	birthdayRaw: string;
+
+	roles: { id: string; name: string }[];
+
+	education: string;
+	workList: {
+		name: string;
+		start: string;
+		startRaw: string;
+		end: string;
+		endRaw: string;
+	}[];
+
+	companyId: number;
+	company: Company;
+
+	socialLinks: string[];
+	spheresList: { id: string; name: string }[];
+	achievements: string;
+	interests: string;
+	wishes: string;
+
+	myProjects: {
+		id: number;
+		title: string;
+		isCreator: boolean;
+	}[];
+	myEvents: {
+		id: number;
+		title: string;
+		isCreator: boolean;
+	}[];
+	myCources: {
+		id: number;
+		title: string;
+		isCreator: boolean;
+	}[];
 }
 
 export class ProfileFormatter extends Formatter {
@@ -24,7 +53,7 @@ export class ProfileFormatter extends Formatter {
 	}
 
 	async formatUser(fetchPromise: Promise<Response>) {
-		await this.responseHandle(fetchPromise).then(contents => {
+		await this.responseHandle(fetchPromise).then((contents) => {
 			if (this.status > 0) {
 				return;
 			}
@@ -46,28 +75,63 @@ export class ProfileFormatter extends Formatter {
 				portfolio,
 				companies,
 			} = contents;
-			const formattedWorkExperiences = workExperiences?.map(work => ({
+			const formattedWorkExperiences = workExperiences?.map((work) => ({
 				name: work.name,
 				start: moment(work.start).format("LL"),
+				startRaw: moment(work.start).format("L"),
 				end: work.end ? moment(work.end).format("LL") : null,
+				endRaw: work.end ? moment(work.end).format("L") : null,
 			}));
 
-			this.body = {
+			const formattedUser: userInterface = {
 				id,
 				name: `${surName} ${firstName} ${middleName || ""}`.trimEnd(),
 				photo: photo || pass,
 				birthday: moment(birthDate).format("LL"),
-				roles: profileTypes || [],
+        birthdayRaw: moment(birthDate).format("L"),
+        
+        roles: profileTypes || [],
+        
 				education,
-				workList: formattedWorkExperiences,
-				companyId: companies && companies[0],
+        workList: formattedWorkExperiences,
+        
+        companyId: companies && companies[0],
+        company: {} as Company,
+
 				socialLinks: socialNetWorks || [],
 				spheresList: skills || [],
 				achievements: achivements,
 				interests,
 				wishes: wantToLearn,
+
+				myCources: portfolio.currentPrograms.map((item) => ({
+					id: item.id,
+					title: item.title,
+					isCreator: item.isInitiator,
+				})),
+				myProjects: portfolio.currentProjects.map((item) => ({
+					id: item.id,
+					title: item.title,
+					isCreator: item.isInitiator,
+				})),
+				myEvents: portfolio.events.map((item) => ({
+					id: item.id,
+					title: item.title,
+					isCreator: item.isInitiator,
+				})),
 			};
+
+			this.body = formattedUser;
 		});
+
+		return {
+			status: this.status,
+			body: this.body,
+		};
+	}
+
+	async editUser(fetchPromise: Promise<Response>) {
+		await this.responseHandle(fetchPromise);
 
 		return {
 			status: this.status,

@@ -1,4 +1,4 @@
-import React, { ReactElement, forwardRef } from "react";
+import React, { ReactElement, forwardRef, ReactHTMLElement, ButtonHTMLAttributes } from "react";
 
 interface Props {
 	name: string;
@@ -63,4 +63,4 @@ function Input(
 	);
 }
 
-export default forwardRef<any, Props | HTMLInputElement>(Input);
+export default forwardRef<any, Props | React.HTMLProps<HTMLInputElement>>(Input);

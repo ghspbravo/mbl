@@ -16,6 +16,8 @@ const Pages = {
   Search: { header: 'Поиск', title: 'Поиск по сайту', route: '/search' },
 
   Profile: { header: 'Личный кабинет', title: 'Профиль', route: '/profile' },
+  ProfileEdit: { header: 'Редактирование профиля', title: 'Редактирование профиля', route: '/profile/edit' },
+  CompanyEdit: { header: 'Редактирование компании', title: 'Редактирование компании', route: '/profile/company/edit' },
   MyEvents: { header: 'Мои мероприятия', title: 'Мои мероприятия', route: '/profile/events' },
   MyCources: { header: 'Мои программы', title: 'Мои программы', route: '/profile/cources' },
   MyProjects: { header: 'Мои проекты', title: 'Мои проекты', route: '/profile/projects' },
@@ -23,7 +25,7 @@ const Pages = {
   CreateEvent: { header: 'Создание мероприятия', title: 'Новое мероприятие', route: '/profile/events/create' },
   CreateCource: { header: 'Создание программы', title: 'Новая программа', route: '/profile/cources/create' },
   CreateProject: { header: 'Создание проекта', title: 'Новый проект', route: '/profile/projects/create' },
-  CreateCompany: { header: 'Создание компании', title: 'Привязать юр. лицо', route: '/profile/companies/create' },
+  CreateCompany: { header: 'Создание компании', title: 'Привязать юр. лицо', route: '/profile/company/create' },
 }
 
 export default Pages

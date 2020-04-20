@@ -9,6 +9,7 @@ const Api = {
 	MembersItem: "User/Details",
 
 	CreateCompany: "Company/Create",
+	EditCompany: "Company/Edit",
 	CompanyList: "Company/List",
 	CompanySingle: "Company/Details",
 
@@ -33,7 +34,10 @@ const Api = {
 	GetRoles: "ProfileType/GetList",
 	GetSkills: "Skill/GetListForUser",
 
-	GetCurrentProfile: "User/Profile",
+  GetCurrentProfile: "User/Profile",
+  EditProfile: "User/EditProfile",
+
+  UploadFile: "File/Upload"
 };
 
 export default Api;

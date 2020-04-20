@@ -31,9 +31,8 @@ function Footer(): ReactElement {
 									</Link>
 								</div>
 								<div className="col-6 col-xl-3 col-md-4">
-									<Link href={Cources.route} passHref prefetch={false}>
+									<Link href={Cources.route} passHref>
 										<a className="footer-nav-item">
-											<Badge small>В разработке</Badge>
 											{Cources.title}
 										</a>
 									</Link>

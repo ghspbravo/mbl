@@ -1,44 +1,95 @@
 import React, { useEffect, useState, createContext } from 'react'
 
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import Header from './Header/Header'
 import Colors from '../constants/colors'
 import Footer from './Footer'
 import moment from 'moment'
 import { getToken, setToken } from '../constants/auth'
 import { userInterface } from '../constants/formatters/profileFormatter'
+import Pages from '../constants/pages'
+import { Company } from '../constants/formatters/companyFormatter'
 
 interface Props {
   children: JSX.Element[] | JSX.Element
 }
+let currentUser = {
+  workList: [],
+  socialLinks: [],
+  roles: [],
+  spheresList: [],
+  company: {} as Company
+};
+const getCurrentUser = () => currentUser;
 
-export const AuthContext = createContext({ isAuth: false, currentUser: {} as userInterface, setAuthState: null });
 
+export const AuthContext = createContext<any>({ isAuth: false, currentUser: {} as userInterface, setAuthState: null, getCurrentUser });
 function Layout({ children: pageContent }: Props) {
   moment.locale('ru');
   const [loaded, loadedSet] = useState(false)
 
   const [isAuth, isAuthSet] = useState(null)
-  const [currentUser, currentUserSet] = useState({})
 
-  const setAuthState = (userInfo) => {
-    if (userInfo) {
-      isAuthSet(true);
-      currentUserSet(userInfo)
-    } else {
-      isAuthSet(false)
-      currentUserSet({})
+  function redirectAuth(authed) {
+    if (authed) {
+      switch (router.pathname) {
+        case Pages.SignIn.route:
+        case Pages.SignUp.route:
+        case Pages.Recover.route:
+          router.replace(Pages.Home.route)
+          break
+        default:
+          break
+      }
+    }
+    else {
+      switch (router.pathname) {
+        case Pages.Profile.route:
+        case Pages.ProfileEdit.route:
+        case Pages.CompanyEdit.route:
+        case Pages.MyEvents.route:
+        case Pages.MyCources.route:
+        case Pages.MyProjects.route:
+        case Pages.CreateCompany.route:
+        case Pages.CreateCource.route:
+        case Pages.CreateEvent.route:
+        case Pages.CreateProject.route:
+          router.replace(Pages.Home.route)
+          break
+        default:
+          break
+      }
     }
   }
+  
+  const setAuthState = (userInfo) => {
+    if (userInfo) {
+      currentUser = {...userInfo}
+      isAuthSet(true)
+    } else {
+      currentUser = {} as userInterface
+      isAuthSet(false)
+    }
+    redirectAuth(!!userInfo);
+    loadedSet(true);
+  }
+
   useEffect(() => {
     const token = getToken();
     if (token) {
       setToken(token, setAuthState)
     } else {
-      isAuthSet(false);
+      setAuthState(null);
     }
-    loadedSet(true);
   }, [])
+
+  const router = useRouter()
+  useEffect(() => {
+    if (isAuth === null) {return}
+    redirectAuth(isAuth)
+  }, [isAuth])
+
   return (loaded
     ? <AuthContext.Provider
       value={{ isAuth, currentUser, setAuthState }} >
@@ -220,8 +271,8 @@ function Layout({ children: pageContent }: Props) {
               textarea {
                 resize: vertical;
               }
-              input:not([type="checkbox"]) {
-                width: 100%;
+              input[type="checkbox"] {
+                width: auto;
               }
               textarea:hover,
               textarea:focus,
