@@ -44,7 +44,6 @@ export default function EditProfile({}: Props): ReactElement {
 	const { getCurrentUser } = useContext(AuthContext);
 	const currentUser: userInterface = getCurrentUser();
 	useEffect(() => {
-		console.log(currentUser);
 		if (!currentUser) return;
 
 		setValue("birthday", currentUser.birthdayRaw);

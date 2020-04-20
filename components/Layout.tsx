@@ -9,6 +9,7 @@ import moment from 'moment'
 import { getToken, setToken } from '../constants/auth'
 import { userInterface } from '../constants/formatters/profileFormatter'
 import Pages from '../constants/pages'
+import { Company } from '../constants/formatters/companyFormatter'
 
 interface Props {
   children: JSX.Element[] | JSX.Element
@@ -17,7 +18,8 @@ let currentUser:userInterface = {
   workList: [],
   socialLinks: [],
   roles: [],
-  spheresList: []
+  spheresList: [],
+  company: {} as Company
 };
 const getCurrentUser = () => currentUser;
 
@@ -28,42 +30,20 @@ function Layout({ children: pageContent }: Props) {
   const [loaded, loadedSet] = useState(false)
 
   const [isAuth, isAuthSet] = useState(null)
-  
-  const setAuthState = (userInfo) => {
-    if (userInfo) {
-      currentUser = {...userInfo}
-      isAuthSet(true)
-    } else {
-      currentUser = {}
-      isAuthSet(false)
-    }
-  }
 
-  useEffect(() => {
-    const token = getToken();
-    if (token) {
-      setToken(token, setAuthState)
-    } else {
-      isAuthSet(false);
-    }
-    loadedSet(true);
-  }, [])
-
-  const router = useRouter()
-  useEffect(() => {
-    if (isAuth === null) {return}
-    if (isAuth) {
+  function redirectAuth(authed) {
+    if (authed) {
       switch (router.pathname) {
         case Pages.SignIn.route:
         case Pages.SignUp.route:
         case Pages.Recover.route:
-          router.replace(Pages.Home.route);
-          break;
-      
+          router.replace(Pages.Home.route)
+          break
         default:
-          break;
+          break
       }
-    } else {
+    }
+    else {
       switch (router.pathname) {
         case Pages.Profile.route:
         case Pages.ProfileEdit.route:
@@ -75,14 +55,41 @@ function Layout({ children: pageContent }: Props) {
         case Pages.CreateCource.route:
         case Pages.CreateEvent.route:
         case Pages.CreateProject.route:
-          router.replace(Pages.Home.route);
-          break;
-      
+          router.replace(Pages.Home.route)
+          break
         default:
-          break;
+          break
       }
     }
+  }
+  
+  const setAuthState = (userInfo) => {
+    if (userInfo) {
+      currentUser = {...userInfo}
+      isAuthSet(true)
+    } else {
+      currentUser = {}
+      isAuthSet(false)
+    }
+    redirectAuth(!!userInfo);
+    loadedSet(true);
+  }
+
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      setToken(token, setAuthState)
+    } else {
+      setAuthState(null);
+    }
+  }, [])
+
+  const router = useRouter()
+  useEffect(() => {
+    if (isAuth === null) {return}
+    redirectAuth(isAuth)
   }, [isAuth])
+
   return (loaded
     ? <AuthContext.Provider
       value={{ isAuth, currentUser, setAuthState }} >

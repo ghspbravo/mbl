@@ -9,6 +9,7 @@ const Api = {
 	MembersItem: "User/Details",
 
 	CreateCompany: "Company/Create",
+	EditCompany: "Company/Edit",
 	CompanyList: "Company/List",
 	CompanySingle: "Company/Details",
 

@@ -1,6 +1,7 @@
 import Formatter from "./rootFormatter";
 import pass from "../../assets/pass.png";
 import moment from "moment";
+import { Company } from "./companyFormatter";
 
 export interface userInterface {
 	id?: string;
@@ -11,6 +12,7 @@ export interface userInterface {
 	roles?: { id: string; name: string }[];
 	education?: string;
 	companyId?: number;
+	company?: Company;
 	workList?: { name: string; start: string; startRaw: string; end: string; endRaw: string }[];
 	socialLinks?: string[];
 	spheresList?: { id: string; name: string }[];
