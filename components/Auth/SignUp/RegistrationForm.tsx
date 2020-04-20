@@ -38,7 +38,6 @@ export default function RegistrationForm({
 
 	const [userPhoto, userPhotoSet] = useState<any>();
 	let photoFile: File;
-  let photoPath:string;
   // TODO: refactor dublicate
 	const onPhotoChange = e => {
 		const input = e.target;
@@ -74,7 +73,7 @@ export default function RegistrationForm({
 					}
         })
         .then((responseJson) => {
-          photoPath = responseJson.path
+          userPhotoSet(responseJson.path)
         });
 		}
 	};
@@ -162,8 +161,8 @@ export default function RegistrationForm({
 			});
 		}
 
-		if (photoPath) {
-			formData.append("Photo", photoPath);
+		if (userPhoto) {
+			formData.append("Photo", userPhoto);
 		}
 
 		const apiResponse = fetcher.fetch(Api.Register, {

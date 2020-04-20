@@ -43,7 +43,6 @@ export default function EditCompany({}: Props): ReactElement {
 
 	const [userPhoto, userPhotoSet] = useState<any>(currentCompany.photo);
 	let photoFile: File;
-  let photoPath: string;
 	// TODO: refactor dublicate
 	const onPhotoChange = (e) => {
 		const input = e.target;
@@ -79,7 +78,7 @@ export default function EditCompany({}: Props): ReactElement {
 					}
 				})
 				.then((responseJson) => {
-					photoPath = responseJson.path;
+					userPhotoSet(responseJson.path)
 				});
 		}
 	};
@@ -157,8 +156,8 @@ export default function EditCompany({}: Props): ReactElement {
 			Occupations: values.sphere,
 		};
 
-		if (photoPath) {
-			payload["Photo"] = photoPath;
+		if (userPhoto) {
+			payload["Photo"] = userPhoto;
 		}
 
 		const apiResponse = fetcher.fetch(Api.EditCompany, {
