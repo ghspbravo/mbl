@@ -5,6 +5,8 @@ import Pages from "../../../constants/pages";
 import ProfileNavigation, {
 	profileTabs,
 } from "../../../components/Profile/ProfileNavigation";
+import PortfolioItem from "../../../components/Profile/PortfolioItem";
+import Link from "next/link";
 
 interface Props {}
 
@@ -25,10 +27,31 @@ export default function ProfileEvents({}: Props): ReactElement {
 				</div>
 			</section>
 
+      <div className="container mb-5">
+        <Link href={Pages.CreateEvent.route}>
+          <button>Создать мероприятие</button>
+        </Link>
+      </div>
+
 			<AuthContext.Consumer>
-				{({ isAuth, currentUser }) => <div className="container">
-            <p>В разработке</p>
-          </div>}
+				{({ isAuth, currentUser }) => (
+					<div className="container">
+            {currentUser.myEvents.length > 0
+            ? currentUser.myEvents.map((item, index) => (
+							<div className="mb-2" key={index}>
+								<PortfolioItem
+									title={item.title}
+									href={Pages.Events.route + "/" + item.id}
+								/>
+							</div>
+            ))
+          : (
+            <div>
+              <p>Нет мероприятий</p>
+            </div>
+          )}
+					</div>
+				)}
 			</AuthContext.Consumer>
 		</Layout>
 	);

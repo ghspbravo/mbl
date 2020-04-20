@@ -5,6 +5,8 @@ import Pages from "../../../constants/pages";
 import ProfileNavigation, {
 	profileTabs,
 } from "../../../components/Profile/ProfileNavigation";
+import PortfolioItem from "../../../components/Profile/PortfolioItem";
+import Link from "next/link";
 
 interface Props {}
 
@@ -25,10 +27,31 @@ export default function ProfileCources({}: Props): ReactElement {
 				</div>
 			</section>
 
+      <div className="container mb-5">
+        <Link href={Pages.CreateCource.route}>
+          <button>Создать программу</button>
+        </Link>
+      </div>
+
 			<AuthContext.Consumer>
-				{({ isAuth, currentUser }) => <div className="container">
-            <p>В разработке</p>
-          </div>}
+				{({ isAuth, currentUser }) => (
+					<div className="container">
+						{currentUser.myCources.length > 0 ? (
+							currentUser.myCources.map((item, index) => (
+								<div className="mb-2" key={index}>
+									<PortfolioItem
+										title={item.title}
+										href={Pages.Cources.route + "/" + item.id}
+									/>
+								</div>
+							))
+						) : (
+							<div>
+								<p>Нет программ</p>
+							</div>
+						)}
+					</div>
+				)}
 			</AuthContext.Consumer>
 		</Layout>
 	);
