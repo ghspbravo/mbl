@@ -178,27 +178,8 @@ CourceSingle.getInitialProps = async context => {
 			id,
 		},
 	});
-	// const formatter = new CourcesFormatter(),
-	// 	item = await formatter.Courcesingle(response);
-
-	// FIXME: mock data
-	const item = {
-		status: 0,
-		body: {
-			id: 1,
-			title: "Бизнес под ключ",
-			fullDescription: "Приглашаем на обучающий",
-			isApplied: false,
-			canApply: true,
-			contacts: "Абдулина Юлия Павловна — Координатор от Клуба «Корифей» +7 (905) 806 62 61, Почта: abdulina_up@koriphey.ru",
-			organisator: {
-        id: 1,
-        title: "Business Consulting Croup",
-        photo: pass
-      },
-			duration: "1 месяц",
-		}
-	};
+	const formatter = new CourcesFormatter(),
+		item = await formatter.courceSingle(response);
 
 	const props = {
 		status: item.status,

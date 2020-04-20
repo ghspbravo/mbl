@@ -14,11 +14,11 @@ export interface Cource {
 	title: string;
 	duration: string;
 	contacts: string;
-  fullDescription: string;
+	fullDescription: string;
 
-  isApplied: boolean,
-  canApply: boolean,
-  
+	isApplied: boolean;
+	canApply: boolean;
+
 	organisator: shortCompany;
 }
 
@@ -28,7 +28,7 @@ export class CourcesFormatter extends Formatter {
 	}
 
 	async createCource(fetchPromise: Promise<Response>) {
-		await this.responseHandle(fetchPromise).then(contents => {
+		await this.responseHandle(fetchPromise).then((contents) => {
 			if (this.status > 0) {
 				return;
 			}
@@ -42,7 +42,7 @@ export class CourcesFormatter extends Formatter {
 	}
 
 	async applyCource(fetchPromise: Promise<Response>) {
-		await this.responseHandle(fetchPromise).then(contents => {
+		await this.responseHandle(fetchPromise).then((contents) => {
 			if (this.status > 0) {
 				return;
 			}
@@ -54,26 +54,22 @@ export class CourcesFormatter extends Formatter {
 			body: this.body,
 		};
 	}
-	/*
+
 	async courcesList(fetchPromise: Promise<Response>) {
-		await this.responseHandle(fetchPromise).then(contents => {
+		await this.responseHandle(fetchPromise).then((contents) => {
 			if (this.status > 0) {
 				return;
 			}
 			this.body = {
 				hasNext: contents.isExistNextPage,
-				events: contents.items.map(item => {
-					const formatedItem: shortEvent = {
+				events: contents.items.map((item) => {
+					const formatedItem: shortCource = {
 						id: item.id,
 						title: item.title,
-						photo: item.imagePreview || pass,
 
 						shortDescription: item.announce,
 
-						startDate: formatDate(item.startEvent),
-						endDate: formatDate(item.endEvent),
-
-						canApply: item.registrationIsAvailable,
+						duration: item.duration + " дней",
 					};
 					return formatedItem;
 				}),
@@ -86,26 +82,23 @@ export class CourcesFormatter extends Formatter {
 		};
 	}
 
-	async eventSingle(fetchPromise: Promise<Response>) {
-		await this.responseHandle(fetchPromise).then(contents => {
+	async courceSingle(fetchPromise: Promise<Response>) {
+		await this.responseHandle(fetchPromise).then((contents) => {
 			if (this.status > 0) {
 				return;
 			}
-			const payload: Event = {
+			const payload: Cource = {
 				id: contents.id,
 				title: contents.title,
-				photo: contents.imagePreview || pass,
 
 				fullDescription: contents.content,
-				contacts: contents.contacts,
+				contacts: contents.announce,
 
-				startDate: formatDate(contents.startEvent),
-				endDate: formatDate(contents.endEvent),
+				duration: contents.duration + " дней",
+				organisator: contents.contacts,
 
 				canApply: contents.registrationIsAvailable,
 				isApplied: contents.alreadyRegistered,
-
-				documents: contents.documents || [],
 			};
 			this.body = payload;
 		});
@@ -114,8 +107,7 @@ export class CourcesFormatter extends Formatter {
 			status: this.status,
 			body: this.body,
 		};
-  }
-  */
+	}
 }
 
 export default CourcesFormatter;

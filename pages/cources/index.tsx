@@ -10,7 +10,7 @@ import EventsFormatter, {
 	shortEvent,
 } from "../../constants/formatters/eventsFormatter";
 import EventItem from "../../components/Events/EventItem";
-import { shortCource } from "../../constants/formatters/courcesFormatter";
+import CourcesFormatter, { shortCource } from "../../constants/formatters/courcesFormatter";
 import CourceItem from "../../components/Cources/CourceItem";
 
 interface Props {}
@@ -23,69 +23,34 @@ export default function Cources({}: Props): ReactElement {
 	const [list, listSet] = useState<shortCource[]>([]);
 	const [hasNext, hasNextSet] = useState(false);
 
-	// const fetchEvents = async () => {
-	// 	statusSet(Status.loading);
-	// 	const responseApi = fetcher.fetch(Api.EventList, {
-	// 		params: {
-	// 			count: 20,
-	// 			page: ++currentPage,
-	// 		},
-	// 	});
-	// 	const formatter = new EventsFormatter();
+	const fetchCources = async () => {
+		statusSet(Status.loading);
+		const responseApi = fetcher.fetch(Api.CourceList, {
+			params: {
+				count: 20,
+				page: ++currentPage,
+			},
+		});
+		const formatter = new CourcesFormatter();
 
-	// 	const response = await formatter.eventsList(responseApi);
-	// 	if (response.status > 0) {
-	// 		statusSet(response.status);
-	// 		errorSet(response.body);
-	// 	} else {
-	// 		statusSet(response.status);
-	// 		listSet([...list, ...response.body.events]);
-	// 		hasNextSet(response.body.hasNext);
-	// 	}
-	// };
+		const response = await formatter.courcesList(responseApi);
+		if (response.status > 0) {
+			statusSet(response.status);
+			errorSet(response.body);
+		} else {
+			statusSet(response.status);
+			listSet([...list, ...response.body.events]);
+			hasNextSet(response.body.hasNext);
+		}
+	};
 
 	useEffect(() => {
 		currentPage = 0;
-
-		// mock cources
-		statusSet(Status.success);
-		listSet([
-			{
-				id: 1,
-				title: "Бизнес под ключ 1",
-				shortDescription:
-					"Готовые решения для бизнеса в любой сфере. Серия лекций, позволяющая быстро внедрить эффективные бизнес-решения в ваш проект.",
-				duration: "180 дней",
-			},
-			{
-				id: 2,
-				title: "Бизнес под ключ 2",
-				shortDescription:
-					"Готовые",
-				duration: "180 дней",
-			},
-			{
-				id: 3,
-				title: "Бизнес под ключ 3",
-				shortDescription:
-					"Готовые решения для бизнеса в любой сфере. Серия лекций, позволяющая быстро внедрить эффективные бизнес-решения в ваш проект.",
-				duration: "180 дней",
-			},
-			{
-				id: 4,
-				title: "Бизнес под ключ 4",
-				shortDescription:
-					"Готовые решения для бизнеса в любой сфере. Серия лекций, позволяющая быстро внедрить эффективные бизнес-решения в ваш проект.",
-				duration: "180 дней",
-			},
-		]);
-
-		// TODO: fetch programs
-		// fetchEvents();
+		fetchCources();
 	}, []);
 
 	const onLoadMoreHandler = () => {
-		// fetchEvents();
+		fetchCources();
 	};
 
 	const hasItems = list.length > 0;
