@@ -6,7 +6,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import { Status } from '../../constants/formatters/rootFormatter'
 import { fetcher } from '../../constants/fetcher'
 import Api from '../../constants/api'
-import { MembersFormatter, members } from '../../constants/formatters/membersFormatter'
+import { MembersFormatter, shortMember } from '../../constants/formatters/membersFormatter'
 import MemberItem from '../../components/Members/MemberItem'
 
 interface Props {
@@ -68,9 +68,9 @@ export default function Members({ }: Props): ReactElement {
 
           {hasItems
             ? <div>
-              {(membersList as members[]).length > 0
+              {(membersList as shortMember[]).length > 0
                 ? <div className="row">
-                  {(membersList as members[]).map(item => <div key={item.id} className="col-sm-4 col-lg-3 col-6 mb-5">
+                  {(membersList as shortMember[]).map(item => <div key={item.id} className="col-sm-4 col-lg-3 col-6 mb-5">
                     <MemberItem contents={item} />
                   </div>)}
 

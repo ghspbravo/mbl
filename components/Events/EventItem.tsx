@@ -27,23 +27,47 @@ export default function EventItem({ content }: Props): ReactElement {
 				</div>
 			</div>
 			<div className="event__content">
-				<h3 className="event__title">{title}</h3>
-				<p className="event__description">{shortDescription}</p>
+				<div className="event__contant-wrapper">
+					<div>
+						<h3 className="event__title">{title}</h3>
+						<p className="event__description">{shortDescription}</p>
+					</div>
 
-				<div className="row no-gutters align-items-center">
-					<Link href={Pages.Events.route + "/" + id}>
-						<button className="event__more">подробнее</button>
-					</Link>
-					{canApply && (
-						<div className="col registration-status">Регистрация открыта</div>
-					)}
+					<div className="row no-gutters align-items-center">
+						<Link href={Pages.Events.route + "/" + id}>
+							<button className="event__more">подробнее</button>
+						</Link>
+						{canApply && (
+							<div className="col registration-status">Регистрация открыта</div>
+						)}
+					</div>
 				</div>
 			</div>
 			<style jsx>{`
+				.event {
+					height: 100%;
+					display: flex;
+					flex-direction: column;
+				}
+				.event__contant-wrapper {
+					height: 100%;
+					display: flex;
+					flex-direction: column;
+					justify-content: space-between;
+				}
 				.event__content {
+					flex: 1 1;
 					padding: 40px;
 					background-color: white;
 					border: 2px solid ${Colors.Primary};
+				}
+				.event__title,
+				.event__description {
+					color: ${Colors.Primary};
+				}
+        button.event__more {
+					color: ${Colors.Primary};
+          border-color: ${Colors.Primary};
 				}
 				.event__more,
 				.registration-status {

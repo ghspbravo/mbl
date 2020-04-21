@@ -39,7 +39,7 @@ export default function Cources({}: Props): ReactElement {
 			errorSet(response.body);
 		} else {
 			statusSet(response.status);
-			listSet([...list, ...response.body.events]);
+			listSet([...list, ...response.body.cources]);
 			hasNextSet(response.body.hasNext);
 		}
 	};

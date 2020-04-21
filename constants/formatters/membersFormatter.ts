@@ -11,7 +11,7 @@ interface membersApi {
   birthDate: string
 }
 
-export interface members {
+export interface shortMember {
   id: number,
   photo: string,
   name: string,

@@ -1,10 +1,10 @@
 import React, { ReactElement } from 'react'
 import Link from 'next/link'
 import Pages from '../../constants/pages'
-import { members } from '../../constants/formatters/membersFormatter'
+import { shortMember } from '../../constants/formatters/membersFormatter'
 
 interface Props {
-  contents: members
+  contents: shortMember
 }
 
 export default function MemberItem({ contents: member }: Props): ReactElement {

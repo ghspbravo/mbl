@@ -37,7 +37,7 @@ export default function Projects({}: Props): ReactElement {
 			errorSet(response.body);
 		} else {
 			statusSet(response.status);
-			listSet([...list, ...response.body.events]);
+			listSet([...list, ...response.body.projects]);
 			hasNextSet(response.body.hasNext);
 		}
 	};
