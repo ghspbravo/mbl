@@ -62,7 +62,7 @@ export class CourcesFormatter extends Formatter {
 			}
 			this.body = {
 				hasNext: contents.isExistNextPage,
-				events: contents.items.map((item) => {
+				cources: contents.items.map((item) => {
 					const formatedItem: shortCource = {
 						id: item.id,
 						title: item.title,

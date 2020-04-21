@@ -95,21 +95,19 @@ function Header({ router }): ReactElement {
 							<a className="clear dropdown__item p-relative">Мои мероприятия</a>
 						</Link>
 						<Link href={Pages.MyCources.route} passHref>
-							<a className="clear dropdown__item p-relative">
-								Мои программы
-							</a>
+							<a className="clear dropdown__item p-relative">Мои программы</a>
 						</Link>
 						<Link href={Pages.MyProjects.route} passHref>
-							<a className="clear dropdown__item p-relative">
-								Мои проекты
-							</a>
+							<a className="clear dropdown__item p-relative">Мои проекты</a>
 						</Link>
 						<div className="dropdown__item">
 							<Line />
 						</div>
-						<Link href={Pages.CreateCompany.route} passHref>
-							<a className="clear dropdown__item">Привязать юр. лицо</a>
-						</Link>
+						{!user.companyId && (
+							<Link href={Pages.CreateCompany.route} passHref>
+								<a className="clear dropdown__item">Привязать юр. лицо</a>
+							</Link>
+						)}
 						<button
 							onClick={onSignOutClick}
 							className="clear link primary dropdown__item w-100 align-left"
@@ -328,13 +326,12 @@ function Header({ router }): ReactElement {
 									</Link>
 								</div>
 								<div className="navigation-item d-none d-xl-block">
-									<Badge small>в разработке</Badge>
-									<Link prefetch={false} href={About.route} passHref={true}>
+									<Link href={About.route} passHref={true}>
 										<a>{About.title}</a>
 									</Link>
 								</div>
 
-								<div className="ml-auto d-none d-xl-block">
+								{/* <div className="ml-auto d-none d-xl-block">
 									<div
 										onClick={searchToggleHandler}
 										className="row no-gutters align-items-center search"
@@ -344,7 +341,7 @@ function Header({ router }): ReactElement {
 											<Icon size="s" name="ei-search" />
 										</div>
 									</div>
-								</div>
+								</div> */}
 
 								<div className="ml-auto d-xl-none">
 									{!burgerMenuShow && (
@@ -355,9 +352,9 @@ function Header({ router }): ReactElement {
 
 									{burgerMenuShow && (
 										<div className="row no-gutters align-items-center">
-											<div onClick={searchToggleHandler}>
+											{/* <div onClick={searchToggleHandler}>
 												<Icon size="s" name="ei-search" />
-											</div>
+											</div> */}
 											<div onClick={burgerMenuToggle} className="ml-3">
 												<Icon size="s" name="ei-close" />
 											</div>
@@ -445,8 +442,7 @@ function Header({ router }): ReactElement {
 											</Link>
 										</div>
 										<div className="col-6 col-md-3 burger-navigation-item">
-											<Badge small>в разработке</Badge>
-											<Link href={About.route} passHref={true} prefetch={false}>
+											<Link href={About.route} passHref={true}>
 												<a>{About.title}</a>
 											</Link>
 										</div>

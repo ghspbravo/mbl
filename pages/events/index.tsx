@@ -6,7 +6,9 @@ import Breadcrumbs from "../../components/Breadcrumbs";
 import { Status } from "../../constants/formatters/rootFormatter";
 import { fetcher } from "../../constants/fetcher";
 import Api from "../../constants/api";
-import EventsFormatter, { shortEvent } from "../../constants/formatters/eventsFormatter";
+import EventsFormatter, {
+	shortEvent,
+} from "../../constants/formatters/eventsFormatter";
 import EventItem from "../../components/Events/EventItem";
 
 interface Props {}
@@ -60,12 +62,24 @@ export default function Events({}: Props): ReactElement {
 				<div className="container">
 					<Breadcrumbs pages={[{ title: Pages.Events.header }]} />
 
-					<h1>{Pages.Events.header}</h1>
+					<div className="row">
+						<div className="col-md">
+							<h1>{Pages.Events.header}</h1>
+						</div>
+						<div className="col-md">
+							<p>
+								Мы регулярно проводим полезные мероприятия, направленные на
+								формирование эффективного бизнес-сообщества. Лекции,
+								мастер-классы, семинары проходят в игровой форме, так что вы
+								точно не успеете заскучать.
+							</p>
+						</div>
+					</div>
 
 					{hasItems ? (
 						<div>
 							<div className="row">
-								{list.map(item => (
+								{list.map((item) => (
 									<div className="col-sm-6 col-12 mb-3" key={item.id}>
 										<EventItem content={item} />
 									</div>

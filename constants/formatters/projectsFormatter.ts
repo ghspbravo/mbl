@@ -9,7 +9,7 @@ export interface shortProject {
   goal: string;
   description: string;
   
-	organisator: shortCompany;
+	organisator: any;
 }
 
 export interface Project {
@@ -19,7 +19,7 @@ export interface Project {
   goal: string;
   description: string;
   
-	organisator: shortCompany;
+	organisator: any;
 }
 
 export class ProjectsFormatter extends Formatter {
@@ -48,7 +48,7 @@ export class ProjectsFormatter extends Formatter {
 			}
 			this.body = {
 				hasNext: contents.isExistNextPage,
-				events: contents.items.map(item => {
+				projects: contents.items.map(item => {
 					const formatedItem: shortProject = {
 						id: item.id,
 						title: item.title,

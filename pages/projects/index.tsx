@@ -37,7 +37,7 @@ export default function Projects({}: Props): ReactElement {
 			errorSet(response.body);
 		} else {
 			statusSet(response.status);
-			listSet([...list, ...response.body.events]);
+			listSet([...list, ...response.body.projects]);
 			hasNextSet(response.body.hasNext);
 		}
 	};
@@ -63,7 +63,18 @@ export default function Projects({}: Props): ReactElement {
 				<div className="container">
 					<Breadcrumbs pages={[{ title: Pages.Projects.header }]} />
 
-					<h1>{Pages.Projects.header}</h1>
+					<div className="row">
+						<div className="col-md">
+							<h1>{Pages.Projects.header}</h1>
+						</div>
+						<div className="col-md">
+							<p>
+								Проекты участников Мололодежной Бизнес Лиги. Вы можете
+								присоединиться к выбранному проекту, если в нем есть открытые
+								заказы. Или создайте свой собственный проект.
+							</p>
+						</div>
+					</div>
 
 					{hasItems ? (
 						<div>

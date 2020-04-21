@@ -33,6 +33,7 @@ const Api = {
 
 	GetRoles: "ProfileType/GetList",
 	GetSkills: "Skill/GetListForUser",
+	GetStatistics: "Statistic/Get",
 
   GetCurrentProfile: "User/Profile",
   EditProfile: "User/EditProfile",

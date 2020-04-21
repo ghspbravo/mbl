@@ -10,7 +10,9 @@ import EventsFormatter, {
 	shortEvent,
 } from "../../constants/formatters/eventsFormatter";
 import EventItem from "../../components/Events/EventItem";
-import CourcesFormatter, { shortCource } from "../../constants/formatters/courcesFormatter";
+import CourcesFormatter, {
+	shortCource,
+} from "../../constants/formatters/courcesFormatter";
 import CourceItem from "../../components/Cources/CourceItem";
 
 interface Props {}
@@ -39,7 +41,7 @@ export default function Cources({}: Props): ReactElement {
 			errorSet(response.body);
 		} else {
 			statusSet(response.status);
-			listSet([...list, ...response.body.events]);
+			listSet([...list, ...response.body.cources]);
 			hasNextSet(response.body.hasNext);
 		}
 	};
@@ -64,13 +66,27 @@ export default function Cources({}: Props): ReactElement {
 				<div className="container">
 					<Breadcrumbs pages={[{ title: Pages.Cources.header }]} />
 
-					<h1>{Pages.Cources.header}</h1>
+					<div className="row">
+						<div className="col-md">
+							<h1>{Pages.Cources.header}</h1>
+						</div>
+						<div className="col-md">
+							<p>
+								Наши программы помогают студентам стать настоящими
+								предпринимателями. Теория и практика ведения бизнеса в
+								увлекательной форме.
+							</p>
+						</div>
+					</div>
 
 					{hasItems ? (
 						<div>
 							<div className="row">
-								{list.map(item => (
-									<div className="col-sm-6 col-12 mb-5 cource-item" key={item.id}>
+								{list.map((item) => (
+									<div
+										className="col-sm-6 col-12 mb-5 cource-item"
+										key={item.id}
+									>
 										<CourceItem content={item} />
 									</div>
 								))}

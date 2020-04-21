@@ -32,6 +32,12 @@ export interface Company {
 	phone: string;
 	site: string;
 }
+export interface shortCompany {
+	id: number;
+	photo: string;
+	title: string;
+	shortTitle: string;
+}
 
 export class CompanyFormatter extends Formatter {
 	constructor() {
