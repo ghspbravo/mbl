@@ -332,7 +332,7 @@ function Header({ router }): ReactElement {
 									</Link>
 								</div>
 
-								<div className="ml-auto d-none d-xl-block">
+								{/* <div className="ml-auto d-none d-xl-block">
 									<div
 										onClick={searchToggleHandler}
 										className="row no-gutters align-items-center search"
@@ -342,7 +342,7 @@ function Header({ router }): ReactElement {
 											<Icon size="s" name="ei-search" />
 										</div>
 									</div>
-								</div>
+								</div> */}
 
 								<div className="ml-auto d-xl-none">
 									{!burgerMenuShow && (
@@ -353,9 +353,9 @@ function Header({ router }): ReactElement {
 
 									{burgerMenuShow && (
 										<div className="row no-gutters align-items-center">
-											<div onClick={searchToggleHandler}>
+											{/* <div onClick={searchToggleHandler}>
 												<Icon size="s" name="ei-search" />
-											</div>
+											</div> */}
 											<div onClick={burgerMenuToggle} className="ml-3">
 												<Icon size="s" name="ei-close" />
 											</div>
