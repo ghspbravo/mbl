@@ -95,21 +95,19 @@ function Header({ router }): ReactElement {
 							<a className="clear dropdown__item p-relative">Мои мероприятия</a>
 						</Link>
 						<Link href={Pages.MyCources.route} passHref>
-							<a className="clear dropdown__item p-relative">
-								Мои программы
-							</a>
+							<a className="clear dropdown__item p-relative">Мои программы</a>
 						</Link>
 						<Link href={Pages.MyProjects.route} passHref>
-							<a className="clear dropdown__item p-relative">
-								Мои проекты
-							</a>
+							<a className="clear dropdown__item p-relative">Мои проекты</a>
 						</Link>
 						<div className="dropdown__item">
 							<Line />
 						</div>
-						<Link href={Pages.CreateCompany.route} passHref>
-							<a className="clear dropdown__item">Привязать юр. лицо</a>
-						</Link>
+						{!user.companyId && (
+							<Link href={Pages.CreateCompany.route} passHref>
+								<a className="clear dropdown__item">Привязать юр. лицо</a>
+							</Link>
+						)}
 						<button
 							onClick={onSignOutClick}
 							className="clear link primary dropdown__item w-100 align-left"
