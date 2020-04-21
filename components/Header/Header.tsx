@@ -326,8 +326,7 @@ function Header({ router }): ReactElement {
 									</Link>
 								</div>
 								<div className="navigation-item d-none d-xl-block">
-									<Badge small>в разработке</Badge>
-									<Link prefetch={false} href={About.route} passHref={true}>
+									<Link href={About.route} passHref={true}>
 										<a>{About.title}</a>
 									</Link>
 								</div>
@@ -443,8 +442,7 @@ function Header({ router }): ReactElement {
 											</Link>
 										</div>
 										<div className="col-6 col-md-3 burger-navigation-item">
-											<Badge small>в разработке</Badge>
-											<Link href={About.route} passHref={true} prefetch={false}>
+											<Link href={About.route} passHref={true}>
 												<a>{About.title}</a>
 											</Link>
 										</div>
