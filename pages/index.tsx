@@ -32,6 +32,10 @@ import ProjectsFormatter, {
 	shortProject,
 } from "../constants/formatters/projectsFormatter";
 import ProjectItem from "../components/Projects/ProjectItem";
+import {
+	CommonFormatter,
+	statisticsInterface,
+} from "../constants/formatters/commonFormatter";
 
 interface Props {
 	newsResponse: {
@@ -70,6 +74,10 @@ interface Props {
 			projects: shortProject[];
 		};
 	};
+	statisticsResponse: {
+		status: number;
+		body: statisticsInterface;
+	};
 }
 
 function Home({
@@ -79,6 +87,7 @@ function Home({
 	membersResponse,
 	companiesResponse,
 	projectsResponse,
+	statisticsResponse,
 }: Props) {
 	const events = eventsResponse.body?.events;
 	const news = newsResponse.body?.news;
@@ -86,6 +95,7 @@ function Home({
 	const members = membersResponse.body?.members;
 	const companies = companiesResponse.body?.companies;
 	const projects = projectsResponse.body?.projects;
+	const statistics = statisticsResponse.body;
 	return (
 		<Layout>
 			<section>
@@ -261,6 +271,181 @@ function Home({
 
 			<section>
 				<div className="container">
+					<h1>МБЛ в цифрах</h1>
+
+					<div className="statistics">
+						<div className="circle circle-members">
+							<div className="number">{statistics.members}</div>
+							<div className="label">участников</div>
+						</div>
+						<div className="circle circle-companies">
+							<div className="number">{statistics.companies}</div>
+							<div className="label">компании</div>
+						</div>
+						<div className="circle circle-events">
+							<div className="number">{statistics.events}</div>
+							<div className="label">мероприятия</div>
+						</div>
+						<div className="circle circle-projects">
+							<div className="number">{statistics.projects}</div>
+							<div className="label">проектов</div>
+						</div>
+						<div className="circle circle-cources">
+							<div className="number">{statistics.cources}</div>
+							<div className="label">программ</div>
+						</div>
+
+						<style jsx>{`
+							.statistics {
+								position: relative;
+								width: 100%;
+								min-height: 600px;
+							}
+							.circle {
+								position: absolute;
+								border-radius: 50%;
+								background-color: ${Colors.Primary};
+								color: white;
+								display: flex;
+								flex-direction: column;
+								align-items: center;
+								justify-content: center;
+							}
+							.number {
+								font-weight: bold;
+							}
+							.circle-members {
+								bottom: 20px;
+								left: 20px;
+								width: 350px;
+								height: 350px;
+							}
+							.circle-members .number {
+								font-size: 120px;
+							}
+							.circle-members .label {
+								font-size: 30px;
+							}
+							.circle-companies {
+								top: 20px;
+								left: 380px;
+								width: 245px;
+								height: 245px;
+							}
+							.circle-companies .number {
+								font-size: 72px;
+							}
+							.circle-companies .label {
+								font-size: 20px;
+							}
+							.circle-events {
+								bottom: 50px;
+								left: 540px;
+								width: 175px;
+								height: 175px;
+							}
+							.circle-events .number {
+								font-size: 56px;
+							}
+							.circle-events .label {
+								font-size: 14px;
+							}
+							.circle-projects {
+								top: 0px;
+								right: 0px;
+								width: 285px;
+								height: 285px;
+							}
+							.circle-projects .number {
+								font-size: 84px;
+							}
+							.circle-projects .label {
+								font-size: 20px;
+							}
+							.circle-cources {
+								top: 360px;
+								right: 90px;
+								width: 133px;
+								height: 133px;
+							}
+							.circle-cources .number {
+								font-size: 36px;
+							}
+							.circle-cources .label {
+								font-size: 12px;
+							}
+							@media screen and (max-width: 992px) {
+								.statistics {
+									min-height: 340px;
+								}
+								.circle-members {
+									bottom: 100px;
+									left: 20px;
+									width: 147px;
+									height: 147px;
+								}
+								.circle-members .number {
+									font-size: 48px;
+								}
+								.circle-members .label {
+									font-size: 14px;
+								}
+								.circle-companies {
+									top: 180px;
+									left: 170px;
+									width: 96px;
+									height: 96px;
+								}
+								.circle-companies .number {
+									font-size: 28px;
+								}
+								.circle-companies .label {
+									font-size: 10px;
+								}
+								.circle-events {
+									bottom: 0px;
+									left: 70px;
+									width: 79px;
+									height: 79px;
+								}
+								.circle-events .number {
+									font-size: 24px;
+								}
+								.circle-events .label {
+									font-size: 8px;
+								}
+								.circle-projects {
+									top: 50px;
+									left: 180px;
+									width: 107px;
+									height: 107px;
+								}
+								.circle-projects .number {
+									font-size: 36px;
+								}
+								.circle-projects .label {
+									font-size: 10px;
+								}
+								.circle-cources {
+									top: 10px;
+									left: 110px;
+									width: 63px;
+									height: 63px;
+								}
+								.circle-cources .number {
+									font-size: 20px;
+								}
+								.circle-cources .label {
+									font-size: 8px;
+								}
+							}
+						`}</style>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<div className="container">
 					<h1>Участники лиги</h1>
 
 					{membersResponse.status > 0 ? (
@@ -425,6 +610,14 @@ Home.getInitialProps = async () => {
 	props.projectsResponse = {
 		status: projectsList.status,
 		body: projectsList.body,
+	};
+
+	const statisticsResponse = isoFetcher.fetch(Api.GetStatistics);
+	const commonFormatter = new CommonFormatter(),
+		statistics = await commonFormatter.formatStatistics(statisticsResponse);
+	props.statisticsResponse = {
+		status: statistics.status,
+		body: statistics.body,
 	};
 
 	return props;
