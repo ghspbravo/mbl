@@ -93,7 +93,7 @@ export class ProfileFormatter extends Formatter {
         roles: profileTypes || [],
         
 				education,
-        workList: formattedWorkExperiences,
+        workList: formattedWorkExperiences || [],
         
         companyId: companies && companies[0],
         company: {} as Company,
@@ -104,17 +104,17 @@ export class ProfileFormatter extends Formatter {
 				interests,
 				wishes: wantToLearn,
 
-				myCources: portfolio.currentPrograms.map((item) => ({
+				myCources: portfolio.currentPrograms?.map((item) => ({
 					id: item.id,
 					title: item.title,
 					isCreator: item.isInitiator,
 				})),
-				myProjects: portfolio.currentProjects.map((item) => ({
+				myProjects: portfolio.currentProjects?.map((item) => ({
 					id: item.id,
 					title: item.title,
 					isCreator: item.isInitiator,
 				})),
-				myEvents: portfolio.events.map((item) => ({
+				myEvents: portfolio.events?.map((item) => ({
 					id: item.id,
 					title: item.title,
 					isCreator: item.isInitiator,
