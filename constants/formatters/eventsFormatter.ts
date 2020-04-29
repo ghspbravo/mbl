@@ -21,6 +21,7 @@ export interface Event {
 	fullDescription: string;
 	documents: string[];
 
+	location: string;
 	contacts: string;
 
 	canApply: boolean;
@@ -105,8 +106,8 @@ export class EventsFormatter extends Formatter {
 				photo: contents.imagePreview || pass,
 
 				fullDescription: contents.content,
-				contacts: contents.contacts,
-
+        contacts: contents.contacts,
+        location: contents.location,
 				startDate: formatDate(contents.startEvent),
 				endDate: formatDate(contents.endEvent),
 
