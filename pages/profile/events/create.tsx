@@ -247,7 +247,7 @@ export default function CreateEvent({}: Props): ReactElement {
 				{currentStep === steps.success && (
 					<div className="container">
 						<h1>Успех!</h1>
-						<p>Мероприятие создано.</p>
+						<p>Мероприятие создано и будет доступно после модерации</p>
 						<Link passHref href={Pages.Profile.route}>
 							<a className="clear button">Вернуться в личный кабинет</a>
 						</Link>

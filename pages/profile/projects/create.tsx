@@ -157,7 +157,7 @@ export default function CreateProject({}: Props): ReactElement {
 				{currentStep === steps.success && (
 					<div className="container">
 						<h1>Успех!</h1>
-						<p>Проект создан.</p>
+						<p>Проект создан и будет доступен после модерации</p>
 						<Link passHref href={Pages.Profile.route}>
 							<a className="clear button">Вернуться в личный кабинет</a>
 						</Link>

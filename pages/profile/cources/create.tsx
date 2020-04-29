@@ -226,7 +226,7 @@ export default function CreateCource({}: Props): ReactElement {
 				{currentStep === steps.success && (
 					<div className="container">
 						<h1>Успех!</h1>
-						<p>Программа создана.</p>
+						<p>Программа создана и будет доступна после модерации</p>
 						<Link passHref href={Pages.Profile.route}>
 							<a className="clear button">Вернуться в личный кабинет</a>
 						</Link>
