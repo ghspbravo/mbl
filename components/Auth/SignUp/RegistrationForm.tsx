@@ -38,22 +38,22 @@ export default function RegistrationForm({
 
 	const [userPhoto, userPhotoSet] = useState<any>();
 	let photoFile: File;
-  // TODO: refactor dublicate
-	const onPhotoChange = e => {
+	// TODO: refactor dublicate
+	const onPhotoChange = (e) => {
 		const input = e.target;
 
 		if (input.files && input.files[0]) {
 			photoFile = input.files[0];
 			var reader = new FileReader();
 
-			reader.onload = function(e) {
+			reader.onload = function (e) {
 				const filePath = e.target.result;
 				userPhotoSet(filePath);
 			};
 
-      reader.readAsDataURL(photoFile);
-      
-      const fileFormData = new FormData();
+			reader.readAsDataURL(photoFile);
+
+			const fileFormData = new FormData();
 
 			fileFormData.append("file", photoFile);
 			fileFormData.append("AttachType", "0");
@@ -71,10 +71,10 @@ export default function RegistrationForm({
 							path: "",
 						};
 					}
-        })
-        .then((responseJson) => {
-          userPhotoSet(responseJson.path)
-        });
+				})
+				.then((responseJson) => {
+					userPhotoSet(responseJson.path);
+				});
 		}
 	};
 	const onPhotoRemove = () => {
@@ -92,6 +92,7 @@ export default function RegistrationForm({
 		study?: string;
 		sphere?: boolean[];
 		link?: string[];
+		phone?: string;
 		work?: { place: string; start: string; end?: string }[];
 	}
 
@@ -116,6 +117,10 @@ export default function RegistrationForm({
 
 		if (values.study) {
 			formData.append("Education", values.study);
+		}
+
+		if (values.phone) {
+			formData.append("Phone", values.phone);
 		}
 		if (values.role?.length) {
 			let idx = 0;
@@ -187,16 +192,18 @@ export default function RegistrationForm({
 	const [skillsList, skillsListSet] = useState(null);
 	useEffect(() => {
 		const commonFormatter = new CommonFormatter();
-		commonFormatter.formatRoles(fetcher.fetch(Api.GetRoles)).then(response => {
-			if (response.status > 0) {
-				setError("roles", "rolesError", response.body);
-			} else {
-				rolesListSet(response.body);
-			}
-		});
+		commonFormatter
+			.formatRoles(fetcher.fetch(Api.GetRoles))
+			.then((response) => {
+				if (response.status > 0) {
+					setError("roles", "rolesError", response.body);
+				} else {
+					rolesListSet(response.body);
+				}
+			});
 		commonFormatter
 			.formatSkills(fetcher.fetch(Api.GetSkills))
-			.then(response => {
+			.then((response) => {
 				if (response.status > 0) {
 					setError("skills", "skillsError", response.body);
 				} else {
@@ -276,7 +283,7 @@ export default function RegistrationForm({
 								}
 								ref={register({
 									required: true,
-									validate: value => value === userPassword,
+									validate: (value) => value === userPassword,
 								})}
 							/>
 						</div>
@@ -291,7 +298,7 @@ export default function RegistrationForm({
 				{rolesList?.length > 0 && (
 					<fieldset>
 						<div className="row no-gutters">
-							{rolesList.map(role => (
+							{rolesList.map((role) => (
 								<div key={role.id} className="mr-3 mb-2">
 									<Checkbox ref={register({})} name={`role[${role.id}]`}>
 										{role.name}
@@ -431,7 +438,7 @@ export default function RegistrationForm({
 						{skillsList?.length > 0 && (
 							<fieldset>
 								<div className="row no-gutters">
-									{skillsList.map(sphere => (
+									{skillsList.map((sphere) => (
 										<div key={sphere.id} className="mr-3 mb-2">
 											<Checkbox
 												ref={register({})}
@@ -448,6 +455,15 @@ export default function RegistrationForm({
 						{errors.skills && (
 							<div className="error">{(errors.skills as any).message}</div>
 						)}
+					</div>
+
+					<div className="mt-3">
+						<Input
+							name="phone"
+							label="Телефон"
+							error={errors.phone}
+							ref={register({})}
+						/>
 					</div>
 
 					<div className="mt-3">

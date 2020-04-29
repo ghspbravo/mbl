@@ -74,6 +74,16 @@ export default function MemberItem({ status, body }: Props): ReactElement {
 									</div>
 								</div>
 							)}
+              {body.phone && (
+								<div className="row mb-3">
+									<div className="col-lg-4 col-xl-3 col-md-6 text">
+										<b>Телефон:</b>
+									</div>
+									<div className="col-lg-8 col-xl-9 col-md-6 text">
+										{body.phone}
+									</div>
+								</div>
+							)}
 							{body.education && (
 								<div className="row mb-3">
 									<div className="col-lg-4 col-xl-3 col-md-6 text">

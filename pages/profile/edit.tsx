@@ -30,6 +30,7 @@ interface formValues {
 	study: string;
 	sphere: boolean[];
 	link: string[];
+	phone: string;
 	work: { place: string; start: string; end?: string }[];
 }
 
@@ -87,7 +88,7 @@ export default function EditProfile({}: Props): ReactElement {
 							skill.checked =
 								currentUser.spheresList.filter(function (item) {
 									return item.id === skill.id;
-                }).length > 0;
+								}).length > 0;
 							return skill;
 						})
 					);
@@ -134,7 +135,7 @@ export default function EditProfile({}: Props): ReactElement {
 					}
 				})
 				.then((responseJson) => {
-					userPhotoSet(responseJson.path)
+					userPhotoSet(responseJson.path);
 				});
 		}
 	};
@@ -235,6 +236,9 @@ export default function EditProfile({}: Props): ReactElement {
 
 		if (values.study) {
 			formData.append("Education", values.study);
+		}
+		if (values.phone) {
+			formData.append("Phone", values.phone);
 		}
 		if (values.role?.length) {
 			let idx = 0;
@@ -493,6 +497,18 @@ export default function EditProfile({}: Props): ReactElement {
 												{(errors.skills as any).message}
 											</div>
 										)}
+									</div>
+
+									<div className="mt-3">
+										<fieldset>
+											<Input
+												name="phone"
+												label="Телефон"
+                        error={errors.phone}
+                        defaultValue={currentUser?.phone}
+												ref={register({})}
+											/>
+										</fieldset>
 									</div>
 
 									<div className="mt-3">
