@@ -17,6 +17,7 @@ interface Props {}
 
 interface formValues {
 	title: string;
+	location: string;
 	dateStart: string;
 	dateEnd: string;
 	contacts: string;
@@ -35,7 +36,7 @@ export default function CreateEvent({}: Props): ReactElement {
 
 	const [userPhoto, userPhotoSet] = useState<any>();
 	let photoFile: File;
-  // TODO: refactor dublicate
+	// TODO: refactor dublicate
 	const onPhotoChange = (e) => {
 		const input = e.target;
 
@@ -70,7 +71,7 @@ export default function CreateEvent({}: Props): ReactElement {
 					}
 				})
 				.then((responseJson) => {
-					userPhotoSet(responseJson.path)
+					userPhotoSet(responseJson.path);
 				});
 		}
 	};
@@ -101,6 +102,7 @@ export default function CreateEvent({}: Props): ReactElement {
 			Announce: values.shortDescription,
 			Content: values.fullDescription,
 			Contacts: values.contacts,
+			Location: values.location,
 			StartEvent: values.dateStart.replace(/\./g, "-"),
 			EndEvent: values.dateEnd.replace(/\./g, "-"),
 			StartRegistration: today,
@@ -196,6 +198,15 @@ export default function CreateEvent({}: Props): ReactElement {
 													name="contacts"
 													label="Контакты"
 													error={errors.contacts}
+													ref={register({})}
+												/>
+											</div>
+
+											<div className="mb-3">
+												<Input
+													name="location"
+													label="Место проведения"
+													error={errors.location}
 													ref={register({})}
 												/>
 											</div>
