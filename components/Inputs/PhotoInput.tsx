@@ -1,15 +1,60 @@
 import React, { ReactElement } from 'react'
 import Icon from '../Icon';
 import Colors from '../../constants/colors';
+import { fetcher } from '../../constants/fetcher';
+import Api from '../../constants/api';
 
 interface Props {
-  onChange: any,
-  onRemove: any,
-  image?: any,
+  setImage: any,
+  image?: any
 }
 
-export default function PhotoInput({ onChange, onRemove, image }: Props): ReactElement {
+export default function PhotoInput({ image, setImage }: Props): ReactElement {
   const id = Math.random().toString();
+
+  let photoFile: File;
+  const onPhotoChange = (e) => {
+    const input = e.target;
+
+    if (input.files && input.files[0]) {
+      photoFile = input.files[0]
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        const filePath = e.target.result
+        setImage(filePath);
+      }
+
+      reader.readAsDataURL(photoFile);
+
+      const fileFormData = new FormData();
+
+			fileFormData.append("file", photoFile);
+			fileFormData.append("AttachType", "0");
+
+			fetcher
+				.fetch(Api.UploadFile, {
+					method: "POST",
+					body: fileFormData,
+				})
+				.then((response) => {
+					if (response.status === 200) {
+						return response.json();
+					} else {
+						return {
+							path: "",
+						};
+					}
+        })
+        .then((responseJson) => {
+          setImage(responseJson.path)
+        });
+    }
+  }
+  const onPhotoRemove = () => {
+    setImage(undefined);
+    photoFile = null;
+  }
   return (
     <div className="photo-wrapper">
       {!image && <label htmlFor={id} className="photo-container">
@@ -23,9 +68,9 @@ export default function PhotoInput({ onChange, onRemove, image }: Props): ReactE
 
       {image && <img className="photo-preview" src={image} alt="Загруженное фото" />}
 
-      <input accept="image/jpeg,image/png" onChange={onChange} type="file" id={id} hidden />
+      <input accept="image/jpeg,image/png" onChange={onPhotoChange} type="file" id={id} hidden />
 
-      {image && <button onClick={onRemove} type="button" className="link primary clear">убрать</button>}
+      {image && <button onClick={onPhotoRemove} type="button" className="link primary clear">убрать</button>}
 
       <style jsx>{`
         .photo-container {

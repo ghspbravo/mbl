@@ -35,50 +35,6 @@ export default function CreateEvent({}: Props): ReactElement {
 	const [currentStep, currentStepSet] = useState(steps.main);
 
 	const [userPhoto, userPhotoSet] = useState<any>();
-	let photoFile: File;
-	// TODO: refactor dublicate
-	const onPhotoChange = (e) => {
-		const input = e.target;
-
-		if (input.files && input.files[0]) {
-			photoFile = input.files[0];
-			var reader = new FileReader();
-
-			reader.onload = function (e) {
-				const filePath = e.target.result;
-				userPhotoSet(filePath);
-			};
-
-			reader.readAsDataURL(photoFile);
-
-			const fileFormData = new FormData();
-
-			fileFormData.append("file", photoFile);
-			fileFormData.append("AttachType", "0");
-
-			fetcher
-				.fetch(Api.UploadFile, {
-					method: "POST",
-					body: fileFormData,
-				})
-				.then((response) => {
-					if (response.status === 200) {
-						return response.json();
-					} else {
-						return {
-							path: "",
-						};
-					}
-				})
-				.then((responseJson) => {
-					userPhotoSet(responseJson.path);
-				});
-		}
-	};
-	const onPhotoRemove = () => {
-		userPhotoSet(undefined);
-		photoFile = null;
-	};
 
 	const { handleSubmit, register, errors, setError, clearError } = useForm({
 		mode: "onBlur",
@@ -213,11 +169,7 @@ export default function CreateEvent({}: Props): ReactElement {
 										</fieldset>
 
 										<div className="mb-5">
-											<PhotoInput
-												image={userPhoto}
-												onRemove={onPhotoRemove}
-												onChange={onPhotoChange}
-											/>
+											<PhotoInput image={userPhoto} setImage={userPhotoSet} />
 										</div>
 
 										<div className="mb-3">

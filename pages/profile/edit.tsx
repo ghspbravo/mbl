@@ -99,50 +99,6 @@ export default function EditProfile({}: Props): ReactElement {
 	}, [currentUser]);
 
 	const [userPhoto, userPhotoSet] = useState<any>();
-	let photoFile: File;
-	// TODO: refactor dublicate
-	const onPhotoChange = (e) => {
-		const input = e.target;
-
-		if (input.files && input.files[0]) {
-			photoFile = input.files[0];
-			var reader = new FileReader();
-
-			reader.onload = function (e) {
-				const filePath = e.target.result;
-				userPhotoSet(filePath);
-			};
-
-			reader.readAsDataURL(photoFile);
-
-			const fileFormData = new FormData();
-
-			fileFormData.append("file", photoFile);
-			fileFormData.append("AttachType", "0");
-
-			fetcher
-				.fetch(Api.UploadFile, {
-					method: "POST",
-					body: fileFormData,
-				})
-				.then((response) => {
-					if (response.status === 200) {
-						return response.json();
-					} else {
-						return {
-							path: "",
-						};
-					}
-				})
-				.then((responseJson) => {
-					userPhotoSet(responseJson.path);
-				});
-		}
-	};
-	const onPhotoRemove = () => {
-		userPhotoSet(undefined);
-		photoFile = null;
-	};
 
 	const [skillsList, skillsListSet] = useState(null);
 
@@ -329,11 +285,7 @@ export default function EditProfile({}: Props): ReactElement {
 						>
 							<div className="row">
 								<div className="col-12 col-md-5 col-lg-4 col-xl-3">
-									<PhotoInput
-										image={userPhoto}
-										onRemove={onPhotoRemove}
-										onChange={onPhotoChange}
-									/>
+									<PhotoInput image={userPhoto} setImage={userPhotoSet} />
 								</div>
 								<div className="col-12 col-md-7 col-lg-8 col-xl-9">
 									<h2>Информация о себе</h2>
@@ -504,8 +456,8 @@ export default function EditProfile({}: Props): ReactElement {
 											<Input
 												name="phone"
 												label="Телефон"
-                        error={errors.phone}
-                        defaultValue={currentUser?.phone}
+												error={errors.phone}
+												defaultValue={currentUser?.phone}
 												ref={register({})}
 											/>
 										</fieldset>

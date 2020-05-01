@@ -13,7 +13,9 @@ import Link from "next/link";
 import { businessSizesList } from "../../../constants/businessSize";
 import { fetcher } from "../../../constants/fetcher";
 import Api from "../../../constants/api";
-import CompanyFormatter, { Company } from "../../../constants/formatters/companyFormatter";
+import CompanyFormatter, {
+	Company,
+} from "../../../constants/formatters/companyFormatter";
 import { userInterface } from "../../../constants/formatters/profileFormatter";
 
 interface Props {}
@@ -39,53 +41,11 @@ export default function EditCompany({}: Props): ReactElement {
 	const [step, stepSet] = useState(steps.main);
 
 	const { getCurrentUser } = useContext(AuthContext);
-	const { company: currentCompany = {} as Company }: userInterface = getCurrentUser();
+	const {
+		company: currentCompany = {} as Company,
+	}: userInterface = getCurrentUser();
 
 	const [userPhoto, userPhotoSet] = useState<any>(currentCompany.photo);
-	let photoFile: File;
-	// TODO: refactor dublicate
-	const onPhotoChange = (e) => {
-		const input = e.target;
-
-		if (input.files && input.files[0]) {
-			photoFile = input.files[0];
-			var reader = new FileReader();
-
-			reader.onload = function (e) {
-				const filePath = e.target.result;
-				userPhotoSet(filePath);
-			};
-
-			reader.readAsDataURL(photoFile);
-
-			const fileFormData = new FormData();
-
-			fileFormData.append("file", photoFile);
-			fileFormData.append("AttachType", "0");
-
-			fetcher
-				.fetch(Api.UploadFile, {
-					method: "POST",
-					body: fileFormData,
-				})
-				.then((response) => {
-					if (response.status === 200) {
-						return response.json();
-					} else {
-						return {
-							path: "",
-						};
-					}
-				})
-				.then((responseJson) => {
-					userPhotoSet(responseJson.path)
-				});
-		}
-	};
-	const onPhotoRemove = () => {
-		userPhotoSet(undefined);
-		photoFile = null;
-	};
 
 	useEffect(() => {
 		if (!currentCompany) {
@@ -128,7 +88,9 @@ export default function EditCompany({}: Props): ReactElement {
 			},
 		]);
 
-  const [businessSizeValue, businessSizeValueSet] = useState(currentCompany.sizeRaw);
+	const [businessSizeValue, businessSizeValueSet] = useState(
+		currentCompany.sizeRaw
+	);
 	const [businessSize, businessSizeSet] = useState(
 		businessSizesList[businessSizeValue].name
 	);
@@ -143,7 +105,7 @@ export default function EditCompany({}: Props): ReactElement {
 		processingSet(true);
 
 		const payload = {
-      Id: currentCompany.id,
+			Id: currentCompany.id,
 			FullName: values.title,
 			ShortName: values.shortTitle,
 			INN: values.inn,
@@ -279,11 +241,7 @@ export default function EditCompany({}: Props): ReactElement {
 									</fieldset>
 
 									<div className="mb-5">
-										<PhotoInput
-											image={userPhoto}
-											onRemove={onPhotoRemove}
-											onChange={onPhotoChange}
-										/>
+										<PhotoInput image={userPhoto} setImage={userPhotoSet} />
 									</div>
 
 									<fieldset>
