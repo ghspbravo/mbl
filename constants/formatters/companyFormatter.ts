@@ -10,13 +10,15 @@ export interface shortCompany {
 
 export interface Company {
 	id: number;
-	photo: string;
+	logo: string;
+	image?: string;
 	title: string;
 	shortTitle: string;
 	size: string;
 	sizeRaw: number;
 
 	creator: string;
+	foundationDate: string;
 
 	inn: string;
 	membersCount: number;
@@ -68,12 +70,18 @@ export class CompanyFormatter extends Formatter {
 				id: contents.id,
 				title: contents.fullName,
 				shortTitle: contents.shortName,
-				photo: contents.photo || pass,
+				logo: contents.photo || pass,
+				image: contents.image,
 				creator: `${creator.surName} ${creator.firstName} ${creator.middleName}`,
+				foundationDate: contents.yearOfFoundation,
 				sizeRaw: parseInt(contents.size || 0),
 
-				spheres: (contents.occupations || []).map((item) => item.name).join(","),
-				spheresRaw: contents.occupations || [],
+				spheres: (contents.occupations || [])
+					.map((item) => item.name)
+					.join(", "),
+				spheresRaw: (contents.occupations || []).map((item) => item.name),
+
+				size: businessSizesList[contents.size].name,
 
 				inn: contents.inn,
 				membersCount: contents.employeeCount,
@@ -83,11 +91,6 @@ export class CompanyFormatter extends Formatter {
 				phone: contents.phone,
 				site: contents.site,
 			};
-			// TODO: remove company size crunch
-			const enumRegexp = /^\d$/;
-			if (enumRegexp.test(contents.size)) {
-				this.body["size"] = businessSizesList[contents.size].name;
-			}
 		});
 
 		return {

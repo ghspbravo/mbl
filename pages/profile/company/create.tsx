@@ -14,12 +14,14 @@ import { businessSizesList } from "../../../constants/businessSize";
 import { fetcher } from "../../../constants/fetcher";
 import Api from "../../../constants/api";
 import CompanyFormatter from "../../../constants/formatters/companyFormatter";
+import DateInput from "../../../components/Inputs/DateInput";
 
 interface Props {}
 
 interface formValues {
 	title: string;
 	shortTitle: string;
+	foundationDate: string;
 	inn: string;
 	sphere: number[];
 	membersCount: string;
@@ -37,7 +39,8 @@ enum steps {
 export default function CreateCompany({}: Props): ReactElement {
 	const [step, stepSet] = useState(steps.main);
 
-	const [userPhoto, userPhotoSet] = useState<any>();
+	const [logo, logoSet] = useState<any>();
+	const [image, imageSet] = useState<any>();
 
 	const {
 		handleSubmit,
@@ -82,10 +85,15 @@ export default function CreateCompany({}: Props): ReactElement {
 			Phone: values.phone,
 			Site: values.site,
 			Occupations: values.sphere,
-		};
+			YearOfFoundation: values.foundationDate,
+    };
 
-		if (userPhoto) {
-			payload["Photo"] = userPhoto;
+		if (logo) {
+			payload["Photo"] = logo;
+		}
+
+		if (image) {
+			payload["Image"] = image;
 		}
 
 		const apiResponse = fetcher.fetch(Api.CreateCompany, {
@@ -155,6 +163,15 @@ export default function CreateCompany({}: Props): ReactElement {
 										</div>
 
 										<div className="mb-3">
+											<DateInput
+												name="foundationDate"
+												label="Дата основания"
+												error={errors.foundationDate}
+												register={register}
+											/>
+										</div>
+
+										<div className="mb-3">
 											{/* TODO: add input mask */}
 											<Input
 												name="inn"
@@ -200,7 +217,11 @@ export default function CreateCompany({}: Props): ReactElement {
 									</fieldset>
 
 									<div className="mb-5">
-										<PhotoInput image={userPhoto} setImage={userPhotoSet} />
+										<div className="label-text mb-2">Логотип компании</div>
+										<PhotoInput image={logo} setImage={logoSet} />
+
+										<div className="label-text my-2">Изображение компании</div>
+										<PhotoInput image={image} setImage={imageSet} />
 									</div>
 
 									<fieldset>

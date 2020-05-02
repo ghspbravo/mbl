@@ -3,7 +3,7 @@ import Layout, { AuthContext } from "../../../components/Layout";
 import Head from "next/head";
 import Pages from "../../../constants/pages";
 import Breadcrumbs from "../../../components/Breadcrumbs";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Input from "../../../components/Inputs/Input";
 import DynamicField from "../../../components/Inputs/DynamicField";
 import PhotoInput from "../../../components/Inputs/PhotoInput";
@@ -17,12 +17,14 @@ import CompanyFormatter, {
 	Company,
 } from "../../../constants/formatters/companyFormatter";
 import { userInterface } from "../../../constants/formatters/profileFormatter";
+import DateInput from "../../../components/Inputs/DateInput";
 
 interface Props {}
 
 interface formValues {
 	title: string;
 	shortTitle: string;
+	foundationDate: string;
 	inn: string;
 	sphere: number[];
 	membersCount: string;
@@ -45,12 +47,15 @@ export default function EditCompany({}: Props): ReactElement {
 		company: currentCompany = {} as Company,
 	}: userInterface = getCurrentUser();
 
-	const [userPhoto, userPhotoSet] = useState<any>(currentCompany.photo);
+	const [logo, logoSet] = useState<any>(currentCompany.logo);
+	const [image, imageSet] = useState<any>(currentCompany.image);
 
 	useEffect(() => {
 		if (!currentCompany) {
 			return;
 		}
+		setValue("foundationDate", currentCompany.foundationDate);
+
 		sphereListSet(
 			currentCompany.spheresRaw.map((item, index) => ({
 				id: index,
@@ -59,7 +64,14 @@ export default function EditCompany({}: Props): ReactElement {
 		);
 	}, [currentCompany]);
 
-	const { handleSubmit, register, errors, setError, clearError } = useForm({
+	const {
+		handleSubmit,
+		register,
+		errors,
+		setError,
+		clearError,
+		setValue,
+	} = useForm({
 		mode: "onBlur",
 	});
 
@@ -116,10 +128,15 @@ export default function EditCompany({}: Props): ReactElement {
 			Phone: values.phone,
 			Site: values.site,
 			Occupations: values.sphere,
+			YearOfFoundation: values.foundationDate,
 		};
 
-		if (userPhoto) {
-			payload["Photo"] = userPhoto;
+		if (logo) {
+			payload["Photo"] = logo;
+		}
+
+		if (image) {
+			payload["Image"] = image;
 		}
 
 		const apiResponse = fetcher.fetch(Api.EditCompany, {
@@ -191,6 +208,15 @@ export default function EditCompany({}: Props): ReactElement {
 										</div>
 
 										<div className="mb-3">
+											<DateInput
+												name="foundationDate"
+												label="Дата основания"
+												error={errors.foundationDate}
+												register={register}
+											/>
+										</div>
+
+										<div className="mb-3">
 											{/* TODO: add input mask */}
 											<Input
 												name="inn"
@@ -241,9 +267,12 @@ export default function EditCompany({}: Props): ReactElement {
 									</fieldset>
 
 									<div className="mb-5">
-										<PhotoInput image={userPhoto} setImage={userPhotoSet} />
-									</div>
+										<div className="label-text mb-2">Логотип компании</div>
+										<PhotoInput image={logo} setImage={logoSet} />
 
+										<div className="label-text my-2">Изображение компании</div>
+										<PhotoInput image={image} setImage={imageSet} />
+									</div>
 									<fieldset>
 										<div className="mb-3">
 											<div className="row">

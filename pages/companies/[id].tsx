@@ -39,18 +39,35 @@ export default function CompanySingle({ status, body }: Props): ReactElement {
 							<div className="col-lg-3">
 								<img
 									className="responsive"
-									src={body.photo}
-									alt="Фото компании"
+									src={body.logo}
+									alt="Лого компании"
 								/>
 							</div>
 							<div className="col-lg-9">
 								<h1 className="mb-4">{body.shortTitle}</h1>
+
+								{body.image && (
+									<div className="mb-2">
+										<img
+											className="responsive"
+											src={body.image}
+											alt="Фото компании"
+										/>
+									</div>
+								)}
 
 								<div className="row">
 									<div className="col-lg-5 col-md-6 col-12">
 										<b>Название юр. лица:</b>
 									</div>
 									<div className="col-md-6 col-12 mb-4">{body.title}</div>
+
+									<div className="col-lg-5 col-md-6 col-12">
+										<b>Дата основания:</b>
+									</div>
+									<div className="col-md-6 col-12 mb-4">
+										{body.foundationDate}
+									</div>
 
 									<div className="col-lg-5 col-md-6 col-12">
 										<b>ИНН:</b>
@@ -75,7 +92,9 @@ export default function CompanySingle({ status, body }: Props): ReactElement {
 									<div className="col-lg-5 col-md-6 col-12">
 										<b>Количество сотрудников:</b>
 									</div>
-									<div className="col-md-6 col-12 mb-4">{body.membersCount}</div>
+									<div className="col-md-6 col-12 mb-4">
+										{body.membersCount}
+									</div>
 
 									<div className="col-lg-5 col-md-6 col-12">
 										<b>Объем годовой выручки:</b>
@@ -118,7 +137,7 @@ export default function CompanySingle({ status, body }: Props): ReactElement {
 	);
 }
 
-CompanySingle.getInitialProps = async context => {
+CompanySingle.getInitialProps = async (context) => {
 	const { id: companyId } = context.query;
 
 	const response = isoFetcher.fetch(Api.CompanySingle, {
