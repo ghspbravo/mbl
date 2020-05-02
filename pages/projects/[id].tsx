@@ -20,7 +20,19 @@ interface Props {
 }
 
 export default function ProjectSingle({ status, body }: Props): ReactElement {
-	const { id, title, description, goal, organisator } = body;
+	const {
+		id,
+		title,
+		description,
+		goal,
+		organisator,
+		shortDescription,
+		product,
+		actuality,
+		advantages,
+		dateStart,
+		image,
+	} = body;
 
 	// const [processing, processingSet] = useState(false);
 	// const [openModal, openModalSet] = useState(false);
@@ -82,10 +94,52 @@ export default function ProjectSingle({ status, body }: Props): ReactElement {
 								<div className="mt-3">
 									<h1>{title}</h1>
 
+									{image && (
+										<img
+											className="responsive"
+											src={image}
+											alt="Изображение проекта"
+										/>
+									)}
+
 									<h3>Цель проекта</h3>
 									<p>{goal}</p>
 
-									<div className="mb-5">
+									{dateStart && (
+										<div className="mt-2">
+											<h3>Дата старта</h3>
+											<p>{dateStart}</p>
+										</div>
+									)}
+
+									{actuality && (
+										<div className="mt-2">
+											<h3>Актуальность</h3>
+											<p>{actuality}</p>
+										</div>
+									)}
+
+									{product && (
+										<div className="mt-2">
+											<h3>Продукт проекта</h3>
+											<p>{product}</p>
+										</div>
+									)}
+
+									{advantages && (
+										<div className="mt-2">
+											<h3>Преимущества</h3>
+											<p>{advantages}</p>
+										</div>
+									)}
+
+									{shortDescription && (
+										<div className="mt-5">
+											<p>{shortDescription}</p>
+										</div>
+									)}
+
+									<div className="mt-3">
 										<p>{description}</p>
 									</div>
 

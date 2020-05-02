@@ -9,15 +9,26 @@ import { fetcher } from "../../../constants/fetcher";
 import Api from "../../../constants/api";
 import { useForm } from "react-hook-form";
 import { userInterface } from "../../../constants/formatters/profileFormatter";
-import { CourcesFormatter } from "../../../constants/formatters/courcesFormatter";
 import ProjectsFormatter from "../../../constants/formatters/projectsFormatter";
+import { normalizeDate } from "../../../constants/formatDate";
+import PhotoInput from "../../../components/Inputs/PhotoInput";
+import DateInput from "../../../components/Inputs/DateInput";
 
 interface Props {}
 
 interface formValues {
 	title: string;
+
+	dateStart: string;
+
 	goal: string;
+	product: string;
+
 	description: string;
+	shortDescription: string;
+
+	advantages: string;
+	actuality: string;
 }
 
 enum steps {
@@ -27,6 +38,8 @@ enum steps {
 
 export default function CreateProject({}: Props): ReactElement {
 	const [currentStep, currentStepSet] = useState(steps.main);
+
+	const [image, imageSet] = useState();
 
 	const { handleSubmit, register, errors, setError, clearError } = useForm({
 		mode: "onBlur",
@@ -47,10 +60,24 @@ export default function CreateProject({}: Props): ReactElement {
 
 		const payload = {
 			Title: values.title,
+
 			ProjectObjective: values.goal,
+			ProjectProduct: values.product,
+
+			Relevance: values.actuality,
+			Benefits: values.advantages,
+
+			Start: normalizeDate(values.dateStart),
+
+			ShortDescription: values.shortDescription,
 			Content: values.description,
+
 			CreateByCompanyId: currentUser.companyId,
 		};
+
+		if (image) {
+			payload["ImagePath"] = image;
+		}
 
 		const apiResponse = fetcher.fetch(Api.CreateProject, {
 			method: "POST",
@@ -111,6 +138,10 @@ export default function CreateProject({}: Props): ReactElement {
 											</div>
 
 											<div className="mb-3">
+												<PhotoInput image={image} setImage={imageSet} />
+											</div>
+
+											<div className="mb-3">
 												<Input
 													name="goal"
 													label="Цель проекта"
@@ -121,7 +152,53 @@ export default function CreateProject({}: Props): ReactElement {
 													})}
 												/>
 											</div>
+
+											<div className="mb-3">
+												<Input
+													name="product"
+													label="Продукт проекта"
+													error={errors.product}
+													ref={register({})}
+												/>
+											</div>
+
+											<div className="mb-3">
+												<Input
+													name="actuality"
+													label="Акуальность"
+													error={errors.actuality}
+													ref={register({})}
+												/>
+											</div>
+
+											<div className="mb-3">
+												<Input
+													name="advantages"
+													label="Преимущества"
+													error={errors.advantages}
+													ref={register({})}
+												/>
+											</div>
+
+											<div className="mb-3">
+												<DateInput
+													name="dateStart"
+													label="Дата старта"
+													error={errors.dateStart}
+													register={register}
+												/>
+											</div>
 										</fieldset>
+
+										<div className="mb-3">
+											<Input
+												multiline
+												name="shortDescription"
+												label="Краткое описание"
+												error={errors.shortDescription}
+												ref={register({})}
+											/>
+										</div>
 
 										<div className="mb-3">
 											<Input
