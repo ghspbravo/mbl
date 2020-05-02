@@ -20,6 +20,7 @@ import { CommonFormatter } from "../../constants/formatters/commonFormatter";
 import Checkbox from "../../components/Inputs/Checkbox";
 import Icon from "../../components/Icon";
 import { formatName } from "../../constants/formatters/rootFormatter";
+import { normalizeDate } from "../../constants/formatDate";
 
 interface Props {}
 
@@ -188,7 +189,7 @@ export default function EditProfile({}: Props): ReactElement {
 		if (nameObj.middlename) {
 			formData.append("MiddleName", nameObj.middlename);
 		}
-		formData.append("BirthDate", values.birthday.replace(/\./g, "-"));
+		formData.append("BirthDate", normalizeDate(values.birthday));
 
 		if (values.study) {
 			formData.append("Education", values.study);
@@ -228,12 +229,12 @@ export default function EditProfile({}: Props): ReactElement {
 					formData.append(`WorkExperiences[${index}].Name`, work.place);
 					formData.append(
 						`WorkExperiences[${index}].Start`,
-						work.start.replace(/\./g, "-")
+						normalizeDate(work.start)
 					);
 					if (work.end) {
 						formData.append(
 							`WorkExperiences[${index}].End`,
-							work.end.replace(/\./g, "-") || ""
+							normalizeDate(work.end)
 						);
 					}
 				}

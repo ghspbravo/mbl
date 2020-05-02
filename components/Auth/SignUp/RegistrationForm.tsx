@@ -14,6 +14,7 @@ import { CommonFormatter } from "../../../constants/formatters/commonFormatter";
 import Icon from "../../Icon";
 import { AuthContext } from "../../Layout";
 import DateInput from "../../Inputs/DateInput";
+import { normalizeDate } from "../../../constants/formatDate";
 
 interface Props {
 	nextStepHandler: Function;
@@ -66,7 +67,7 @@ export default function RegistrationForm({
 		if (nameObj.middlename) {
 			formData.append("MiddleName", nameObj.middlename);
 		}
-		formData.append("BirthDate", values.birthday.replace(/\./g, "-"));
+		formData.append("BirthDate", normalizeDate(values.birthday));
 
 		formData.append("Email", values.username);
 		formData.append("Password", values.password);
@@ -110,12 +111,12 @@ export default function RegistrationForm({
 					formData.append(`WorkExperiences[${index}].Name`, work.place);
 					formData.append(
 						`WorkExperiences[${index}].Start`,
-						work.start.replace(/\./g, "-")
+						normalizeDate(work.start)
 					);
 					if (work.end) {
 						formData.append(
 							`WorkExperiences[${index}].End`,
-							work.end.replace(/\./g, "-") || ""
+							normalizeDate(work.end)
 						);
 					}
 				}

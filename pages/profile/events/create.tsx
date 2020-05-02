@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { EventsFormatter } from "../../../constants/formatters/eventsFormatter";
 import DateInput from "../../../components/Inputs/DateInput";
 import { userInterface } from "../../../constants/formatters/profileFormatter";
+import { normalizeDate } from "../../../constants/formatDate";
 
 interface Props {}
 
@@ -59,10 +60,10 @@ export default function CreateEvent({}: Props): ReactElement {
 			Content: values.fullDescription,
 			Contacts: values.contacts,
 			Location: values.location,
-			StartEvent: values.dateStart.replace(/\./g, "-"),
-			EndEvent: values.dateEnd.replace(/\./g, "-"),
+			StartEvent: normalizeDate(values.dateStart),
+			EndEvent: normalizeDate(values.dateEnd),
 			StartRegistration: today,
-			EndRegistration: values.dateStart.replace(/\./g, "-"),
+			EndRegistration: normalizeDate(values.dateStart),
 			CreateByCompanyId: currentUser.companyId,
 		};
 
