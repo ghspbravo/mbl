@@ -1,6 +1,7 @@
 import Formatter, { formatDate } from "./rootFormatter";
 import pass from "../../assets/pass.png";
 import { shortCompany } from "./companyFormatter";
+import moment from "moment";
 
 export interface shortCource {
 	id: number;
@@ -12,7 +13,12 @@ export interface shortCource {
 export interface Cource {
 	id: number;
 	title: string;
+	photo: string;
+
 	duration: string;
+	dateStart: string;
+	dateEnd: string;
+
 	contacts: string;
 	fullDescription: string;
 
@@ -89,12 +95,16 @@ export class CourcesFormatter extends Formatter {
 			}
 			const payload: Cource = {
 				id: contents.id,
-				title: contents.title,
+        title: contents.title,
+        photo: contents.imagePreview,
 
 				fullDescription: contents.content,
 				contacts: contents.announce,
 
 				duration: contents.duration + " дней",
+				dateStart: moment(contents.startEvent).format("LL"),
+				dateEnd: moment(contents.endEvent).format("LL"),
+
 				organisator: contents.contacts,
 
 				canApply: contents.registrationIsAvailable,

@@ -29,6 +29,7 @@ export default function EventSingle({ status, body }: Props): ReactElement {
 		canApply,
 		photo,
 		contacts,
+		location,
 	} = body;
 
 	const [processing, processingSet] = useState(false);
@@ -103,10 +104,19 @@ export default function EventSingle({ status, body }: Props): ReactElement {
 										)}
 									</div>
 
-									<div className="mt-5">
-										<h2>Контакты</h2>
-										<p>{contacts}</p>
-									</div>
+									{contacts && (
+										<div className="mt-5">
+											<h2>Контакты</h2>
+											<p>{contacts}</p>
+										</div>
+									)}
+
+									{location && (
+										<div className="mt-3">
+											<h2>Место проведения</h2>
+											<p>{location}</p>
+										</div>
+									)}
 
 									{canApply && !hasSuccessApply && (
 										<div className="mt-3">
@@ -128,10 +138,12 @@ export default function EventSingle({ status, body }: Props): ReactElement {
 										/>
 									</div>
 
-									<div className="mt-3">
-										<h2>О мероприятии</h2>
-										<p>{fullDescription}</p>
-									</div>
+									{fullDescription && (
+										<div className="mt-3">
+											<h2>О мероприятии</h2>
+											<p>{fullDescription}</p>
+										</div>
+									)}
 
 									{canApply && !hasSuccessApply && (
 										<div className="mt-3">
@@ -186,7 +198,7 @@ export default function EventSingle({ status, body }: Props): ReactElement {
 	);
 }
 
-EventSingle.getInitialProps = async context => {
+EventSingle.getInitialProps = async (context) => {
 	const { id } = context.query;
 
 	const response = isoFetcher.fetch(Api.EventSingle, {

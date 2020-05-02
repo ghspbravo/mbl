@@ -12,7 +12,7 @@ import Pages from "../../constants/pages";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import Colors from "../../constants/colors";
 import Modal from "../../components/Modal";
-import pass from '../../assets/pass.png';
+import pass from "../../assets/pass.png";
 
 interface Props {
 	status: number;
@@ -29,6 +29,9 @@ export default function CourceSingle({ status, body }: Props): ReactElement {
 		contacts,
 		organisator,
 		duration,
+		photo,
+		dateEnd,
+		dateStart,
 	} = body;
 
 	const [processing, processingSet] = useState(false);
@@ -106,6 +109,27 @@ export default function CourceSingle({ status, body }: Props): ReactElement {
 										<p>{contacts}</p>
 									</div>
 
+									{dateStart && dateEnd && (
+										<div className="mt-2">
+											<h2>Даты</h2>
+											<p>
+												Дата начала: {dateStart}
+												<br />
+												Дата конца: {dateEnd}
+											</p>
+										</div>
+									)}
+
+									{photo && (
+										<div className="mt-2">
+											<img
+												className="responsive"
+												src={photo}
+												alt="Фото программы"
+											/>
+										</div>
+									)}
+
 									{canApply && !hasSuccessApply && (
 										<div className="mt-3">
 											<button
@@ -170,7 +194,7 @@ export default function CourceSingle({ status, body }: Props): ReactElement {
 	);
 }
 
-CourceSingle.getInitialProps = async context => {
+CourceSingle.getInitialProps = async (context) => {
 	const { id } = context.query;
 
 	const response = isoFetcher.fetch(Api.CourceSingle, {

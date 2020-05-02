@@ -126,6 +126,16 @@ export default function Login({}: Props): ReactElement {
 									</div>
 								</div>
 							)}
+							{currentUser.phone && (
+								<div className="row mb-3">
+									<div className="col-lg-4 col-xl-3 col-md-6 text">
+										<b>Телефон:</b>
+									</div>
+									<div className="col-lg-8 col-xl-9 col-md-6 text">
+										{currentUser.phone}
+									</div>
+								</div>
+							)}
 							{currentUser.education && (
 								<div className="row mb-3">
 									<div className="col-lg-4 col-xl-3 col-md-6 text">

@@ -12,11 +12,13 @@ import { useForm } from "react-hook-form";
 import { EventsFormatter } from "../../../constants/formatters/eventsFormatter";
 import DateInput from "../../../components/Inputs/DateInput";
 import { userInterface } from "../../../constants/formatters/profileFormatter";
+import { normalizeDate } from "../../../constants/formatDate";
 
 interface Props {}
 
 interface formValues {
 	title: string;
+	location: string;
 	dateStart: string;
 	dateEnd: string;
 	contacts: string;
@@ -34,50 +36,6 @@ export default function CreateEvent({}: Props): ReactElement {
 	const [currentStep, currentStepSet] = useState(steps.main);
 
 	const [userPhoto, userPhotoSet] = useState<any>();
-	let photoFile: File;
-  // TODO: refactor dublicate
-	const onPhotoChange = (e) => {
-		const input = e.target;
-
-		if (input.files && input.files[0]) {
-			photoFile = input.files[0];
-			var reader = new FileReader();
-
-			reader.onload = function (e) {
-				const filePath = e.target.result;
-				userPhotoSet(filePath);
-			};
-
-			reader.readAsDataURL(photoFile);
-
-			const fileFormData = new FormData();
-
-			fileFormData.append("file", photoFile);
-			fileFormData.append("AttachType", "0");
-
-			fetcher
-				.fetch(Api.UploadFile, {
-					method: "POST",
-					body: fileFormData,
-				})
-				.then((response) => {
-					if (response.status === 200) {
-						return response.json();
-					} else {
-						return {
-							path: "",
-						};
-					}
-				})
-				.then((responseJson) => {
-					userPhotoSet(responseJson.path)
-				});
-		}
-	};
-	const onPhotoRemove = () => {
-		userPhotoSet(undefined);
-		photoFile = null;
-	};
 
 	const { handleSubmit, register, errors, setError, clearError } = useForm({
 		mode: "onBlur",
@@ -101,10 +59,11 @@ export default function CreateEvent({}: Props): ReactElement {
 			Announce: values.shortDescription,
 			Content: values.fullDescription,
 			Contacts: values.contacts,
-			StartEvent: values.dateStart.replace(/\./g, "-"),
-			EndEvent: values.dateEnd.replace(/\./g, "-"),
+			Location: values.location,
+			StartEvent: normalizeDate(values.dateStart),
+			EndEvent: normalizeDate(values.dateEnd),
 			StartRegistration: today,
-			EndRegistration: values.dateStart.replace(/\./g, "-"),
+			EndRegistration: normalizeDate(values.dateStart),
 			CreateByCompanyId: currentUser.companyId,
 		};
 
@@ -199,14 +158,19 @@ export default function CreateEvent({}: Props): ReactElement {
 													ref={register({})}
 												/>
 											</div>
+
+											<div className="mb-3">
+												<Input
+													name="location"
+													label="Место проведения"
+													error={errors.location}
+													ref={register({})}
+												/>
+											</div>
 										</fieldset>
 
 										<div className="mb-5">
-											<PhotoInput
-												image={userPhoto}
-												onRemove={onPhotoRemove}
-												onChange={onPhotoChange}
-											/>
+											<PhotoInput image={userPhoto} setImage={userPhotoSet} />
 										</div>
 
 										<div className="mb-3">
@@ -247,7 +211,7 @@ export default function CreateEvent({}: Props): ReactElement {
 				{currentStep === steps.success && (
 					<div className="container">
 						<h1>Успех!</h1>
-						<p>Мероприятие создано.</p>
+						<p>Мероприятие создано и будет доступно после модерации</p>
 						<Link passHref href={Pages.Profile.route}>
 							<a className="clear button">Вернуться в личный кабинет</a>
 						</Link>

@@ -20,6 +20,7 @@ import { CommonFormatter } from "../../constants/formatters/commonFormatter";
 import Checkbox from "../../components/Inputs/Checkbox";
 import Icon from "../../components/Icon";
 import { formatName } from "../../constants/formatters/rootFormatter";
+import { normalizeDate } from "../../constants/formatDate";
 
 interface Props {}
 
@@ -30,6 +31,7 @@ interface formValues {
 	study: string;
 	sphere: boolean[];
 	link: string[];
+	phone: string;
 	work: { place: string; start: string; end?: string }[];
 }
 
@@ -87,7 +89,7 @@ export default function EditProfile({}: Props): ReactElement {
 							skill.checked =
 								currentUser.spheresList.filter(function (item) {
 									return item.id === skill.id;
-                }).length > 0;
+								}).length > 0;
 							return skill;
 						})
 					);
@@ -98,50 +100,6 @@ export default function EditProfile({}: Props): ReactElement {
 	}, [currentUser]);
 
 	const [userPhoto, userPhotoSet] = useState<any>();
-	let photoFile: File;
-	// TODO: refactor dublicate
-	const onPhotoChange = (e) => {
-		const input = e.target;
-
-		if (input.files && input.files[0]) {
-			photoFile = input.files[0];
-			var reader = new FileReader();
-
-			reader.onload = function (e) {
-				const filePath = e.target.result;
-				userPhotoSet(filePath);
-			};
-
-			reader.readAsDataURL(photoFile);
-
-			const fileFormData = new FormData();
-
-			fileFormData.append("file", photoFile);
-			fileFormData.append("AttachType", "0");
-
-			fetcher
-				.fetch(Api.UploadFile, {
-					method: "POST",
-					body: fileFormData,
-				})
-				.then((response) => {
-					if (response.status === 200) {
-						return response.json();
-					} else {
-						return {
-							path: "",
-						};
-					}
-				})
-				.then((responseJson) => {
-					userPhotoSet(responseJson.path)
-				});
-		}
-	};
-	const onPhotoRemove = () => {
-		userPhotoSet(undefined);
-		photoFile = null;
-	};
 
 	const [skillsList, skillsListSet] = useState(null);
 
@@ -231,10 +189,13 @@ export default function EditProfile({}: Props): ReactElement {
 		if (nameObj.middlename) {
 			formData.append("MiddleName", nameObj.middlename);
 		}
-		formData.append("BirthDate", values.birthday.replace(/\./g, "-"));
+		formData.append("BirthDate", normalizeDate(values.birthday));
 
 		if (values.study) {
 			formData.append("Education", values.study);
+		}
+		if (values.phone) {
+			formData.append("Phone", values.phone);
 		}
 		if (values.role?.length) {
 			let idx = 0;
@@ -268,12 +229,12 @@ export default function EditProfile({}: Props): ReactElement {
 					formData.append(`WorkExperiences[${index}].Name`, work.place);
 					formData.append(
 						`WorkExperiences[${index}].Start`,
-						work.start.replace(/\./g, "-")
+						normalizeDate(work.start)
 					);
 					if (work.end) {
 						formData.append(
 							`WorkExperiences[${index}].End`,
-							work.end.replace(/\./g, "-") || ""
+							normalizeDate(work.end)
 						);
 					}
 				}
@@ -325,11 +286,7 @@ export default function EditProfile({}: Props): ReactElement {
 						>
 							<div className="row">
 								<div className="col-12 col-md-5 col-lg-4 col-xl-3">
-									<PhotoInput
-										image={userPhoto}
-										onRemove={onPhotoRemove}
-										onChange={onPhotoChange}
-									/>
+									<PhotoInput image={userPhoto} setImage={userPhotoSet} />
 								</div>
 								<div className="col-12 col-md-7 col-lg-8 col-xl-9">
 									<h2>Информация о себе</h2>
@@ -493,6 +450,18 @@ export default function EditProfile({}: Props): ReactElement {
 												{(errors.skills as any).message}
 											</div>
 										)}
+									</div>
+
+									<div className="mt-3">
+										<fieldset>
+											<Input
+												name="phone"
+												label="Телефон"
+												error={errors.phone}
+												defaultValue={currentUser?.phone}
+												ref={register({})}
+											/>
+										</fieldset>
 									</div>
 
 									<div className="mt-3">

@@ -25,6 +25,7 @@ export interface userInterface {
 	company: Company;
 
 	socialLinks: string[];
+	phone: string;
 	spheresList: { id: string; name: string }[];
 	achievements: string;
 	interests: string;
@@ -70,6 +71,7 @@ export class ProfileFormatter extends Formatter {
 				achivements,
 				wantToLearn,
 				interests,
+				phone,
 				education,
 				skills,
 				portfolio,
@@ -88,17 +90,18 @@ export class ProfileFormatter extends Formatter {
 				name: `${surName} ${firstName} ${middleName || ""}`.trimEnd(),
 				photo: photo || pass,
 				birthday: moment(birthDate).format("LL"),
-        birthdayRaw: moment(birthDate).format("L"),
-        
-        roles: profileTypes || [],
-        
+				birthdayRaw: moment(birthDate).format("L"),
+
+				roles: profileTypes || [],
+
 				education,
-        workList: formattedWorkExperiences || [],
-        
-        companyId: companies && companies[0],
-        company: {} as Company,
+				workList: formattedWorkExperiences || [],
+
+				companyId: companies && companies[0],
+				company: {} as Company,
 
 				socialLinks: socialNetWorks || [],
+				phone,
 				spheresList: skills || [],
 				achievements: achivements,
 				interests,

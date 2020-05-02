@@ -14,9 +14,18 @@ export default function CompanyItem({ content }: Props): ReactElement {
 		<Link passHref href={`${Pages.Companies.route}/${id}`}>
 			<a className="clear">
 				<Lazy>
-					<img className="responsive mx-auto" src={photo} alt="Лого компании" />
+					<img
+						className="responsive mx-auto company-photo"
+						src={photo}
+						alt="Лого компании"
+					/>
 				</Lazy>
 				<div className="mt-2 align-center">{shortTitle}</div>
+				<style jsx>{`
+					.company-photo {
+						max-height: 250px;
+					}
+				`}</style>
 			</a>
 		</Link>
 	);

@@ -11,15 +11,25 @@ import { useForm } from "react-hook-form";
 import { userInterface } from "../../../constants/formatters/profileFormatter";
 import { CourcesFormatter } from "../../../constants/formatters/courcesFormatter";
 import Select from "../../../components/Inputs/Select";
+import PhotoInput from "../../../components/Inputs/PhotoInput";
+import { normalizeDate } from "../../../constants/formatDate";
+import DateInput from "../../../components/Inputs/DateInput";
 
 interface Props {}
 
 interface formValues {
 	title: string;
-	duration: string;
-	contacts: string;
+
+	photo: string;
+
 	aboutCource: string;
 	shortDescription: string;
+
+	duration: string;
+	dateStart: string;
+	dateEnd: string;
+
+	contacts: string;
 }
 
 enum steps {
@@ -50,6 +60,8 @@ export default function CreateCource({}: Props): ReactElement {
 		projectIdSet(value);
 	};
 
+	const [photo, photoSet] = useState();
+
 	const [processing, processingSet] = useState(false);
 	const onSubmit = async (values: formValues, currentUser: userInterface) => {
 		clearError("formError");
@@ -72,14 +84,25 @@ export default function CreateCource({}: Props): ReactElement {
 
 		const payload = {
 			Title: values.title,
+
 			Announce: values.shortDescription,
 			Content: values.aboutCource,
-			Contacts: values.contacts,
+
 			Duration: parseInt(values.duration),
 			DurationModifier: 0,
+			StartEvent: normalizeDate(values.dateStart),
+			EndEvent: normalizeDate(values.dateEnd),
+
+			Contacts: values.contacts,
+
 			CreateByCompanyId: userCompanyId,
 			CreateForProjectId: projectId,
 		};
+
+		if (photo) {
+			payload["ImagePath"] = photo;
+			payload["ImagePreviewPath"] = photo;
+		}
 
 		const apiResponse = fetcher.fetch(Api.CreateCource, {
 			method: "POST",
@@ -140,21 +163,42 @@ export default function CreateCource({}: Props): ReactElement {
 											</div>
 
 											<div className="px-0 mb-3 col-sm-6 col-12">
-												<Input
-													name="duration"
-													label="Длительность (в днях)"
-													error={errors.duration}
-													min="1"
-													required
-													type="number"
-													ref={register({
-														required: true,
-														min: {
-															value: 1,
-															message: "Введите длительность программы в днях",
-														},
-													})}
-												/>
+												<div className="mb-2">
+													<Input
+														name="duration"
+														label="Длительность (в днях)"
+														error={errors.duration}
+														min="1"
+														required
+														type="number"
+														ref={register({
+															required: true,
+															min: {
+																value: 1,
+																message:
+																	"Введите длительность программы в днях",
+															},
+														})}
+													/>
+												</div>
+
+												<div className="mb-2">
+													<DateInput
+														name="dateStart"
+														label="Дата начала"
+														error={errors.dateStart}
+														register={register}
+													/>
+												</div>
+
+												<div className="mb-2">
+													<DateInput
+														name="dateEnd"
+														label="Дата конца"
+														error={errors.dateEnd}
+														register={register}
+													/>
+												</div>
 											</div>
 											<div className="px-0 mb-3 col-sm-6 col-12">
 												<Select
@@ -163,6 +207,10 @@ export default function CreateCource({}: Props): ReactElement {
 												>
 													{project}
 												</Select>
+											</div>
+
+											<div className="mb-3">
+												<PhotoInput image={photo} setImage={photoSet} />
 											</div>
 
 											<div className="mb-3">
@@ -226,7 +274,7 @@ export default function CreateCource({}: Props): ReactElement {
 				{currentStep === steps.success && (
 					<div className="container">
 						<h1>Успех!</h1>
-						<p>Программа создана.</p>
+						<p>Программа создана и будет доступна после модерации</p>
 						<Link passHref href={Pages.Profile.route}>
 							<a className="clear button">Вернуться в личный кабинет</a>
 						</Link>

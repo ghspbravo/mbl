@@ -3,7 +3,7 @@ import Layout, { AuthContext } from "../../../components/Layout";
 import Head from "next/head";
 import Pages from "../../../constants/pages";
 import Breadcrumbs from "../../../components/Breadcrumbs";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Input from "../../../components/Inputs/Input";
 import DynamicField from "../../../components/Inputs/DynamicField";
 import PhotoInput from "../../../components/Inputs/PhotoInput";
@@ -13,14 +13,18 @@ import Link from "next/link";
 import { businessSizesList } from "../../../constants/businessSize";
 import { fetcher } from "../../../constants/fetcher";
 import Api from "../../../constants/api";
-import CompanyFormatter, { Company } from "../../../constants/formatters/companyFormatter";
+import CompanyFormatter, {
+	Company,
+} from "../../../constants/formatters/companyFormatter";
 import { userInterface } from "../../../constants/formatters/profileFormatter";
+import DateInput from "../../../components/Inputs/DateInput";
 
 interface Props {}
 
 interface formValues {
 	title: string;
 	shortTitle: string;
+	foundationDate: string;
 	inn: string;
 	sphere: number[];
 	membersCount: string;
@@ -39,58 +43,19 @@ export default function EditCompany({}: Props): ReactElement {
 	const [step, stepSet] = useState(steps.main);
 
 	const { getCurrentUser } = useContext(AuthContext);
-	const { company: currentCompany = {} as Company }: userInterface = getCurrentUser();
+	const {
+		company: currentCompany = {} as Company,
+	}: userInterface = getCurrentUser();
 
-	const [userPhoto, userPhotoSet] = useState<any>(currentCompany.photo);
-	let photoFile: File;
-	// TODO: refactor dublicate
-	const onPhotoChange = (e) => {
-		const input = e.target;
-
-		if (input.files && input.files[0]) {
-			photoFile = input.files[0];
-			var reader = new FileReader();
-
-			reader.onload = function (e) {
-				const filePath = e.target.result;
-				userPhotoSet(filePath);
-			};
-
-			reader.readAsDataURL(photoFile);
-
-			const fileFormData = new FormData();
-
-			fileFormData.append("file", photoFile);
-			fileFormData.append("AttachType", "0");
-
-			fetcher
-				.fetch(Api.UploadFile, {
-					method: "POST",
-					body: fileFormData,
-				})
-				.then((response) => {
-					if (response.status === 200) {
-						return response.json();
-					} else {
-						return {
-							path: "",
-						};
-					}
-				})
-				.then((responseJson) => {
-					userPhotoSet(responseJson.path)
-				});
-		}
-	};
-	const onPhotoRemove = () => {
-		userPhotoSet(undefined);
-		photoFile = null;
-	};
+	const [logo, logoSet] = useState<any>(currentCompany.logo);
+	const [image, imageSet] = useState<any>(currentCompany.image);
 
 	useEffect(() => {
 		if (!currentCompany) {
 			return;
 		}
+		setValue("foundationDate", currentCompany.foundationDate);
+
 		sphereListSet(
 			currentCompany.spheresRaw.map((item, index) => ({
 				id: index,
@@ -99,7 +64,14 @@ export default function EditCompany({}: Props): ReactElement {
 		);
 	}, [currentCompany]);
 
-	const { handleSubmit, register, errors, setError, clearError } = useForm({
+	const {
+		handleSubmit,
+		register,
+		errors,
+		setError,
+		clearError,
+		setValue,
+	} = useForm({
 		mode: "onBlur",
 	});
 
@@ -128,7 +100,9 @@ export default function EditCompany({}: Props): ReactElement {
 			},
 		]);
 
-  const [businessSizeValue, businessSizeValueSet] = useState(currentCompany.sizeRaw);
+	const [businessSizeValue, businessSizeValueSet] = useState(
+		currentCompany.sizeRaw
+	);
 	const [businessSize, businessSizeSet] = useState(
 		businessSizesList[businessSizeValue].name
 	);
@@ -143,7 +117,7 @@ export default function EditCompany({}: Props): ReactElement {
 		processingSet(true);
 
 		const payload = {
-      Id: currentCompany.id,
+			Id: currentCompany.id,
 			FullName: values.title,
 			ShortName: values.shortTitle,
 			INN: values.inn,
@@ -154,10 +128,15 @@ export default function EditCompany({}: Props): ReactElement {
 			Phone: values.phone,
 			Site: values.site,
 			Occupations: values.sphere,
+			YearOfFoundation: values.foundationDate,
 		};
 
-		if (userPhoto) {
-			payload["Photo"] = userPhoto;
+		if (logo) {
+			payload["Photo"] = logo;
+		}
+
+		if (image) {
+			payload["Image"] = image;
 		}
 
 		const apiResponse = fetcher.fetch(Api.EditCompany, {
@@ -229,6 +208,15 @@ export default function EditCompany({}: Props): ReactElement {
 										</div>
 
 										<div className="mb-3">
+											<DateInput
+												name="foundationDate"
+												label="Дата основания"
+												error={errors.foundationDate}
+												register={register}
+											/>
+										</div>
+
+										<div className="mb-3">
 											{/* TODO: add input mask */}
 											<Input
 												name="inn"
@@ -279,13 +267,12 @@ export default function EditCompany({}: Props): ReactElement {
 									</fieldset>
 
 									<div className="mb-5">
-										<PhotoInput
-											image={userPhoto}
-											onRemove={onPhotoRemove}
-											onChange={onPhotoChange}
-										/>
-									</div>
+										<div className="label-text mb-2">Логотип компании</div>
+										<PhotoInput image={logo} setImage={logoSet} />
 
+										<div className="label-text my-2">Изображение компании</div>
+										<PhotoInput image={image} setImage={imageSet} />
+									</div>
 									<fieldset>
 										<div className="mb-3">
 											<div className="row">

@@ -10,6 +10,8 @@ import Pages from "../../constants/pages";
 import { Status } from "../../constants/formatters/rootFormatter";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import Link from "next/link";
+import PortfolioItem from "../../components/Profile/PortfolioItem";
+import MemberItem from "../../components/Members/MemberItem";
 
 interface Props {
 	status: number;
@@ -39,18 +41,35 @@ export default function CompanySingle({ status, body }: Props): ReactElement {
 							<div className="col-lg-3">
 								<img
 									className="responsive"
-									src={body.photo}
-									alt="Фото компании"
+									src={body.logo}
+									alt="Лого компании"
 								/>
 							</div>
 							<div className="col-lg-9">
 								<h1 className="mb-4">{body.shortTitle}</h1>
+
+								{body.image && (
+									<div className="mb-2">
+										<img
+											className="responsive"
+											src={body.image}
+											alt="Фото компании"
+										/>
+									</div>
+								)}
 
 								<div className="row">
 									<div className="col-lg-5 col-md-6 col-12">
 										<b>Название юр. лица:</b>
 									</div>
 									<div className="col-md-6 col-12 mb-4">{body.title}</div>
+
+									<div className="col-lg-5 col-md-6 col-12">
+										<b>Дата основания:</b>
+									</div>
+									<div className="col-md-6 col-12 mb-4">
+										{body.foundationDate}
+									</div>
 
 									<div className="col-lg-5 col-md-6 col-12">
 										<b>ИНН:</b>
@@ -75,7 +94,9 @@ export default function CompanySingle({ status, body }: Props): ReactElement {
 									<div className="col-lg-5 col-md-6 col-12">
 										<b>Количество сотрудников:</b>
 									</div>
-									<div className="col-md-6 col-12 mb-4">{body.membersCount}</div>
+									<div className="col-md-6 col-12 mb-4">
+										{body.membersCount}
+									</div>
 
 									<div className="col-lg-5 col-md-6 col-12">
 										<b>Объем годовой выручки:</b>
@@ -96,6 +117,59 @@ export default function CompanySingle({ status, body }: Props): ReactElement {
 										<b>Сайт:</b>
 									</div>
 									<div className="col-md-6 col-12 mb-4">{body.site}</div>
+								</div>
+
+								{body.portfolio && (
+									<div className="my-4">
+										<h2>Портфолио</h2>
+										{body.portfolio.events.length > 0 && (
+											<div className="mb-2">
+												<b>Мероприятия</b>
+												{body.portfolio.events.map((item) => (
+													<PortfolioItem
+														title={item.title}
+														href={Pages.Events.route + "/" + item.id}
+													/>
+												))}
+											</div>
+										)}
+										{body.portfolio.projects.length > 0 && (
+											<div className="mb-2">
+												<b>Проекты</b>
+												{body.portfolio.projects.map((item) => (
+													<PortfolioItem
+														title={item.title}
+														href={Pages.Projects.route + "/" + item.id}
+													/>
+												))}
+											</div>
+										)}
+										{body.portfolio.programs.length > 0 && (
+											<div className="mb-2">
+												<b>Программы</b>
+												{body.portfolio.programs.map((item) => (
+													<PortfolioItem
+														title={item.title}
+														href={Pages.Cources.route + "/" + item.id}
+													/>
+												))}
+											</div>
+										)}
+									</div>
+								)}
+
+								<div className="my-4">
+									<h2>Участники компании</h2>
+									<div className="row">
+										{body.users.map((item, index) => (
+											<div
+												key={item.id}
+												className="col-sm-4 col-lg-3 col-6 mb-5"
+											>
+												<MemberItem contents={item} />
+											</div>
+										))}
+									</div>
 								</div>
 							</div>
 						</div>
@@ -118,7 +192,7 @@ export default function CompanySingle({ status, body }: Props): ReactElement {
 	);
 }
 
-CompanySingle.getInitialProps = async context => {
+CompanySingle.getInitialProps = async (context) => {
 	const { id: companyId } = context.query;
 
 	const response = isoFetcher.fetch(Api.CompanySingle, {
