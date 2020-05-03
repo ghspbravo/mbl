@@ -13,6 +13,7 @@ import { EventsFormatter } from "../../../constants/formatters/eventsFormatter";
 import DateInput from "../../../components/Inputs/DateInput";
 import { userInterface } from "../../../constants/formatters/profileFormatter";
 import { normalizeDate } from "../../../constants/formatDate";
+import DraftEditor from "../../../components/Inputs/DraftEditor";
 
 interface Props {}
 
@@ -24,7 +25,6 @@ interface formValues {
 	contacts: string;
 
 	shortDescription: string;
-	fullDescription: string;
 }
 
 enum steps {
@@ -36,6 +36,7 @@ export default function CreateEvent({}: Props): ReactElement {
 	const [currentStep, currentStepSet] = useState(steps.main);
 
 	const [userPhoto, userPhotoSet] = useState<any>();
+	const [fullDescription, fullDescriptionSet] = useState<any>("");
 
 	const { handleSubmit, register, errors, setError, clearError } = useForm({
 		mode: "onBlur",
@@ -57,7 +58,7 @@ export default function CreateEvent({}: Props): ReactElement {
 		const payload = {
 			Title: values.title,
 			Announce: values.shortDescription,
-			Content: values.fullDescription,
+			Content: fullDescription,
 			Contacts: values.contacts,
 			Location: values.location,
 			StartEvent: normalizeDate(values.dateStart),
@@ -184,12 +185,10 @@ export default function CreateEvent({}: Props): ReactElement {
 										</div>
 
 										<div className="mb-3">
-											<Input
-												multiline
-												name="fullDescription"
-												label="Полное описание мероприятия"
-												ref={register()}
-											/>
+											<div className="label-text mb-2">
+												Полное описание мероприятия
+											</div>
+											<DraftEditor setContent={fullDescriptionSet} />
 										</div>
 
 										{errors.formError && (

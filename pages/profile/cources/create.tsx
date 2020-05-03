@@ -14,6 +14,7 @@ import Select from "../../../components/Inputs/Select";
 import PhotoInput from "../../../components/Inputs/PhotoInput";
 import { normalizeDate } from "../../../constants/formatDate";
 import DateInput from "../../../components/Inputs/DateInput";
+import DraftEditor from "../../../components/Inputs/DraftEditor";
 
 interface Props {}
 
@@ -22,7 +23,6 @@ interface formValues {
 
 	photo: string;
 
-	aboutCource: string;
 	shortDescription: string;
 
 	duration: string;
@@ -43,6 +43,8 @@ export default function CreateCource({}: Props): ReactElement {
 	const { handleSubmit, register, errors, setError, clearError } = useForm({
 		mode: "onBlur",
 	});
+
+	const [aboutCource, aboutCourceSet] = useState("");
 
 	const { getCurrentUser } = useContext(AuthContext);
 	const currentUser: userInterface = getCurrentUser();
@@ -86,7 +88,7 @@ export default function CreateCource({}: Props): ReactElement {
 			Title: values.title,
 
 			Announce: values.shortDescription,
-			Content: values.aboutCource,
+			Content: aboutCource,
 
 			Duration: parseInt(values.duration),
 			DurationModifier: 0,
@@ -241,16 +243,8 @@ export default function CreateCource({}: Props): ReactElement {
 										</div>
 
 										<div className="mb-3">
-											<Input
-												multiline
-												required
-												error={errors.aboutCource}
-												name="aboutCource"
-												label="О программе"
-												ref={register({
-													required: true,
-												})}
-											/>
+											<div className="label-text mb-2">О программе</div>
+											<DraftEditor setContent={aboutCourceSet} />
 										</div>
 
 										{/* TODO: add co-authors */}

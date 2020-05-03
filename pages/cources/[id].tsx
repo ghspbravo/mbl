@@ -144,7 +144,9 @@ export default function CourceSingle({ status, body }: Props): ReactElement {
 
 									<div className="mt-3">
 										<h2>О программе</h2>
-										<p>{fullDescription}</p>
+										<div
+											dangerouslySetInnerHTML={{ __html: fullDescription }}
+										></div>
 									</div>
 
 									{canApply && !hasSuccessApply && (

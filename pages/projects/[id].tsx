@@ -140,7 +140,9 @@ export default function ProjectSingle({ status, body }: Props): ReactElement {
 									)}
 
 									<div className="mt-3">
-										<p>{description}</p>
+										<div
+											dangerouslySetInnerHTML={{ __html: description }}
+										></div>
 									</div>
 
 									{/* {canApply && (
