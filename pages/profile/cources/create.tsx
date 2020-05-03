@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useContext } from "react";
+import React, { ReactElement, useState } from "react";
 import Layout, { AuthContext } from "../../../components/Layout";
 import Head from "next/head";
 import Pages from "../../../constants/pages";
@@ -15,6 +15,7 @@ import PhotoInput from "../../../components/Inputs/PhotoInput";
 import { normalizeDate } from "../../../constants/formatDate";
 import DateInput from "../../../components/Inputs/DateInput";
 import DraftEditor from "../../../components/Inputs/DraftEditor";
+import useUser from "../../../constants/hooks/useUser";
 
 interface Props {}
 
@@ -46,10 +47,9 @@ export default function CreateCource({}: Props): ReactElement {
 
 	const [aboutCource, aboutCourceSet] = useState("");
 
-	const { getCurrentUser } = useContext(AuthContext);
-	const currentUser: userInterface = getCurrentUser();
-	const projectsList = currentUser.myProjects
-		.filter((item) => item.isCreator)
+	const currentUser = useUser();
+	const projectsList = currentUser?.myProjects
+		?.filter((item) => item.isCreator)
 		.map((item) => ({
 			value: item.id,
 			name: item.title,
