@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useContext } from "react";
+import React, { ReactElement, useState } from "react";
 import Layout, { AuthContext } from "../../../components/Layout";
 import Head from "next/head";
 import Pages from "../../../constants/pages";
@@ -14,6 +14,8 @@ import Select from "../../../components/Inputs/Select";
 import PhotoInput from "../../../components/Inputs/PhotoInput";
 import { normalizeDate } from "../../../constants/formatDate";
 import DateInput from "../../../components/Inputs/DateInput";
+import DraftEditor from "../../../components/Inputs/DraftEditor";
+import useUser from "../../../constants/hooks/useUser";
 
 interface Props {}
 
@@ -22,7 +24,6 @@ interface formValues {
 
 	photo: string;
 
-	aboutCource: string;
 	shortDescription: string;
 
 	duration: string;
@@ -44,10 +45,11 @@ export default function CreateCource({}: Props): ReactElement {
 		mode: "onBlur",
 	});
 
-	const { getCurrentUser } = useContext(AuthContext);
-	const currentUser: userInterface = getCurrentUser();
-	const projectsList = currentUser.myProjects
-		.filter((item) => item.isCreator)
+	const [aboutCource, aboutCourceSet] = useState("");
+
+	const currentUser = useUser();
+	const projectsList = currentUser?.myProjects
+		?.filter((item) => item.isCreator)
 		.map((item) => ({
 			value: item.id,
 			name: item.title,
@@ -86,7 +88,7 @@ export default function CreateCource({}: Props): ReactElement {
 			Title: values.title,
 
 			Announce: values.shortDescription,
-			Content: values.aboutCource,
+			Content: aboutCource,
 
 			Duration: parseInt(values.duration),
 			DurationModifier: 0,
@@ -241,16 +243,8 @@ export default function CreateCource({}: Props): ReactElement {
 										</div>
 
 										<div className="mb-3">
-											<Input
-												multiline
-												required
-												error={errors.aboutCource}
-												name="aboutCource"
-												label="О программе"
-												ref={register({
-													required: true,
-												})}
-											/>
+											<div className="label-text mb-2">О программе</div>
+											<DraftEditor setContent={aboutCourceSet} />
 										</div>
 
 										{/* TODO: add co-authors */}

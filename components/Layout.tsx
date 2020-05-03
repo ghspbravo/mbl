@@ -227,6 +227,12 @@ function Layout({ children: pageContent }: Props) {
               .small {
                 font-size: 0.75rem;
               }
+              blockquote {
+                border-left: 5px solid ${Colors.Primary};
+                font-style: italic;
+                margin: 16px 0;
+                padding: 10px 20px;
+              }
               @media screen and (max-width: 576px) {
                 body { font-size: 0.75em; }
                 h1 { font-size: 1.25em; }

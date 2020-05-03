@@ -13,6 +13,7 @@ import ProjectsFormatter from "../../../constants/formatters/projectsFormatter";
 import { normalizeDate } from "../../../constants/formatDate";
 import PhotoInput from "../../../components/Inputs/PhotoInput";
 import DateInput from "../../../components/Inputs/DateInput";
+import DraftEditor from "../../../components/Inputs/DraftEditor";
 
 interface Props {}
 
@@ -24,7 +25,6 @@ interface formValues {
 	goal: string;
 	product: string;
 
-	description: string;
 	shortDescription: string;
 
 	advantages: string;
@@ -40,6 +40,7 @@ export default function CreateProject({}: Props): ReactElement {
 	const [currentStep, currentStepSet] = useState(steps.main);
 
 	const [image, imageSet] = useState();
+	const [description, descriptionSet] = useState("");
 
 	const { handleSubmit, register, errors, setError, clearError } = useForm({
 		mode: "onBlur",
@@ -70,7 +71,7 @@ export default function CreateProject({}: Props): ReactElement {
 			Start: normalizeDate(values.dateStart),
 
 			ShortDescription: values.shortDescription,
-			Content: values.description,
+			Content: description,
 
 			CreateByCompanyId: currentUser.companyId,
 		};
@@ -201,16 +202,8 @@ export default function CreateProject({}: Props): ReactElement {
 										</div>
 
 										<div className="mb-3">
-											<Input
-												multiline
-												required
-												error={errors.description}
-												name="description"
-												label="О проекте"
-												ref={register({
-													required: true,
-												})}
-											/>
+											<div className="label-text mb-2">О проекте</div>
+											<DraftEditor setContent={descriptionSet} />
 										</div>
 
 										{/* TODO: add co-authors */}

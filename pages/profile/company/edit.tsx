@@ -1,5 +1,5 @@
-import React, { ReactElement, useState, useContext, useEffect } from "react";
-import Layout, { AuthContext } from "../../../components/Layout";
+import React, { ReactElement, useState, useEffect } from "react";
+import Layout from "../../../components/Layout";
 import Head from "next/head";
 import Pages from "../../../constants/pages";
 import Breadcrumbs from "../../../components/Breadcrumbs";
@@ -18,6 +18,7 @@ import CompanyFormatter, {
 } from "../../../constants/formatters/companyFormatter";
 import { userInterface } from "../../../constants/formatters/profileFormatter";
 import DateInput from "../../../components/Inputs/DateInput";
+import useUser from "../../../constants/hooks/useUser";
 
 interface Props {}
 
@@ -42,16 +43,14 @@ enum steps {
 export default function EditCompany({}: Props): ReactElement {
 	const [step, stepSet] = useState(steps.main);
 
-	const { getCurrentUser } = useContext(AuthContext);
-	const {
-		company: currentCompany = {} as Company,
-	}: userInterface = getCurrentUser();
+	const currentUser = useUser();
+	const currentCompany = currentUser.company || ({ sizeRaw: 0 } as Company);
 
 	const [logo, logoSet] = useState<any>(currentCompany.logo);
 	const [image, imageSet] = useState<any>(currentCompany.image);
 
 	useEffect(() => {
-		if (!currentCompany) {
+		if (!currentCompany?.id) {
 			return;
 		}
 		setValue("foundationDate", currentCompany.foundationDate);
@@ -62,6 +61,9 @@ export default function EditCompany({}: Props): ReactElement {
 				value: item,
 			}))
 		);
+		onBusinessSizeChange(currentCompany.sizeRaw.toString());
+		logoSet(currentCompany.logo);
+		imageSet(currentCompany.image);
 	}, [currentCompany]);
 
 	const {

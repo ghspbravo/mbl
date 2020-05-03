@@ -1,5 +1,5 @@
-import React, { ReactElement, useState, useEffect, useContext } from "react";
-import Layout, { AuthContext } from "../../components/Layout";
+import React, { ReactElement, useState, useEffect } from "react";
+import Layout from "../../components/Layout";
 import Head from "next/head";
 import Pages from "../../constants/pages";
 import Breadcrumbs from "../../components/Breadcrumbs";
@@ -8,12 +8,9 @@ import Input from "../../components/Inputs/Input";
 import PhotoInput from "../../components/Inputs/PhotoInput";
 import { fetcher } from "../../constants/fetcher";
 import Api from "../../constants/api";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import DateInput from "../../components/Inputs/DateInput";
-import {
-	userInterface,
-	ProfileFormatter,
-} from "../../constants/formatters/profileFormatter";
+import { ProfileFormatter } from "../../constants/formatters/profileFormatter";
 import { nameRegexp, dateRegexp } from "../../constants/regexp";
 import DynamicField from "../../components/Inputs/DynamicField";
 import { CommonFormatter } from "../../constants/formatters/commonFormatter";
@@ -21,6 +18,7 @@ import Checkbox from "../../components/Inputs/Checkbox";
 import Icon from "../../components/Icon";
 import { formatName } from "../../constants/formatters/rootFormatter";
 import { normalizeDate } from "../../constants/formatDate";
+import useUser from "../../constants/hooks/useUser";
 
 interface Props {}
 
@@ -43,10 +41,9 @@ enum steps {
 export default function EditProfile({}: Props): ReactElement {
 	const [currentStep, currentStepSet] = useState(steps.main);
 
-	const { getCurrentUser } = useContext(AuthContext);
-	const currentUser: userInterface = getCurrentUser();
+	const currentUser = useUser();
 	useEffect(() => {
-		if (!currentUser) return;
+		if (!currentUser?.id) return;
 
 		setValue("birthday", currentUser.birthdayRaw);
 		worksListSet(

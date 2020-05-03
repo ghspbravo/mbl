@@ -1,5 +1,5 @@
-import React, { ReactElement, useContext } from "react";
-import Layout, { AuthContext } from "../../components/Layout";
+import React, { ReactElement } from "react";
+import Layout from "../../components/Layout";
 import Head from "next/head";
 
 import Pages from "../../constants/pages";
@@ -8,13 +8,12 @@ import Link from "next/link";
 import ProfileNavigation, {
 	profileTabs,
 } from "../../components/Profile/ProfileNavigation";
-import { userInterface } from "../../constants/formatters/profileFormatter";
+import useUser from "../../constants/hooks/useUser";
 
 interface Props {}
 
 export default function Login({}: Props): ReactElement {
-	const { getCurrentUser } = useContext(AuthContext);
-	const currentUser: userInterface = getCurrentUser();
+	const currentUser = useUser();
 
 	const buttons = () => (
 		<div>
