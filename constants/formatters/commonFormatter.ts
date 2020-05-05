@@ -7,6 +7,11 @@ export interface statisticsInterface {
 	projects: string;
 	cources: string;
 }
+
+export interface UserRole {
+  id: number;
+  name: string;
+}
 export class CommonFormatter extends Formatter {
 	constructor() {
 		super();
@@ -22,7 +27,7 @@ export class CommonFormatter extends Formatter {
 
 		return {
 			status: this.status,
-			body: this.body,
+			body: this.body as UserRole[],
 		};
 	}
 

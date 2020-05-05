@@ -45,7 +45,6 @@ export default function EditProfile({}: Props): ReactElement {
 	useEffect(() => {
 		if (!currentUser?.id) return;
 
-		setValue("birthday", currentUser.birthdayRaw);
 		worksListSet(
 			currentUser.workList.map((work, index) => ({
 				id: index,
@@ -55,17 +54,16 @@ export default function EditProfile({}: Props): ReactElement {
 				end: work.endRaw || "",
 			}))
 		);
-		// resolving conflicts with worksListSet
-		setTimeout(
-			() =>
-				currentUser.workList.forEach((work, index) =>
-					setValue([
-						{ [`work[${index}].start`]: work.startRaw },
-						{ [`work[${index}].end`]: work.endRaw },
-					])
-				),
-			300
-		);
+		// resolving conflicts with dates
+		setTimeout(() => {
+			setValue("birthday", currentUser.birthdayRaw);
+			currentUser.workList.forEach((work, index) =>
+				setValue([
+					{ [`work[${index}].start`]: work.startRaw },
+					{ [`work[${index}].end`]: work.endRaw },
+				])
+			);
+		}, 300);
 
 		linksListSet(
 			currentUser.socialLinks.map((link, index) => ({
@@ -514,9 +512,9 @@ export default function EditProfile({}: Props): ReactElement {
 					<div className="container">
 						<h1>Успех!</h1>
 						<p>Информация изменена</p>
-						<Link passHref href={Pages.Profile.route}>
-							<a className="clear button">Вернуться в личный кабинет</a>
-						</Link>
+						<a href={Pages.Profile.route} className="clear button">
+							Вернуться в личный кабинет
+						</a>
 					</div>
 				)}
 			</section>

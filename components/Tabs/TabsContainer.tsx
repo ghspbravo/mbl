@@ -5,6 +5,7 @@ interface Props {
 	activeTab?: number;
 	children?: any;
 	customAction?: Function;
+	onTabChangeCallback?: Function;
 	names: string[];
 }
 
@@ -13,13 +14,19 @@ export default function TabsContainer({
 	children: tabs,
 	customAction,
 	names,
+	onTabChangeCallback,
 }: Props): ReactElement {
 	const [currentTab, currentTabSet] = useState(activeTab);
 
-	const tabChangeHandler = tabId => {
+	const tabChangeHandler = (tabId) => {
 		if (customAction) {
 			customAction(tabId);
-		} else currentTabSet(tabId);
+		} else {
+			currentTabSet(tabId);
+			if (onTabChangeCallback) {
+				onTabChangeCallback(tabId);
+			}
+		}
 	};
 	return (
 		<div>
