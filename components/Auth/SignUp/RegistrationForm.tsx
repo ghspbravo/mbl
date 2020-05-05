@@ -153,7 +153,7 @@ export default function RegistrationForm({
 			.formatRoles(fetcher.fetch(Api.GetRoles))
 			.then((response) => {
 				if (response.status > 0) {
-					setError("roles", "rolesError", response.body);
+					setError("roles", "rolesError", response.body.toString());
 				} else {
 					rolesListSet(response.body);
 				}
