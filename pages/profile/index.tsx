@@ -118,7 +118,7 @@ export default function Login({}: Props): ReactElement {
 							{currentUser.birthday && (
 								<div className="row mb-3">
 									<div className="col-lg-4 col-xl-3 col-md-6 text">
-										<b>Дата рождния:</b>
+										<b>Дата рождения:</b>
 									</div>
 									<div className="col-lg-8 col-xl-9 col-md-6 text">
 										{currentUser.birthday}
