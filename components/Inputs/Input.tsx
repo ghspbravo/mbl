@@ -1,4 +1,4 @@
-import React, { ReactElement, forwardRef, ReactHTMLElement, ButtonHTMLAttributes } from "react";
+import React, { forwardRef } from "react";
 
 interface Props {
 	name: string;
@@ -40,15 +40,17 @@ function Input(
 					id={`${name}_${random}`}
 					name={name}
 					type={type}
+					tabIndex={0}
 					{...otherProps}
 				/>
 			) : (
 				<textarea
 					data-error={error ? true : false}
-          ref={ref}
-          rows={4}
+					ref={ref}
+					rows={4}
 					id={`${name}_${random}`}
 					name={name}
+					tabIndex={0}
 					{...otherProps}
 				/>
 			)}
@@ -63,4 +65,6 @@ function Input(
 	);
 }
 
-export default forwardRef<any, Props | React.HTMLProps<HTMLInputElement>>(Input);
+export default forwardRef<any, Props | React.HTMLProps<HTMLInputElement>>(
+	Input
+);

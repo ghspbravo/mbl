@@ -37,7 +37,7 @@ export default function Modal({ children, open, closeHandler, width }: Props): R
         }
       }}
     >
-      <button onClick={closeHandler} className="modal__close">
+      <button tabIndex={-1} onClick={closeHandler} className="modal__close">
         <Icon size={40} name="ei-close-o" />
       </button>
       {children}
