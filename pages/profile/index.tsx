@@ -9,6 +9,7 @@ import ProfileNavigation, {
 	profileTabs,
 } from "../../components/Profile/ProfileNavigation";
 import useUser from "../../constants/hooks/useUser";
+import { link } from "fs";
 
 interface Props {}
 
@@ -192,6 +193,20 @@ export default function Login({}: Props): ReactElement {
 									</div>
 									<div className="col-lg-8 col-xl-9 col-md-6 text">
 										{currentUser.achievements}
+									</div>
+								</div>
+							)}
+							{currentUser?.socialLinks?.length > 0 && (
+								<div className="row mb-3">
+									<div className="col-lg-4 col-xl-3 col-md-6 text">
+										<b>Социальные сети:</b>
+									</div>
+									<div className="col-lg-8 col-xl-9 col-md-6 text">
+										{currentUser.socialLinks.map((link, index) => (
+											<a key={index} target="_blank" href={link}>
+												{link}
+											</a>
+										))}
 									</div>
 								</div>
 							)}

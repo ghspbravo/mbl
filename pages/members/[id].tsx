@@ -48,7 +48,7 @@ export default function MemberItem({ status, body }: Props): ReactElement {
 							<h1>{body.name}</h1>
 
 							<div className="row no-gutters mb-5">
-								{body.roles?.map(role => (
+								{body.roles?.map((role) => (
 									<div key={role.id} className="mb-2 mr-2">
 										<Tag>{role.name}</Tag>
 									</div>
@@ -74,7 +74,7 @@ export default function MemberItem({ status, body }: Props): ReactElement {
 									</div>
 								</div>
 							)}
-              {body.phone && (
+							{body.phone && (
 								<div className="row mb-3">
 									<div className="col-lg-4 col-xl-3 col-md-6 text">
 										<b>Телефон:</b>
@@ -118,7 +118,7 @@ export default function MemberItem({ status, body }: Props): ReactElement {
 										<b>Интересы:</b>
 									</div>
 									<div className="col-lg-8 col-xl-9 col-md-6 text">
-										{body.spheresList.map(sphere => sphere.name).join(",")}
+										{body.spheresList.map((sphere) => sphere.name).join(",")}
 									</div>
 								</div>
 							)}
@@ -139,6 +139,20 @@ export default function MemberItem({ status, body }: Props): ReactElement {
 									</div>
 									<div className="col-lg-8 col-xl-9 col-md-6 text">
 										{body.achievements}
+									</div>
+								</div>
+							)}
+							{body?.socialLinks?.length > 0 && (
+								<div className="row mb-3">
+									<div className="col-lg-4 col-xl-3 col-md-6 text">
+										<b>Социальные сети:</b>
+									</div>
+									<div className="col-lg-8 col-xl-9 col-md-6 text">
+										{body.socialLinks.map((link, index) => (
+											<a key={index} target="_blank" href={link}>
+												{link}
+											</a>
+										))}
 									</div>
 								</div>
 							)}
@@ -165,7 +179,7 @@ export default function MemberItem({ status, body }: Props): ReactElement {
 	);
 }
 
-MemberItem.getInitialProps = async context => {
+MemberItem.getInitialProps = async (context) => {
 	const { id: memberId } = context.query;
 
 	const profileResponse = isoFetcher.fetch(Api.MembersItem, {
